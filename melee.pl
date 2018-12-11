@@ -18,14 +18,17 @@ close FP;
 # Manage combat sequence
 my $turn = 1;
 do {
-  print "\nTurn $turn\n";
+  print "\n* Turn $turn:\n";
+
+  # Initiative
+  print "Initiative order:\n";
   foreach (keys %names) {
     $names{$_} = rand;
 #     print "$_\t$names{$_}\n";
   }
 #   print "\n";
-  
   my $prev_roll;
+  my $rank;
   foreach (sort {$names{$a} <=> $names{$b}} keys %names) {
     my $roll = $names{$_};
     if (defined $prev_roll && $prev_roll == $roll) {
@@ -33,13 +36,22 @@ do {
     } else {
       $prev_roll = $roll;
     }
-    print "$_\n";
+    print ++$rank, " $_\n";
   }
+
+  print "Renew spells\n";
+  &query;
+
+} while ($turn++);
+
+
+# Interact with user
+sub query {
   print "q to quit ";
   chomp(my $input = <>);
   $turn = 0 if $input eq 'q';
+}
 
-} while ($turn++);
 
 # It would be faster to use array indices as identifiers, and keep the names in an array...  Hmm?
 # my $n = @names;
