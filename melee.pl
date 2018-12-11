@@ -22,6 +22,7 @@ do {
 
   # Initiative
   print "Initiative order:\n";
+  my @stack;
   foreach (keys %names) {
     $names{$_} = rand;
 #     print "$_\t$names{$_}\n";
@@ -37,19 +38,35 @@ do {
       $prev_roll = $roll;
     }
     print ++$rank, " $_\n";
+    push @stack, $_;
   }
 
   print "Renew spells\n";
-  &query;
+  query('Finished with spells');
 
+  # Movement
+  do {
+
+    # Select next move
+    my $i = 0;
+    my $name;
+    until ($i<$n && $name = $stack[$i++]) {}
+    print $name;
+    my $move = query(" move, (d)efer");
+    unless $move
+
+  }
+
+#   query('Proceed to next turn');
 } while ($turn++);
 
 
 # Interact with user
 sub query {
-  print "q to quit ";
+  print shift, ' or (q)uit> ';
   chomp(my $input = <>);
   $turn = 0 if $input eq 'q';
+  $input;
 }
 
 
