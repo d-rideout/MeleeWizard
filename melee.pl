@@ -20,44 +20,50 @@ use warnings;
 # Check command line
 die "usage: melee.pl <party 1 file> <party 2 file> <party 3 file> ...\n"
     unless @ARGV;
-# my $infile = shift;
 
 # Data structures
-# my %names;
-# It would be faster to use array indices as identifiers, and keep the names in an array...
-# Seems better! (31mar021)
 my @characters;
-# hkeys: NAME ADJDEX
-# my $n = @characters;
-my $n;
+# hkeys: NAME ADJDEX PLAYER PARTY
+my $n = 0;
 
 # Read parties
 foreach my $partyfile (@ARGV) {
   open FP, "<$partyfile" or die "Error opening $partyfile: $!\n";
+  chomp(my $tmp = <FP>);
+  my @hkeys = split /\t/, $tmp;
   while (<FP>) {
     chomp;
-    $characters[$n++]->{NAME} = $_;
-    #     $names{$_} = 0;
+    next unless $_;
+    my @l = split /\t/;
+    foreach my $hkey (@l) {
+      $characters[$n]->{$hkey} = $_;
+    }
+    $characters[$n++]->{PARTY} = $partyfile;
   }
+  close FP;
 }
-close FP;
+print "$n characters\n"; # with ", 0+@hkeys, " fields\n";
+print "Capital letter is default\n";
 
-die;
+# Manage combat sequence
+# ----------------------
+# Surprise
+my $q = query('n', 'Surprise? (y)es (N)o');
+print "Sorry, not ready to handle this yet." if $q eq 'y';
 
-# # Manage combat sequence
-# my $turn = 1;
-# do {
-#   print "\n* Turn $turn:\n";
-# 
-#   # Initiative
-# 
-# # my @roll;
-# # for (my $i=0; $i<$n; ++$i) {
-# #   $roll[$i] = rand;
-# # }
-# # print "@roll\n";
-# 
-#   print "Initiative order:\n";
+my $turn = 1;
+do {
+  print "\n* Turn $turn:\n";
+
+  # Initiative
+
+# my @roll;
+# for (my $i=0; $i<$n; ++$i) {
+#   $roll[$i] = rand;
+# }
+# print "@roll\n";
+
+  print "Initiative order:\n";
 #   my @stack;
 #   foreach (keys %names) {
 #     $names{$_} = rand;
@@ -76,11 +82,11 @@ die;
 #     print ++$rank, " $_\n";
 #     push @stack, $_;
 #   }
-# 
-#   print "Renew spells\n";
+
+  print "Renew spells\n"; # Does this come before rolling for initiative?
 #   query('Finished with spells');
-# 
-#   # Movement
+
+  # Movement
 #   do {
 # 
 #     # Select next move
@@ -92,15 +98,20 @@ die;
 # #     unless $move
 # 
 #   }
-# 
-# #   query('Proceed to next turn');
-# } while ($turn++);
-# 
-# 
-# # Interact with user
-# sub query {
-#   print shift, ' or (q)uit> ';
-#   chomp(my $input = <>);
-#   $turn = 0 if $input eq 'q';
-#   $input;
-# }
+
+  die;
+#   query('Proceed to next turn');
+} while ($turn++);
+
+
+# Interact with user
+# args: default value, query string
+sub query {
+  my $default = shift;
+  print shift, ' or (q)uit> ';
+  chomp(my $input = <STDIN>);
+#   print "input is [$input]\n";
+  $turn = 0 if $input eq 'q';
+  return $default unless $input;
+  $input;
+}
