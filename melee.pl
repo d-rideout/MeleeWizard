@@ -29,12 +29,18 @@ my $n = 0;
 # Read parties
 foreach my $partyfile (@ARGV) {
   open FP, "<$partyfile" or die "Error opening $partyfile: $!\n";
-  chomp(my $tmp = <FP>);
+  print "Reading party $partyfile:\n";
+  my $tmp;
+  do {
+    chomp($tmp = <FP>);
+  } while $tmp =~ /^#/;
   my @hkeys = split /\t/, $tmp;
   while (<FP>) {
+    next if /^#/;
     chomp;
     next unless $_;
     my @l = split /\t/;
+    print " $l[0]\n";
     foreach my $hkey (@l) {
       $characters[$n]->{$hkey} = $_;
     }
@@ -47,11 +53,17 @@ print "Capital letter is default\n";
 
 # Manage combat sequence
 # ----------------------
+# Combat sequence state
+my $turn = 1;
+my $state = ''; #power spells';
+# movement
+# action
+# force retreats
+
 # Surprise
 my $q = query('n', 'Surprise? (y)es (N)o');
 print "Sorry, not ready to handle this yet." if $q eq 'y';
 
-my $turn = 1;
 do {
   print "\n* Turn $turn:\n";
 
@@ -108,7 +120,7 @@ do {
 # args: default value, query string
 sub query {
   my $default = shift;
-  print shift, ' or (q)uit> ';
+  print "Turn $turn $state: ", shift, ' or (q)uit> ';
   chomp(my $input = <STDIN>);
 #   print "input is [$input]\n";
   $turn = 0 if $input eq 'q';
