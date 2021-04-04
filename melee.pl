@@ -17,6 +17,8 @@
 use strict;
 use warnings;
 
+# my $debug = 1;
+
 # Check command line
 die "usage: melee.pl <party 1 file> <party 2 file> <party 3 file> ...\n"
     unless @ARGV;
@@ -31,9 +33,11 @@ foreach my $partyfile (@ARGV) {
   open FP, "<$partyfile" or die "Error opening $partyfile: $!\n";
   print "Reading party $partyfile:\n";
   my $tmp;
+  # ignore leading comments
   do {
     chomp($tmp = <FP>);
   } while $tmp =~ /^#/;
+  # read header of key names
   my @hkeys = split /\t/, $tmp;
   while (<FP>) {
     next if /^#/;
@@ -41,20 +45,20 @@ foreach my $partyfile (@ARGV) {
     next unless $_;
     my @l = split /\t/;
     print " $l[0]\n";
-    foreach my $hkey (@l) {
-      $characters[$n]->{$hkey} = $_;
+    foreach my $i (0..$#hkeys) {
+      $characters[$n]->{$hkeys[$i]} = $l[$i];
     }
     $characters[$n++]->{PARTY} = $partyfile;
   }
   close FP;
 }
-print "$n characters\n"; # with ", 0+@hkeys, " fields\n";
+print "$n characters\n\n"; # with ", 0+@hkeys, " fields\n";
 print "Capital letter is default\n";
 
 # Manage combat sequence
 # ----------------------
 # Combat sequence state
-my $turn = 1;
+my $turn = 0;
 my $state = ''; #power spells';
 # movement
 # action
@@ -63,39 +67,38 @@ my $state = ''; #power spells';
 # Surprise
 my $q = query('n', 'Surprise? (y)es (N)o');
 print "Sorry, not ready to handle this yet." if $q eq 'y';
+++$turn;
 
 do {
   print "\n* Turn $turn:\n";
 
   # Initiative
-
-# my @roll;
-# for (my $i=0; $i<$n; ++$i) {
-#   $roll[$i] = rand;
-# }
-# print "@roll\n";
+  my @roll;
+  for (my $i=0; $i<$n; ++$i) {
+    $roll[$i] = rand;
+  }
+#   print "@roll\n";
 
   print "Initiative order:\n";
-#   my @stack;
+  my @order;
 #   foreach (keys %names) {
 #     $names{$_} = rand;
 # #     print "$_\t$names{$_}\n";
 #   }
 # #   print "\n";
-#   my $prev_roll;
-#   my $rank;
-#   foreach (sort {$names{$a} <=> $names{$b}} keys %names) {
-#     my $roll = $names{$_};
-#     if (defined $prev_roll && $prev_roll == $roll) {
-#       die "Roll collision!!\n";
-#     } else {
-#       $prev_roll = $roll;
-#     }
-#     print ++$rank, " $_\n";
-#     push @stack, $_;
-#   }
+  my $prev_roll;
+  my $rank;
+  foreach my $i (sort {$roll[$a] <=> $roll[$b]} 0..$#roll) {
+    my $roll = $roll[$i];
+    if (defined $prev_roll && $prev_roll == $roll) { die "Roll collision!\n"; }
+    else { $prev_roll = $roll; }
+#     print "$i\n";
+#     print "$characters[$i]\n";
+    print ++$rank, " $characters[$i]->{NAME}\n";
+    push @order, $i;
+  }
 
-  print "Renew spells\n"; # Does this come before rolling for initiative?
+  print "Renew spells\n";
 #   query('Finished with spells');
 
   # Movement
