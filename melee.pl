@@ -44,7 +44,7 @@ foreach my $partyfile (@ARGV) {
     chomp;
     next unless $_;
     my @l = split /\t/;
-    print " $l[0]\n";
+    print $n+1, "\t$l[0]\n";
     foreach my $i (0..$#hkeys) {
       $characters[$n]->{$hkeys[$i]} = $l[$i];
     }
@@ -79,7 +79,7 @@ do {
   }
 #   print "@roll\n";
 
-  print "Initiative order:\n";
+  print "\nInitiative order:\n";
   my @order;
 #   foreach (keys %names) {
 #     $names{$_} = rand;
@@ -98,7 +98,7 @@ do {
     push @order, $i;
   }
 
-  print "Renew spells or they end now\n";
+  print "\nSpell phase: Renew spells or they end now\n";
 #   query('Finished with spells');
 
   # Movement
@@ -106,6 +106,7 @@ do {
   my $i = 0;
   my $last = $n-1;
   $phase = 'movement';
+  print "\nMovement phase:\n";
   while (1) {
 
     # skip over people who have gone already
@@ -135,7 +136,38 @@ do {
     last if $last<0;
   } # movement phase
 
-  die "finished with first turn";
+  # Actions
+  print "\nAction phase:\n";
+  #   declare expected dex adjustments
+  my $dexadj = 1;
+
+  print "DEX adjustments?  Offset from original declared adj dex.  Ignore reactions to injury.\nwho +/- num (e.g. 2+4 for char 2 doing rear attack)\n";
+  while ($dexadj) {
+    $dexadj = query('', "DEX adjustment");
+    last unless $dexadj; # get rid of redundancy above!
+    if ($dexadj =~ /(\d+) ?(\+|-) ?(\d+)/) {
+      my $index = $1-1;
+      if ($index<0 || $index > $n) {
+	print "Invalid character index: $1\n";
+	next;
+      }
+      my $adj = $3;
+      $adj *= -1 if $2 eq '-';
+      print "$characters[$index]->{NAME} at $2$3 DEX = ", $characters[$index]->{ADJDEX}+$adj, "\n";
+      
+    }
+  }
+
+
+#       move in order of dex
+#       (not too sure how to handle changing one's mind -- add that later)
+# 
+# i should probably record everything that happens in this phase, e.g. to decide about forced retreats, and to manage reactions to injury
+
+  # Force Retreats
+
+
+  die "Finished with first turn\n";
 #   query('Proceed to next turn');
 } while ($turn++);
 
@@ -147,7 +179,7 @@ sub query {
   print "Turn $turn $phase: ", shift, ' or (q)uit> ';
   chomp(my $input = <STDIN>);
 #   print "input is [$input]\n";
-  $turn = 0 if $input eq 'q';
+  die "aborting\n" if $input eq 'q';
   return $default unless $input;
   $input;
 }
