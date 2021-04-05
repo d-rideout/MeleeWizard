@@ -138,6 +138,7 @@ do {
 
   # Actions
   print "\nAction phase:\n";
+  $phase = 'action';
   #   declare expected dex adjustments
 #   my $dexadj = 1;
   my @dexadj;
@@ -175,14 +176,14 @@ do {
   foreach my $dex (sort {$b <=> $a} keys %dexes) {
     # Should I go though all this if there is no tie? (4apr021)
     my $ties = $dexes{$dex};
-    print "dex $dex: ", 0+@{$ties}, " ties\n";
+    print "dex ${dex}s:\n"; # ", 0+@{$ties}, " ties\n";
     # roll initiative
     my @roll;
     foreach $i (0..$#{$ties}) {
       push @roll, rand; # ignoring repeats here (4apr021)
     }
     foreach $i (sort {$roll[$b] <=> $roll[$a]} (0..$#{$ties})) {
-      print $ties->[$i]+1, " rolled a $roll[$i]\n";
+#       print $ties->[$i]+1, " rolled a $roll[$i]\n";
       print "$characters[$ties->[$i]]->{NAME} goes\n";
     }
   }
@@ -190,9 +191,10 @@ do {
 # i should probably record everything that happens in this phase, e.g. to decide about forced retreats, and to manage reactions to injury
 
   # Force Retreats
-
-
-  die "Finished with first turn\n";
+  print "\nForced Retreats phase: execute all forced retreats\n";
+  $phase = 'forced retreats';
+  
+#   die "Finished with first turn\n";
 #   query('Proceed to next turn');
 } while ($turn++);
 
