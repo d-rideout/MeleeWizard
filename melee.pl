@@ -139,11 +139,11 @@ do {
   # Actions
   print "\nAction phase:\n";
   #   declare expected dex adjustments
-  my $dexadj = 1;
-
+#   my $dexadj = 1;
+  my @dexadj;
   print "DEX adjustments?  Offset from original declared adj dex.  Ignore reactions to injury.\nwho +/- num (e.g. 2+4 for char 2 doing rear attack)\n";
-  while ($dexadj) {
-    $dexadj = query('', "DEX adjustment");
+  while (1) {
+    my $dexadj = query('', "DEX adjustment");
     last unless $dexadj; # get rid of redundancy above!
     if ($dexadj =~ /(\d+) ?(\+|-) ?(\d+)/) {
       my $index = $1-1;
@@ -154,14 +154,39 @@ do {
       my $adj = $3;
       $adj *= -1 if $2 eq '-';
       print "$characters[$index]->{NAME} at $2$3 DEX = ", $characters[$index]->{ADJDEX}+$adj, "\n";
-      
+      $dexadj[$index] = $adj; # when do I add them together? (4apr021)
     }
   }
 
+  # Compute dex for this turn
+  my @dex;
+  for $i (0..$n-1) {
+    $dex[$i] = $characters[$i]->{ADJDEX};
+    $dex[$i] += $dexadj[$i] if $dexadj[$i];
+  }
 
-#       move in order of dex
-#       (not too sure how to handle changing one's mind -- add that later)
-# 
+  # Move in order of dex
+  # (not too sure how to handle changing one's mind -- add that later (4apr021))
+  my %dexes; # key dex val array of indices
+  for $i (0..$n-1) {
+    push @{$dexes{$dex[$i]}}, $i;
+  }
+#   foreach $i (sort {$dex[$b] <=> $dex[$a]} (0..$n-1)) {
+  foreach my $dex (sort {$b <=> $a} keys %dexes) {
+    # Should I go though all this if there is no tie? (4apr021)
+    my $ties = $dexes{$dex};
+    print "dex $dex: ", 0+@{$ties}, " ties\n";
+    # roll initiative
+    my @roll;
+    foreach $i (0..$#{$ties}) {
+      push @roll, rand; # ignoring repeats here (4apr021)
+    }
+    foreach $i (sort {$roll[$b] <=> $roll[$a]} (0..$#{$ties})) {
+      print $ties->[$i]+1, " rolled a $roll[$i]\n";
+      print "$characters[$ties->[$i]]->{NAME} goes\n";
+    }
+  }
+  
 # i should probably record everything that happens in this phase, e.g. to decide about forced retreats, and to manage reactions to injury
 
   # Force Retreats
@@ -179,7 +204,7 @@ sub query {
   print "Turn $turn $phase: ", shift, ' or (q)uit> ';
   chomp(my $input = <STDIN>);
 #   print "input is [$input]\n";
-  die "aborting\n" if $input eq 'q';
   return $default unless $input;
+  die "aborting\n" if $input eq 'q';
   $input;
 }
