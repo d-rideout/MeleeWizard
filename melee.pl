@@ -57,9 +57,9 @@ print "Capital letter is default\n";
 
 # Manage combat sequence
 # ----------------------
-# Combat sequence state
+# Combat sequence phase
 my $turn = 0;
-my $state = ''; #power spells';
+my $phase = ''; #power spells';
 # movement
 # action
 # force retreats
@@ -98,23 +98,44 @@ do {
     push @order, $i;
   }
 
-  print "Renew spells\n";
+  print "Renew spells or they end now\n";
 #   query('Finished with spells');
 
   # Movement
-#   do {
-# 
-#     # Select next move
-#     my $i = 0;
-#     my $name;
-# #     until ($i<$n && $name = $stack[$i++]) {}
-#     print $name;
-#     my $move = query(" move, (d)efer");
-# #     unless $move
-# 
-#   }
+  my @moved; # who has moved so far
+  my $i = 0;
+  my $last = $n-1;
+  $phase = 'movement';
+  while (1) {
 
-  die;
+    # skip over people who have gone already
+    while ($moved[$i]) { ++$i; }
+
+    # move $i
+#     my $name;
+#     until ($i<$n && $name = $stack[$i++]) {}
+#     print $name;
+    if ($i == $last) {
+      print "$characters[$order[$i]]->{NAME} moves\n";
+      $moved[$i] = 1;
+      $i = 0;
+      while ($last>=0 && $moved[--$last]) {}
+    } else {
+      my $move = query('d', "$characters[$order[$i]]->{NAME} (m)ove, or (D)efer");
+      if ($move eq 'm') {
+	$moved[$i] = 1;
+	$i = 0;
+	#       next;
+      } elsif ($move eq 'd') {
+	++$i;
+      } elsif ($move eq 'q') {
+	die "aborting";
+      } else { print "unrecognized response [$move]\n"; }
+    }
+    last if $last<0;
+  } # movement phase
+
+  die "finished with first turn";
 #   query('Proceed to next turn');
 } while ($turn++);
 
@@ -123,7 +144,7 @@ do {
 # args: default value, query string
 sub query {
   my $default = shift;
-  print "Turn $turn $state: ", shift, ' or (q)uit> ';
+  print "Turn $turn $phase: ", shift, ' or (q)uit> ';
   chomp(my $input = <STDIN>);
 #   print "input is [$input]\n";
   $turn = 0 if $input eq 'q';
