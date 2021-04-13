@@ -13,3 +13,13 @@ A battle involves two or more *sides*.  Each side if composed of *parties*, whic
 
 Before starting the battle, create a file for each party, which details all characters in the party, including who is playing them and their 'usual' adjusted DEX.
 There are two sample party files in the `parties/` folder.
+They are tab-separated-value files: you can edit them with your favorite
+spreadsheet program or text editor.
+
+Run the tool however you launch Perl programs on your computer.  For
+example, from the Linux command line:
+```
+$ melee.pl coyotes fair2midlin
+```
+(melee.pl looks for your party files in `parties/` if you do not specify a
+full path to them.)

@@ -20,7 +20,7 @@ use warnings;
 # my $debug = 1;
 
 # Check command line
-die "usage: melee.pl <party 1 file> <party 2 file> <party 3 file> ...\n"
+die "usage: melee.pl <party 1> <party 2> <party 3> ...\n"
     unless @ARGV;
 
 # Data structures
@@ -30,6 +30,7 @@ my $n = 0;
 
 # Read parties
 foreach my $partyfile (@ARGV) {
+  $partyfile = "parties/$partyfile" unless $partyfile =~ /^parties\//;
   open FP, "<$partyfile" or die "Error opening $partyfile: $!\n";
   print "Reading party $partyfile:\n";
   my $tmp;
@@ -129,8 +130,8 @@ do {
 	#       next;
       } elsif ($move eq 'd') {
 	++$i;
-      } elsif ($move eq 'q') {
-	die "aborting";
+	#  elsif ($move eq 'q') {
+	# 	die "Finished.";
       } else { print "unrecognized response [$move]\n"; }
     }
     last if $last<0;
@@ -207,6 +208,6 @@ sub query {
   chomp(my $input = <STDIN>);
 #   print "input is [$input]\n";
   return $default unless $input;
-  die "aborting\n" if $input eq 'q';
+  die "Finished.\n" if $input eq 'q';
   $input;
 }
