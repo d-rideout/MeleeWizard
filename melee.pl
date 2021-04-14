@@ -25,7 +25,8 @@ die "usage: melee.pl <party 1> <party 2> <party 3> ...\n"
 
 # Data structures
 my @characters;
-# hkeys: NAME ADJDEX PLAYER PARTY
+my %hkeys = (NAME=>1, NHEX=>1, ST=>1, ADJDEX=>1, PLAYER=>1, PARTY=>0);
+# 1 ==> can appear in party file
 my $n = 0;
 
 # Read parties
@@ -42,6 +43,11 @@ foreach my $partyfile (@ARGV) {
   } while $tmp =~ /^#/;
   # read header of key names
   my @hkeys = split /\t/, $tmp;
+  # Check that all headers are valid
+  foreach (@hkeys) {
+#     die "Unrecognized field in party $partyfile: $_\n" unless $hkeys{$_};
+    die "Unrecognized field: $_\n" unless $hkeys{$_};
+  }
   while (<FP>) {
     next if /^#/;
     chomp;
@@ -51,6 +57,11 @@ foreach my $partyfile (@ARGV) {
     foreach my $i (0..$#hkeys) {
       $characters[$n]->{$hkeys[$i]} = $l[$i];
     }
+
+    # Check that all fields are present?
+    #   foreach (keys %hkeys)
+    die "Please provide ADJDEX for all characters\n" unless $characters[$n]->{ADJDEX};
+
     $characters[$n++]->{PARTY} = $partyfile;
   }
   close FP;
@@ -62,7 +73,8 @@ print "Capital letter is default\n";
 # ----------------------
 # Combat sequence phase
 my $turn = 0;
-my $phase = ''; #power spells';
+my $phase = '';
+# power spells
 # movement
 # action
 # force retreats

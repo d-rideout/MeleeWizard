@@ -1,5 +1,3 @@
-* abort if no adj dx declared (11apr021)
-
 * display char numbers before dex adj? (11apr021)
 * dx adjustments enter when finished (11apr021)
 
@@ -40,3 +38,4 @@
 * find parties in `parties/` (13apr021)
 * Provide party template for github (4apr021)
 * Write README.md?
+* abort if no adj dx declared (11apr021)
