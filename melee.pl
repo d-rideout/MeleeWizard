@@ -30,8 +30,10 @@ my $n = 0;
 
 # Read parties
 foreach my $partyfile (@ARGV) {
-  $partyfile = "parties/$partyfile" unless $partyfile =~ /^parties\//;
-  open FP, "<$partyfile" or die "Error opening $partyfile: $!\n";
+  unless (open FP, '<', $partyfile) {
+    #     $partyfile = "parties/$partyfile"; # unless $partyfile =~ /^parties\//;
+    open FP, '<', "parties/$partyfile" or die "Error opening $partyfile: $!\n";
+  }
   print "Reading party $partyfile:\n";
   my $tmp;
   # ignore leading comments
