@@ -1,6 +1,3 @@
-* display char numbers before dex adj? (11apr021)
-* dx adjustments enter when finished (11apr021)
-
 * put in reactions to injury or have them put it into adj dx!
   note injury will change execution order!! (11apr021)
 * Handle dex adjustments due to injury (4apr021)
@@ -39,3 +36,5 @@
 * Provide party template for github (4apr021)
 * Write README.md?
 * abort if no adj dx declared (11apr021)
+* display char numbers before dex adj? (11apr021)
+* dx adjustments enter when finished (11apr021)

@@ -152,18 +152,20 @@ do {
   } # movement phase
 
   # Actions
+  # -------
   print "\nAction phase:\n";
   $phase = 'action';
-  #   declare expected dex adjustments
-#   my $dexadj = 1;
+  # Declare expected dex adjustments
   my @dexadj;
-  print "DEX adjustments?  Offset from original declared adj dex.  Ignore reactions to injury.\nwho +/- num (e.g. 2+4 for char 2 doing rear attack)\n";
+#   print "DEX adjustments?  Offset from original declared adj dex.  Ignore reactions to injury.\nwho +/- num (e.g. 2+4 for char 2 doing rear attack)\n";
+  print "DEX adjustments?  Offset from original declared adjDX.  Include reactions to injury for now.\nwho +/- num (e.g. 2+4 for char 2 doing rear attack)\n";
+  &displayCharacters;
   while (1) {
-    my $dexadj = query('', "DEX adjustment");
-    last unless $dexadj; # get rid of redundancy above!
+    my $dexadj = query('', "DEX adjustment, (F)inished");
+    last unless $dexadj;
     if ($dexadj =~ /(\d+) ?(\+|-) ?(\d+)/) {
       my $index = $1-1;
-      if ($index<0 || $index > $n) {
+      if ($index<0 || $index >= $n) {
 	print "Invalid character index: $1\n";
 	next;
       }
@@ -171,7 +173,7 @@ do {
       $adj *= -1 if $2 eq '-';
       print "$characters[$index]->{NAME} at $2$3 DEX = ", $characters[$index]->{ADJDEX}+$adj, "\n";
       $dexadj[$index] = $adj; # when do I add them together? (4apr021)
-    }
+    } else { print "Unrecognized adjustment $dexadj\n"; }
   }
 
   # Compute dex for this turn
@@ -212,6 +214,14 @@ do {
 #   die "Finished with first turn\n";
 #   query('Proceed to next turn');
 } while ($turn++);
+
+
+# Display characters
+sub displayCharacters {
+  for my $i (0..$#characters) {
+    print $i+1, "\t$characters[$i]->{NAME}\n";
+  }
+}
 
 
 # Interact with user
