@@ -1,6 +1,6 @@
-* put in reactions to injury or have them put it into adj dx!
-  note injury will change execution order!! (11apr021)
-* Handle dex adjustments due to injury (4apr021)
+* Skip over unconscious characters during movement (20apr021)
+* Sort out forced retreats! (16apr021)
+* Take into account damage from casting spells! (16apr021)
 
 #### Later / Dunno:
 
@@ -38,3 +38,5 @@
 * abort if no adj dx declared (11apr021)
 * display char numbers before dex adj? (11apr021)
 * dx adjustments enter when finished (11apr021)
+* put in reactions to injury or have them put it into adj dx!
+  note injury will change execution order!! (11apr021)
