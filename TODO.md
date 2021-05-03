@@ -2,6 +2,12 @@
 * Sort out forced retreats! (16apr021)
 * Take into account damage from casting spells! (16apr021)
 
+* It may be cool to save the sequence of actions&outcomes to a file, so the
+  code can be aborted and restarted in the middle of a battle.  For debugging
+  primarily. (2may021)
+* It may help to document the algorithms, so that one understands how to
+  implement features. (2may021)
+
 #### Later / Dunno:
 
 * What happens with other missing fields? (14apr021)
