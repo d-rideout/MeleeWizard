@@ -206,6 +206,7 @@ do {
   print "Actions: who - dam (e.g. 2-4 for 4 damage to character 2 after armor)\n";
   @dexes_keys = sort {$b <=> $a} keys %dexes;
 #   foreach my $dex (sort {$b <=> $a} keys %dexes) { 
+  my @turn_damage;
   while (my $dex = shift @dexes_keys) { # assuming no one has 0 dex! (20apr021)
     # Should I go though all this if there is no tie? (4apr021)
     my $ties = $dexes{$dex};
@@ -237,14 +238,17 @@ do {
 	  # Reaction to Injury
 	  print "$damage ST damage to $chr->{NAME}\n";
 	  $chr->{STrem} -= $damage;
+	  $turn_damage[$injuredi] += $damage;
+	  print "$chr->{NAME} has taken $turn_damage[$injuredi] damage so far this turn\n"; 
+	  my $turn_damage = $turn_damage[$injuredi];
 	  my $olddex = $dex[$injuredi];
 	  my $newdex = $dex[$injuredi];
-	  if ($damage >= $chr->{STUN}) {
+	  if ($turn_damage >= $chr->{STUN}) {
 	    print "$chr->{NAME} is stunned\n";
 	    $chr->{StunTurn} = $turn+2;
 	    $newdex -= 2;
 	  }
-	  print "$chr->{NAME} falls down\n" if $damage >= $chr->{FALL};
+	  print "$chr->{NAME} falls down\n" if $turn_damage >= $chr->{FALL};
 	  if ($chr->{STrem} <4) {
 	    print "$chr->{NAME} is in bad shape...\n";
 	    $newdex -= 3;
