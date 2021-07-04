@@ -1,6 +1,8 @@
-* Skip over unconscious characters during movement (20apr021)
+* Create characters from spells! (3jul021)
 * Sort out forced retreats! (16apr021)
 * Take into account damage from casting spells! (16apr021)
+  - both for renewal and initial cast
+* dead characters should not populate dex ties lists (3jul021)
 
 * It may be cool to save the sequence of actions&outcomes to a file, so the
   code can be aborted and restarted in the middle of a battle.  For debugging
@@ -14,7 +16,6 @@
 * Allow referencing characters by first letters of name (14apr021)
 * Implement deferred actions (4apr021)
 * finish dx adj when all characters entered(?) (11apr021)
-* Handle death / unconsciousness
 * Allow changing mind about action -- how does that affect turn order?
 * Only put 'q' to quit at beginning?
 * GPL wants a blurb at the opening of the program
@@ -46,3 +47,5 @@
 * dx adjustments enter when finished (11apr021)
 * put in reactions to injury or have them put it into adj dx!
   note injury will change execution order!! (11apr021)
+* Skip over unconscious characters during movement (20apr021)
+* Handle death / unconsciousness

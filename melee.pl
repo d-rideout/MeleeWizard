@@ -24,10 +24,10 @@ die "usage: melee.pl <party 1> <party 2> <party 3> ...\n"
     unless @ARGV;
 
 # Data structures
-my @characters;
+my @characters; # val hash with below keys
 my %hkeys = (NAME=>1, ST=>1, STrem=>1, ADJDEX=>1, PLAYER=>1, PARTY=>0, STUN=>0, FALL=>0, StunTurn=>0, DEAD=>0);
 # 1 ==> can appear in party file
-my $n = 0;
+my $n = 0; # total number of characters
 
 # Banner
 $debug && print "Debug level $debug\n\n";
@@ -88,10 +88,6 @@ foreach (@characters) {
 # Combat sequence phase
 my $turn = 0;
 my $phase = '';
-# power spells
-# movement
-# action
-# force retreats
 
 # Surprise
 my $q = query('n', 'Surprise? (y)es (N)o');
@@ -110,20 +106,24 @@ do {
   my @order;
   my $prev_roll;
   my $rank;
+  my @moved; # who has moved so far
+  #my $ndead = 0;
   foreach my $i (sort {$roll[$a] <=> $roll[$b]} 0..$#roll) {
     my $roll = $roll[$i];
     if (defined $prev_roll && $prev_roll == $roll) { die "Roll collision!\n"; }
     else { $prev_roll = $roll; }
-    print ++$rank, " $characters[$i]->{NAME}\n";
+    unless ($characters[$i]->{DEAD}) {
+      print ++$rank, " $characters[$i]->{NAME}\n";
+    } else { $moved[$i] = 1; } # ++$ndead; }
     push @order, $i;
   }
 
   print "\nSpell phase: Renew spells or they end now\n";
+  # need to charge st cost for spells here (3jul021)
 #   query('Finished with spells');
 
   # Movement
   # --------
-  my @moved; # who has moved so far
   my $i = 0;
   my $last = $n-1; # who is last in queue
   $phase = 'movement';
@@ -131,7 +131,7 @@ do {
   while (1) {
 
     # skip over people who have gone already
-#     while ($moved[$i] || $characters[$order[$i]]->{DEAD}) { ++$i; }
+ #   while ($moved[$i] || $characters[$order[$i]]->{DEAD}) { ++$i; }
     while ($moved[$i]) { ++$i; }
 
     if ($i == $last) {
@@ -318,11 +318,11 @@ do {
 
 # Display characters
 sub displayCharacters {
-  print '-'x24, "\nCharacters:\n";
+  print '-'x25, "\nCharacters:\n";
   for my $i (0..$#characters) {
-    print $i+1, "\t$characters[$i]->{NAME}\n";
+    print $i+1, "\t$characters[$i]->{NAME}\n" unless $characters[$i]->{DEAD};
   }
-  print '-'x24, "\n";
+  print '-'x25, "\n";
 }
 
 
