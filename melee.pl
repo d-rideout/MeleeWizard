@@ -17,15 +17,30 @@
 use strict;
 use warnings;
 
-my $debug = 0;
+# Setting flags
+my $debug = 1; # 1 ==> max debug output
+my $initiative = 'c'; # c ==> character-based; p ==> party-based
+                      # l ==> pLayer-based; s ==> 'side-based
+
+# Check settings
+die "Only character-based iniative is currently implemented\n" unless $initiative eq 'c';
 
 # Check command line
-die "usage: melee.pl <party 1> <party 2> <party 3> ...\n"
-    unless @ARGV;
+die "usage: melee.pl [-l] <party 1> <party 2> <party 3> ...\n" .
+    "  -l ==> restart from log file\n" unless @ARGV;
+my $restart;
+if ($ARGV[0] eq '-l') {
+  $restart = 1;
+  shift @ARGV;
+}
+
+################################################################################
+# code cleaner above this line? (27jul021)
 
 # Data structures
 my @characters; # val hash with below keys
-my %hkeys = (NAME=>1, ST=>1, STrem=>1, ADJDEX=>1, PLAYER=>1, PARTY=>0, STUN=>0, FALL=>0, StunTurn=>0, DEAD=>0);
+my %charkeys; # key namekey val index into @characters
+my %hkeys = (NAME=>1, ST=>1, STrem=>1, ADJDEX=>1, PLAYER=>1, PARTY=>0, STUN=>0, FALL=>0, StunTurn=>0, DEAD=>0, NAMEKEY=>0);
 # 1 ==> can appear in party file
 my $n = 0; # total number of characters
 
@@ -75,14 +90,39 @@ print "Capital letter is default\n";
 
 # Preparations
 # ------------
-foreach (@characters) {
-  my $st = $_->{ST};
-  if ($st < 30) { $_->{STUN} = 5; $_->{FALL} = 8; } # normal
-  elsif ($st < 50) { $_->{STUN} = 9; $_->{FALL} = 16; } # giants
-  else { $_->{STUN} = 15; $_->{FALL} = 25; } # dragons
-  $_->{STrem} = $st unless $_->{STrem};
-  $_->{StunTurn} = 0;
+foreach my $ci (0..$#characters) {
+  # stun & fall thresholds
+  my $char = $characters[$ci];
+  my $st = $char->{ST};
+  if ($st < 30) { $char->{STUN} = 5; $char->{FALL} = 8; } # normal
+  elsif ($st < 50) { $char->{STUN} = 9; $char->{FALL} = 16; } # giants
+  else { $char->{STUN} = 15; $char->{FALL} = 25; } # dragons
+  $char->{STrem} = $st unless $char->{STrem};
+  $char->{StunTurn} = 0;
+
+  # name keys
+  my $name = $char->{NAME};
+  my $len = 1;
+  my $namekey = substr $name, 0, $len;
+  $namekey = substr $name, 0, ++$len while defined $charkeys{$namekey};
+  $charkeys{$namekey} = $ci;
+  $char->{NAMEKEY} = $namekey;
+  # Is this good enough, or do I need to expand both keys? (27jul021)
+  # Actually this could be better, e.g. if two people have the same first name.
 }
+
+# Open log file
+# -------------
+my @log;
+if ($restart) {
+  open LOG, '<log' or die "problem reading log file";
+  chomp(my $seed = <LOG>);
+  srand $seed;
+  @log = <LOG>;
+  close LOG;
+}
+open LOG, '>log' or die "problem creating log file";
+print LOG srand, "\n";
 
 # Manage combat sequence
 # ----------------------
@@ -164,13 +204,13 @@ do {
   # Declare expected dex adjustments
   my @dexadj; # amt to add to ADJDEX
   &displayCharacters;
-  print "DEX adjustments?  Offset from original declared adj dex.  Ignore reactions to injury.\nwho +/- num (e.g. 2+4 for char 2 doing rear attack)\n";
+  print "DEX adjustments?  Offset from original declared adj dex.  Ignore reactions to injury and weapon range penalties.\nwho +/- num (e.g. 2+4 for char 2 doing rear attack)\n";
 #   print "DEX adjustments?  Offset from original declared adjDX.  Include reactions to injury for now.\nwho +/- num (e.g. 2+4 for char 2 doing rear attack)\n";
   while (1) {
     my $dexadj = query('', "DEX adjustment, (F)inished");
     last unless $dexadj;
     if ($dexadj =~ /(\d+) ?(\+|-) ?(\d+)/) {
-      my $index = $1-1;
+      my $index = $1;
       if ($index<0 || $index >= $n) {
 	print "Invalid character index: $1\n";
 	next;
@@ -229,7 +269,7 @@ do {
       while (1) {
 	my $dam = query('', "$characters[$ties->[$i]]->{NAME} does damage? (N)o");
 	if ($dam =~ /(\d+) ?- ?(\d+)/) {
-	  my $injuredi = $1-1;
+	  my $injuredi = $1;
 	  if ($injuredi<0 || $injuredi >= $n) {
 	    print "Invalid character index: $1\n";
 	    next;
@@ -326,7 +366,7 @@ do {
 sub displayCharacters {
   print '-'x25, "\nCharacters:\n";
   for my $i (0..$#characters) {
-    print $i+1, "\t$characters[$i]->{NAME}\n" unless $characters[$i]->{DEAD};
+    print $i, "\t$characters[$i]->{NAME}\n" unless $characters[$i]->{DEAD};
   }
   print '-'x25, "\n";
 }
@@ -337,9 +377,12 @@ sub displayCharacters {
 sub query {
   my $default = shift;
   print "Turn $turn $phase: ", shift, ' or (q)uit> ';
-  chomp(my $input = <STDIN>);
-#   print "input is [$input]\n";
+  my $input;
+  if ($restart && @log) { $input = shift @log; }
+  else { chomp($input = <STDIN>); }
+  #   print "input is [$input]\n";
   return $default unless $input;
   die "Finished.\n" if $input eq 'q';
+  print LOG "$input\n";
   $input;
 }

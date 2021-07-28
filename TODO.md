@@ -1,3 +1,7 @@
+#### Questions:
+What problems would arise if characters were stored in a hash? (27jul021)
+
+#### Urgent:
 and then it just choked on uninitialized value in array element in @order at line 149.
 The whole thing needs to be rewritten with a debug mode etc etc. (25jul021)
 
@@ -23,6 +27,14 @@ erewon got skipped for move somehow, after orasmus who is dead
   primarily. (2may021)
 * It may help to document the algorithms, so that one understands how to
   implement features. (2may021)
+
+* charging Pole arms go first (27jul021)
+
+% * log file will need iniative rolls to be useful!  Or a seed say. (27jul021)
+
+#### Non-urgent:
+* Implement non-character iniative schemes? (27jul021)
+* Allow deferring action? (27jul021)
 
 #### Later / Dunno:
 
