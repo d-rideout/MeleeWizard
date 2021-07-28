@@ -1,4 +1,18 @@
+and then it just choked on uninitialized value in array element in @order at line 149.
+The whole thing needs to be rewritten with a debug mode etc etc. (25jul021)
+
+* bugs in bugs file
+
+* Dead characters should not move? (25jul021)
+* stunned chars go twice??  Oh this guy was multiply stunned maybe!  But no matter! (25jul021)
+Yes they can go twice!
+erewon got skipped for move somehow, after orasmus who is dead
 * Create characters from spells! (3jul021)
+* pole weapon attacks go first! (25jul021)
+
+* illusions etc need to be added (for initiative and turn order)!!
+* dead things need to be taken out of queries
+
 * Sort out forced retreats! (16apr021)
 * Take into account damage from casting spells! (16apr021)
   - both for renewal and initial cast

@@ -47,6 +47,7 @@ foreach my $partyfile (@ARGV) {
   foreach (@hkeys) { die "Unrecognized field: $_\n" unless $hkeys{$_}; }
   while (<FP>) {
     next if /^#/;
+    next unless /[^\s]/;
     chomp;
     next unless $_;
     my @l = split /\t/;
@@ -128,10 +129,15 @@ do {
   my $last = $n-1; # who is last in queue
   $phase = 'movement';
   print "\nMovement phase:\n";
+  # Have dead people move already
+  while ($i<=$last) {
+    $moved[$i] = 1 if $characters[$order[$i]]->{DEAD};
+    ++$i;
+  }
+  $i=0;
   while (1) {
 
     # skip over people who have gone already
- #   while ($moved[$i] || $characters[$order[$i]]->{DEAD}) { ++$i; }
     while ($moved[$i]) { ++$i; }
 
     if ($i == $last) {

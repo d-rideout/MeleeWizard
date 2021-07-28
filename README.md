@@ -23,3 +23,9 @@ $ melee.pl coyotes fair2midlin
 ```
 (melee.pl looks for your party files in `parties/` if you do not specify a
 full path to them.)
+
+## Files
+
+`doc/HouseRules` : some decisions and discussion (27jul021)
+
+`bugs` : for requests that include screen output, otherwise put into TODO.md (27jul021)

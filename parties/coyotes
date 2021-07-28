@@ -1,7 +1,7 @@
 NAME	PLAYER	ADJDEX	ST
-BlueC	Dad	12	9
+D	Dad	12	9
 BlackC	Dad	12	9
-V	Dad	12	9
+# V	Dad	12	9
 # Lines beginning with a '#' are comments ignored by melee.pl
 # maybe three is enough of a challenge...
 # Omega	Dad	12
