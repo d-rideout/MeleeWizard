@@ -114,15 +114,16 @@ foreach my $ci (0..$#characters) {
 # Open log file
 # -------------
 my @log;
+my $seed;
 if ($restart) {
   open LOG, '<log' or die "problem reading log file";
-  chomp(my $seed = <LOG>);
+  chomp($seed = <LOG>);
   srand $seed;
   @log = <LOG>;
   close LOG;
-}
+} else { $seed = srand; }
 open LOG, '>log' or die "problem creating log file";
-print LOG srand, "\n";
+print LOG "$seed\n";
 
 # Manage combat sequence
 # ----------------------
@@ -263,11 +264,12 @@ do {
     my @dex_ties = sort {$roll[$b] <=> $roll[$a]} (0..$#{$ties});
     while (defined($i = shift @dex_ties)) {
       $debug && print "people with this dex: ties = @{$ties}\n";
-      $debug && print "people with this dex: ties = @dex_ties\n";
-      $debug && print "$i goes now\n";
+      $debug && print "remaining ordered people with this dex: @dex_ties\n";
+      $debug && print "tie $i goes now, char $ties->[$i]\n";
       next if $acted[$ties->[$i]];
       while (1) {
 	my $dam = query('', "$characters[$ties->[$i]]->{NAME} does damage? (N)o");
+	$acted[$ties->[$i]] = 1;
 	if ($dam =~ /(\d+) ?- ?(\d+)/) {
 	  my $injuredi = $1;
 	  if ($injuredi<0 || $injuredi >= $n) {
@@ -308,7 +310,6 @@ do {
 
 	  # Record that $ties->[$i] acted
 # 	  print "i=$i\n";
-	  $acted[$ties->[$i]] = 1;
 
 	  # Push injured back in action order?
 # 	  need to pull injuredi out of ties array if $dex == $olddex
@@ -378,11 +379,14 @@ sub query {
   my $default = shift;
   print "Turn $turn $phase: ", shift, ' or (q)uit> ';
   my $input;
-  if ($restart && @log) { $input = shift @log; }
+  if ($restart && @log) {
+    print $input = shift @log;
+    chomp $input;
+  }
   else { chomp($input = <STDIN>); }
   #   print "input is [$input]\n";
+  print LOG "$input\n";
   return $default unless $input;
   die "Finished.\n" if $input eq 'q';
-  print LOG "$input\n";
   $input;
 }

@@ -32,6 +32,8 @@ erewon got skipped for move somehow, after orasmus who is dead
 
 % * log file will need iniative rolls to be useful!  Or a seed say. (27jul021)
 
+* name key will choke if run over end of name!  Put monsters first... (27jul021)
+
 #### Non-urgent:
 * Implement non-character iniative schemes? (27jul021)
 * Allow deferring action? (27jul021)
