@@ -171,25 +171,25 @@ do {
   $phase = 'movement';
   print "\nMovement phase:\n";
   # Have dead people move already
-  while ($i<=$last) {
-    $moved[$i] = 1 if $characters[$order[$i]]->{DEAD};
-    ++$i;
-  }
-  $i=0;
+#   foreach (@characters)
+#     $moved[$i] = 1 if $characters[$order[$i]]->{DEAD};
+#     ++$i;
+#   }
+#   $i=0;
   while (1) {
 
     # skip over people who have gone already
-    while ($moved[$i]) { ++$i; }
+    while ($moved[$order[$i]]) { ++$i; }
 
     if ($i == $last) {
       print "$characters[$order[$i]]->{NAME} moves\n";
-      $moved[$i] = 1;
+      $moved[$order[$i]] = 1;
       $i = 0;
-      while ($last>=0 && $moved[--$last]) {}
+      while ($last>=0 && $moved[$order[--$last]]) {}
     } else {
       my $move = query('d', "$characters[$order[$i]]->{NAME} (m)ove, or (D)efer");
       if ($move eq 'm') {
-	$moved[$i] = 1;
+	$moved[$order[$i]] = 1;
 	$i = 0;
       } elsif ($move eq 'd') { ++$i; }
       else { print "unrecognized response [$move]\n"; }
@@ -385,7 +385,7 @@ sub query {
   }
   else { chomp($input = <STDIN>); }
   #   print "input is [$input]\n";
-  print LOG "$input\n";
+  print LOG "$input\n" unless $input eq 'q';
   return $default unless $input;
   die "Finished.\n" if $input eq 'q';
   $input;
