@@ -90,26 +90,7 @@ print "Capital letter is default\n";
 
 # Preparations
 # ------------
-foreach my $ci (0..$#characters) {
-  # stun & fall thresholds
-  my $char = $characters[$ci];
-  my $st = $char->{ST};
-  if ($st < 30) { $char->{STUN} = 5; $char->{FALL} = 8; } # normal
-  elsif ($st < 50) { $char->{STUN} = 9; $char->{FALL} = 16; } # giants
-  else { $char->{STUN} = 15; $char->{FALL} = 25; } # dragons
-  $char->{STrem} = $st unless $char->{STrem};
-  $char->{StunTurn} = 0;
-
-  # name keys
-  my $name = $char->{NAME};
-  my $len = 1;
-  my $namekey = substr $name, 0, $len;
-  $namekey = substr $name, 0, ++$len while defined $charkeys{$namekey};
-  $charkeys{$namekey} = $ci;
-  $char->{NAMEKEY} = $namekey;
-  # Is this good enough, or do I need to expand both keys? (27jul021)
-  # Actually this could be better, e.g. if two people have the same first name.
-}
+foreach my $ci (0..$#characters) { character_prep($ci); }
 
 # Open log file
 # -------------
@@ -349,14 +330,13 @@ do {
 	elsif ($action =~ /^(.+) (\d+) (\d+)$/) {
 	  print "$1 created with ST $2 adjDX $3\n";
 	  # Not too sure how to handle this.  Will write explicit code for now, but should put into function which is shared with 'Read parties' code above. (29jul021)
-	  $characters[++$n]->{NAME} = $1;
+	  $characters[$n]->{NAME} = $1;
 	  $characters[$n]->{ST} = $2;
 	  $characters[$n]->{STrem} = $2;
 	  $characters[$n]->{ADJDEX} = $3;
 	  $characters[$n]->{PLAYER} = $characters[$ties->[$i]]->{NAME};
 	  $characters[$n]->{PARTY} = $characters[$ties->[$i]]->{PARTY};
-	  # Need to do something about NAMEKEY.  Need function which integrates new NAMEKEY. (29jul021)
-	  # Is this enough??  I will not do anything until next turn anyway.
+	  character_prep($n++);
 	} # create being
 	elsif (!$action) { last; } # exits action query for this character
 	else { print "Unrecognized action $action\n"; }
@@ -380,7 +360,8 @@ do {
 sub displayCharacters {
   print '-'x25, "\nCharacters:\n";
   for my $i (0..$#characters) {
-    print $i, "\t$characters[$i]->{NAME}\n" unless $characters[$i]->{DEAD};
+    my $c = $characters[$i];
+    print $i, "\t$c->{NAMEKEY}\t$c->{NAME}\n" unless $c->{DEAD};
   }
   print '-'x25, "\n";
 }
@@ -402,4 +383,29 @@ sub query {
   return $default unless $input;
   die "Finished.\n" if $input eq 'q';
   $input;
+}
+
+
+# Character preparations?
+sub character_prep {
+  my $ci = shift;
+
+  # stun & fall thresholds
+  my $char = $characters[$ci];
+  my $st = $char->{ST};
+  if ($st < 30) { $char->{STUN} = 5; $char->{FALL} = 8; } # normal
+  elsif ($st < 50) { $char->{STUN} = 9; $char->{FALL} = 16; } # giants
+  else { $char->{STUN} = 15; $char->{FALL} = 25; } # dragons
+  $char->{STrem} = $st unless $char->{STrem};
+  $char->{StunTurn} = 0;
+
+  # name keys
+  my $name = $char->{NAME};
+  my $len = 1;
+  my $namekey = substr $name, 0, $len;
+  $namekey = substr $name, 0, ++$len while defined $charkeys{$namekey};
+  $charkeys{$namekey} = $ci;
+  $char->{NAMEKEY} = $namekey;
+  # Is this good enough, or do I need to expand both keys? (27jul021)
+  # Actually this could be better, e.g. if two people have the same first name.
 }
