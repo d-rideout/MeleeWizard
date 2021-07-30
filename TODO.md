@@ -1,7 +1,6 @@
-#### Questions:
-What problems would arise if characters were stored in a hash? (27jul021)
-
 #### Urgent:
+* second bow shot!
+
 and then it just choked on uninitialized value in array element in @order at line 149.
 The whole thing needs to be rewritten with a debug mode etc etc. (25jul021)
 
@@ -62,6 +61,9 @@ erewon got skipped for move somehow, after orasmus who is dead
 * use extensions for party files?
   Maybe not for starters.
 * find parties in spite of extensions
+
+#### Questions:
+What problems would arise if characters were stored in a hash? (27jul021)
 
 #### DONE:
 

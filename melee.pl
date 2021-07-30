@@ -206,6 +206,7 @@ do {
   my @dexadj; # amt to add to ADJDEX
   &displayCharacters;
   print "DEX adjustments?  Offset from original declared adj dex.  Ignore reactions to injury and weapon range penalties.\nwho +/- num (e.g. 2+4 for char 2 doing rear attack)\n";
+  # In the future this will ask about pole weapon charges and doubled arrows (29jul021)
 #   print "DEX adjustments?  Offset from original declared adjDX.  Include reactions to injury for now.\nwho +/- num (e.g. 2+4 for char 2 doing rear attack)\n";
   while (1) {
     my $dexadj = query('', "DEX adjustment, (F)inished");
@@ -250,13 +251,18 @@ do {
   }
   # Act in order
   &displayCharacters;
-  print "Actions: who - dam (e.g. 2-4 for 4 damage to character 2 after armor)\n";
+  print "Actions:\n  who - dam (e.g. 2-4 for 4 damage to character 2 after armor)\n";
+  print "  name ST adjDX (for created being)\n";
   @dexes_keys = sort {$b <=> $a} keys %dexes;
 #   foreach my $dex (sort {$b <=> $a} keys %dexes) { 
   my @turn_damage;
   while (my $dex = shift @dexes_keys) { # assuming no one has 0 dex! (20apr021)
     # Should I go though all this if there is no tie? (4apr021)
     my $ties = $dexes{$dex};
+    unless (@$ties) {
+      print "skipping empty dex slot!\n";
+      next;
+    }
     print "dex ${dex}s:\n"; # ", 0+@{$ties}, " ties\n";
     # roll initiative
     my @roll;
@@ -268,9 +274,9 @@ do {
       $debug && print "tie $i goes now, char $ties->[$i]\n";
       next if $acted[$ties->[$i]];
       while (1) {
-	my $dam = query('', "$characters[$ties->[$i]]->{NAME} does damage? (N)o");
+	my $action = query('', "$characters[$ties->[$i]]->{NAME} action? (N)o");
 	$acted[$ties->[$i]] = 1;
-	if ($dam =~ /(\d+) ?- ?(\d+)/) {
+	if ($action =~ /(\d+) ?- ?(\d+)/) {
 	  my $injuredi = $1;
 	  if ($injuredi<0 || $injuredi >= $n) {
 	    print "Invalid character index: $1\n";
@@ -308,14 +314,8 @@ do {
 	    $acted[$injuredi] = 1;
 	  }
 
-	  # Record that $ties->[$i] acted
-# 	  print "i=$i\n";
-
-	  # Push injured back in action order?
-# 	  need to pull injuredi out of ties array if $dex == $olddex
-# 	      but how does that interact with the loop structure?
-	  # 	      either change loop or build special case to skip this person
-
+	  # Push injured back in action order
+	  
 	  # This below does not actually help -- does not remove injured from
 	  # current dex loop if injured has current dex	  
 	  if (!$acted[$injuredi] && $newdex < $olddex) {
@@ -345,9 +345,22 @@ do {
 	  } # push back in action order
 
 	  last; # exit from while (1) damage query loop
-	} elsif (!$dam) { last; }
-	else { print "Unrecognized damage $dam\n"; }
-      } # what happened
+	} # did damage
+	elsif ($action =~ /^(.+) (\d+) (\d+)$/) {
+	  print "$1 created with ST $2 adjDX $3\n";
+	  # Not too sure how to handle this.  Will write explicit code for now, but should put into function which is shared with 'Read parties' code above. (29jul021)
+	  $characters[++$n]->{NAME} = $1;
+	  $characters[$n]->{ST} = $2;
+	  $characters[$n]->{STrem} = $2;
+	  $characters[$n]->{ADJDEX} = $3;
+	  $characters[$n]->{PLAYER} = $characters[$ties->[$i]]->{NAME};
+	  $characters[$n]->{PARTY} = $characters[$ties->[$i]]->{PARTY};
+	  # Need to do something about NAMEKEY.  Need function which integrates new NAMEKEY. (29jul021)
+	  # Is this enough??  I will not do anything until next turn anyway.
+	} # create being
+	elsif (!$action) { last; } # exits action query for this character
+	else { print "Unrecognized action $action\n"; }
+      } # what happened during $ties->[$i]'s action
     } # loop over ties
   } # loop over dexes
   
