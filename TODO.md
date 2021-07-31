@@ -1,6 +1,6 @@
 #### Urgent:
-* second bow shot!
-  ... This is getting really complicated.  In practice one will want this to be computed automatically, based on adjdx, rather than entering it each turn.  Oh well, for now it must be entered each turn -- automatic will be complicated. (30jul021)
+* get rid of spell option for pole & bow attacks (30jul021)
+
 * party-wise initiative
 
 
@@ -33,6 +33,9 @@
 #### Non-urgent:
 * Implement non-character iniative schemes? (27jul021)
 * Allow deferring action? (27jul021)
+* Compute second bow shot automatically, based on adjdx, rather than entering
+  it each turn.  Oh well, for now it must be entered each turn -- automatic
+  will be complicated. (30jul021)
 
 #### Later / Dunno:
 

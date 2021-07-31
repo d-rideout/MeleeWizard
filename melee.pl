@@ -210,21 +210,23 @@ do {
       print "Invalid character specification $1\n";
       next;
     }
-    print "$characters[$who]->{NAME} ";
+    print "$characters[$who]->{NAME}";
     foreach my $cmd (@sccmd) {
-      if (/^\+?-?\d+$/) { #(\+|-) ?(\d+)( ?([pm]))?/) {
+      if ($cmd =~ /^\+?-?\d+$/) { #(\+|-) ?(\d+)( ?([pm]))?/) {
 #       my $index = $1;
 #       my $adj = $3;
 #       $adj *= -1 if $2 eq '-';
 	$dexadj[$who] = $cmd;
-	print "at $cmd DEX = ", $characters[$who]->{ADJDEX}+$cmd;
+	my $plus = '+';
+	$plus = '' if $cmd =~ /^[\+-]/;
+	print " at $plus$cmd DEX = ", $characters[$who]->{ADJDEX}+$cmd;
       } elsif ($cmd eq 'p') {
 	push @poles, $who;
-	print "charging with pole weapon";
+	print " charging with pole weapon";
       } elsif ($cmd eq 'b') {
 	push @bow2, $who;
-	print "double shot with bow";
-      } else { print "Unrecognized considration $cmd"; }
+	print " double shot with bow";
+      } else { print "Unrecognized consideration $cmd\n"; }
     } # loop over considerations for this character
     print "\n";
   } # special considerations
@@ -249,10 +251,10 @@ do {
     act(@poles);
     splice @chars, $_, 1 foreach @poles;
   }
-  print "Normal attacks:\n";
+  print "\nNormal attacks:\n";
   act(@chars);
   if (@bow2) {
-    print "Second bow attacks:\n";
+    print "\nSecond bow attacks:\n";
     act(@bow2);
   }
 
@@ -367,8 +369,8 @@ sub act {
 	    next;
 	  }
 	  if ($injuredi == $ties->[$i]) {
-	    print "Did you really attack yourself??\n";
-	    next;
+	    print "Injuring self!  You must have rolled an 18 as an animal or in HTH combat...\n";
+# 	    next;
 	  }
 	  my $chr = $characters[$injuredi];
 	  my $damage = $2;
