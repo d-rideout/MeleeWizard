@@ -349,7 +349,7 @@ sub act {
     # Should I go though all this if there is no tie? (4apr021)
     my $ties = $dexes{$dex};
     unless (@$ties) {
-      print "skipping empty dex slot!\n";
+      print "skipping empty dex slot $dex!\n";
       next;
     }
     print "dex ${dex}s:\n"; # ", 0+@{$ties}, " ties\n";
@@ -445,6 +445,7 @@ sub act {
 	  $characters[$n]->{PLAYER} = $characters[$ties->[$i]]->{NAME};
 	  $characters[$n]->{PARTY} = $characters[$ties->[$i]]->{PARTY};
 	  character_prep($n++);
+	  last; # always last after successful action result
 	} # create being
 	elsif (!$action) { last; } # exits action query for this character
 	else { print "Unrecognized action $action\n"; }

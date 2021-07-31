@@ -1,36 +1,22 @@
 #### Urgent:
-* get rid of spell option for pole & bow attacks (30jul021)
-
+* Generate probability tables for 3 & 4 dice to-hit.
 * party-wise initiative
-
-
 * bugs in bugs file
-
 * stunned chars go twice when multiply stunned?
 
-* pole weapon attacks go first! (25jul021)
-
-* illusions etc need to be added (for initiative and turn order)!!
-* dead things need to be taken out of queries
-
-* Sort out forced retreats! (16apr021)
-* Take into account damage from casting spells! (16apr021)
-  - both for renewal and initial cast
 * dead characters should not populate dex ties lists (3jul021)
-
-* It may be cool to save the sequence of actions&outcomes to a file, so the
-  code can be aborted and restarted in the middle of a battle.  For debugging
-  primarily. (2may021)
-* It may help to document the algorithms, so that one understands how to
-  implement features. (2may021)
-
-* charging Pole arms go first (27jul021)
-
-% * log file will need iniative rolls to be useful!  Or a seed say. (27jul021)
-
+  Is this still an issue?? (31jul021)
+  
 * name key will choke if run over end of name!  Put monsters first... (27jul021)
 
 #### Non-urgent:
+* It may help to document the algorithms, so that one understands how to
+  implement features. (2may021)
+* Sort out forced retreats (16apr021)
+* Take into account damage from casting spells! (16apr021)
+  - both for renewal and initial cast
+  - actually not so crucial -- spell casting desn't seem to count as an injury
+
 * Implement non-character iniative schemes? (27jul021)
 * Allow deferring action? (27jul021)
 * Compute second bow shot automatically, based on adjdx, rather than entering
@@ -38,7 +24,6 @@
   will be complicated. (30jul021)
 
 #### Later / Dunno:
-
 * What happens with other missing fields? (14apr021)
 * Allow referencing characters by first letters of name (14apr021)
 * Implement deferred actions (4apr021)
@@ -57,7 +42,6 @@
 * Is it silly to use different vars to hold query responses? (4apr021)
 
 #### Less important:
-
 * use extensions for party files?
   Maybe not for starters.
 * find parties in spite of extensions
@@ -66,7 +50,6 @@
 What problems would arise if characters were stored in a hash? (27jul021)
 
 #### DONE:
-
 * Should have separate file for each party (4apr021)
 * Handle 'q' response within query subroutine (4apr021)
 * find parties in `parties/` (13apr021)
@@ -79,3 +62,11 @@ What problems would arise if characters were stored in a hash? (27jul021)
   note injury will change execution order!! (11apr021)
 * Skip over unconscious characters during movement (20apr021)
 * Handle death / unconsciousness
+* pole weapon attacks go first! (25jul021)
+* illusions etc need to be added (for initiative and turn order)!!
+* dead things need to be taken out of queries
+* It may be cool to save the sequence of actions&outcomes to a file, so the
+  code can be aborted and restarted in the middle of a battle.  For debugging
+  primarily. (2may021)
+* charging Pole arms go first (27jul021)
+* log file will need iniative rolls to be useful!  Or a seed say. (27jul021)
