@@ -117,6 +117,7 @@ my $q = query('n', 'Surprise? (y)es (N)o');
 print "Sorry, not ready to handle this yet." if $q eq 'y';
 ++$turn;
 
+my @dex; # used in loop below, but needs to be accessed by &act
 do {
   print "\n* Turn $turn:\n";
 
@@ -230,7 +231,6 @@ do {
   print "\n";
 
   # Compute dex for this turn
-  my @dex;
   for $i (0..$n-1) {
     my $chr = $characters[$i];
     
@@ -242,13 +242,93 @@ do {
     $dex[$i] -= 3 if $chr->{STrem} < 4;
   }
 
-  # Act in order of dex
+  # Act
+  my @chars = 0..$n-1;
+  if (@poles) {
+    print "Pole weapon charges:\n";
+    act(@poles);
+    splice @chars, $_, 1 foreach @poles;
+  }
+  print "Normal attacks:\n";
+  act(@chars);
+  if (@bow2) {
+    print "Second bow attacks:\n";
+    act(@bow2);
+  }
+
+  # Force Retreats
+  print "\nForced Retreats phase: execute all forced retreats\n";
+  $phase = 'forced retreats';
+# I should probably record everything that happens in this phase, e.g. to
+# decide about forced retreats
+  
+} while ($turn++);
+
+
+# Display characters
+sub displayCharacters {
+  print '-'x25, "\nCharacters:\n";
+  for my $i (0..$#characters) {
+    my $c = $characters[$i];
+    print $i, "\t$c->{NAMEKEY}\t$c->{NAME}\n" unless $c->{DEAD};
+  }
+  print '-'x25, "\n";
+}
+
+
+# Interact with user
+# args: default value, query string
+sub query {
+  my $default = shift;
+  print "Turn $turn $phase: ", shift, ' or (q)uit> ';
+  my $input;
+  if ($restart && @log) {
+    print $input = shift @log;
+    chomp $input;
+  }
+  else { chomp($input = <STDIN>); }
+  #   print "input is [$input]\n";
+  print LOG "$input\n" unless $input eq 'q';
+  return $default unless $input;
+  die "Finished.\n" if $input eq 'q';
+  $input;
+}
+
+
+# Character preparations?
+sub character_prep {
+  my $ci = shift;
+
+  # stun & fall thresholds
+  my $char = $characters[$ci];
+  my $st = $char->{ST};
+  if ($st < 30) { $char->{STUN} = 5; $char->{FALL} = 8; } # normal
+  elsif ($st < 50) { $char->{STUN} = 9; $char->{FALL} = 16; } # giants
+  else { $char->{STUN} = 15; $char->{FALL} = 25; } # dragons
+  $char->{STrem} = $st unless $char->{STrem};
+  $char->{StunTurn} = 0;
+
+  # name keys
+  my $name = $char->{NAME};
+  my $len = 1;
+  my $namekey = substr $name, 0, $len;
+  $namekey = substr $name, 0, ++$len while defined $charkeys{$namekey};
+  $charkeys{$namekey} = $ci;
+  $char->{NAMEKEY} = $namekey;
+  # Is this good enough, or do I need to expand both keys? (27jul021)
+  # Actually this could be better, e.g. if two people have the same first name.
+}
+
+
+# Act in order of dex
+sub act {
   # (not too sure how to handle changing one's mind -- add that later (4apr021))
   # Gather DEXes
-  my %dexes; # key dex val array of indices
+  my %dexes; # key dex val array of character indices
   my @dexes_keys; # keys of %dexes, for looping
   my @acted; # who acted this turn
-  for $i (0..$n-1) {
+#   for $i (0..$n-1) {
+  for my $i (@_) {
     push @{$dexes{$dex[$i]}}, $i;
     if ($characters[$i]->{DEAD}) { $acted[$i] = 1; }
     else { $acted[$i] = 0; }
@@ -270,9 +350,9 @@ do {
     print "dex ${dex}s:\n"; # ", 0+@{$ties}, " ties\n";
     # roll initiative
     my @roll;
-    foreach $i (0..$#{$ties}) { push @roll, rand; } # ignoring repeats (4apr021)
+    foreach (0..$#{$ties}) { push @roll, rand; } # ignoring repeats (4apr021)
     my @dex_ties = sort {$roll[$b] <=> $roll[$a]} (0..$#{$ties});
-    while (defined($i = shift @dex_ties)) {
+    while (defined(my $i = shift @dex_ties)) {
       $debug && print "people with this dex: ties = @{$ties}\n";
       $debug && print "remaining ordered people with this dex: @dex_ties\n";
       $debug && print "tie $i goes now, char $ties->[$i]\n";
@@ -366,69 +446,4 @@ do {
       } # what happened during $ties->[$i]'s action
     } # loop over ties
   } # loop over dexes
-  
-# I should probably record everything that happens in this phase, e.g. to
-# decide about forced retreats, and to manage reactions to injury...
-
-  # Force Retreats
-  print "\nForced Retreats phase: execute all forced retreats\n";
-  $phase = 'forced retreats';
-  
-#   die "Finished with first turn\n";
-#   query('Proceed to next turn');
-} while ($turn++);
-
-
-# Display characters
-sub displayCharacters {
-  print '-'x25, "\nCharacters:\n";
-  for my $i (0..$#characters) {
-    my $c = $characters[$i];
-    print $i, "\t$c->{NAMEKEY}\t$c->{NAME}\n" unless $c->{DEAD};
-  }
-  print '-'x25, "\n";
-}
-
-
-# Interact with user
-# args: default value, query string
-sub query {
-  my $default = shift;
-  print "Turn $turn $phase: ", shift, ' or (q)uit> ';
-  my $input;
-  if ($restart && @log) {
-    print $input = shift @log;
-    chomp $input;
-  }
-  else { chomp($input = <STDIN>); }
-  #   print "input is [$input]\n";
-  print LOG "$input\n" unless $input eq 'q';
-  return $default unless $input;
-  die "Finished.\n" if $input eq 'q';
-  $input;
-}
-
-
-# Character preparations?
-sub character_prep {
-  my $ci = shift;
-
-  # stun & fall thresholds
-  my $char = $characters[$ci];
-  my $st = $char->{ST};
-  if ($st < 30) { $char->{STUN} = 5; $char->{FALL} = 8; } # normal
-  elsif ($st < 50) { $char->{STUN} = 9; $char->{FALL} = 16; } # giants
-  else { $char->{STUN} = 15; $char->{FALL} = 25; } # dragons
-  $char->{STrem} = $st unless $char->{STrem};
-  $char->{StunTurn} = 0;
-
-  # name keys
-  my $name = $char->{NAME};
-  my $len = 1;
-  my $namekey = substr $name, 0, $len;
-  $namekey = substr $name, 0, ++$len while defined $charkeys{$namekey};
-  $charkeys{$namekey} = $ci;
-  $char->{NAMEKEY} = $namekey;
-  # Is this good enough, or do I need to expand both keys? (27jul021)
-  # Actually this could be better, e.g. if two people have the same first name.
 }
