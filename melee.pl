@@ -183,27 +183,50 @@ do {
   print "\nAction phase:\n";
   $phase = 'action';
   
-  # Declare expected dex adjustments
+  # Declare expected dex adjustments and other special considerations
+  my @poles; # pole weapon charges
+  my @bow2;  # double bow attacks
   my @dexadj; # amt to add to ADJDEX
   &displayCharacters;
-  print "DEX adjustments?  Offset from original declared adj dex.  Ignore reactions to injury and weapon range penalties.\nwho +/- num (e.g. 2+4 for char 2 doing rear attack)\n";
+#   print "DEX adjustments?  Offset from original declared adj dex.  Ignore reactions to injury and weapon range penalties.\nwho +/- num [p|b] (e.g. 2+4p for char 2 doing rear attack as pole weapon charge; b ==> 2x shot with bow)\n";
   # In the future this will ask about pole weapon charges and doubled arrows (29jul021)
-#   print "DEX adjustments?  Offset from original declared adjDX.  Include reactions to injury for now.\nwho +/- num (e.g. 2+4 for char 2 doing rear attack)\n";
+  print 'Special considerations: <who> <consideration1> [consideration2]
+  Considerations are
+  * <num>
+    DEX adjustments as offset from original declared adjDX.  
+    Ignore reactions to injury and weapon range penalties.
+  * <p|b>
+    p ==> pole weapon charge
+    b ==> double shot with bow
+  e.g. "2 -4 p" for char 2 doing rear attack as pole weapon charge
+';
   while (1) {
-    my $dexadj = query('', "DEX adjustment, (F)inished");
-    last unless $dexadj;
-    if ($dexadj =~ /(\d+) ?(\+|-) ?(\d+)/) {
-      my $index = $1;
-      if ($index<0 || $index >= $n) {
-	print "Invalid character index: $1\n";
-	next;
-      }
-      my $adj = $3;
-      $adj *= -1 if $2 eq '-';
-      print "$characters[$index]->{NAME} at $2$3 DEX = ", $characters[$index]->{ADJDEX}+$adj, "\n";
-      $dexadj[$index] = $adj;
-    } else { print "Unrecognized adjustment $dexadj\n"; }
-  } # query DEX adjustments
+    my $sccmd = query('', "Special consideration, (F)inished");
+    last unless $sccmd;
+    my @sccmd = split / /, $sccmd;
+    my $who = shift @sccmd;
+    if ($who<0 || $who >= $n) {
+      print "Invalid character specification $1\n";
+      next;
+    }
+    print "$characters[$who]->{NAME} ";
+    foreach my $cmd (@sccmd) {
+      if (/^\+?-?\d+$/) { #(\+|-) ?(\d+)( ?([pm]))?/) {
+#       my $index = $1;
+#       my $adj = $3;
+#       $adj *= -1 if $2 eq '-';
+	$dexadj[$who] = $cmd;
+	print "at $cmd DEX = ", $characters[$who]->{ADJDEX}+$cmd;
+      } elsif ($cmd eq 'p') {
+	push @poles, $who;
+	print "charging with pole weapon";
+      } elsif ($cmd eq 'b') {
+	push @bow2, $who;
+	print "double shot with bow";
+      } else { print "Unrecognized considration $cmd"; }
+    } # loop over considerations for this character
+    print "\n";
+  } # special considerations
   print "\n";
 
   # Compute dex for this turn
@@ -212,7 +235,7 @@ do {
     my $chr = $characters[$i];
     
     $dex[$i] = $chr->{ADJDEX};
-    $dex[$i] += $dexadj[$i] if $dexadj[$i];
+    $dex[$i] += $dexadj[$i] if $dexadj[$i]; # (it might be undefined!)
 
     # Reactions to injury
     $dex[$i] -= 2 if $turn < $chr->{StunTurn};

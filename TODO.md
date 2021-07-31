@@ -1,16 +1,13 @@
 #### Urgent:
 * second bow shot!
+  ... This is getting really complicated.  In practice one will want this to be computed automatically, based on adjdx, rather than entering it each turn.  Oh well, for now it must be entered each turn -- automatic will be complicated. (30jul021)
+* party-wise initiative
 
-and then it just choked on uninitialized value in array element in @order at line 149.
-The whole thing needs to be rewritten with a debug mode etc etc. (25jul021)
 
 * bugs in bugs file
 
-* Dead characters should not move? (25jul021)
-* stunned chars go twice??  Oh this guy was multiply stunned maybe!  But no matter! (25jul021)
-Yes they can go twice!
-erewon got skipped for move somehow, after orasmus who is dead
-* Create characters from spells! (3jul021)
+* stunned chars go twice when multiply stunned?
+
 * pole weapon attacks go first! (25jul021)
 
 * illusions etc need to be added (for initiative and turn order)!!
