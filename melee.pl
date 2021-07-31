@@ -206,8 +206,8 @@ do {
     last unless $sccmd;
     my @sccmd = split / /, $sccmd;
     my $who = shift @sccmd;
-    if ($who<0 || $who >= $n) {
-      print "Invalid character specification $1\n";
+    if ($who =~ /[^\d]/ || $who<0 || $who >= $n) {
+      print "Invalid character specification $who\n";
       next;
     }
     print "$characters[$who]->{NAME}";
@@ -247,13 +247,16 @@ do {
   # Act
   my @chars = 0..$n-1;
   if (@poles) {
+    $phase = 'pole weapon charges';
     print "Pole weapon charges:\n";
     act(@poles);
     splice @chars, $_, 1 foreach @poles;
   }
+  $phase = 'normal actions';
   print "\nNormal attacks:\n";
   act(@chars);
   if (@bow2) {
+    $phase = 'second missle shots';
     print "\nSecond bow attacks:\n";
     act(@bow2);
   }
@@ -338,7 +341,7 @@ sub act {
   # Act in order
   &displayCharacters;
   print "Actions:\n  who - dam (e.g. 2-4 for 4 damage to character 2 after armor)\n";
-  print "  name ST adjDX (for created being)\n";
+  print "  name ST adjDX (for created being)\n" if $phase =~ /n/;
   @dexes_keys = sort {$b <=> $a} keys %dexes;
 #   foreach my $dex (sort {$b <=> $a} keys %dexes) { 
   my @turn_damage;
@@ -360,7 +363,7 @@ sub act {
       $debug && print "tie $i goes now, char $ties->[$i]\n";
       next if $acted[$ties->[$i]];
       while (1) {
-	my $action = query('', "$characters[$ties->[$i]]->{NAME} action? (N)o");
+	my $action = query('', "$characters[$ties->[$i]]->{NAME} action result? (N)o");
 	$acted[$ties->[$i]] = 1;
 	if ($action =~ /(\d+) ?- ?(\d+)/) {
 	  my $injuredi = $1;
