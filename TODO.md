@@ -1,5 +1,4 @@
 #### Urgent:
-* Generate probability tables for 3 & 4 dice to-hit.
 * party-wise initiative
 * bugs in bugs file
 * stunned chars go twice when multiply stunned?
@@ -70,3 +69,4 @@ What problems would arise if characters were stored in a hash? (27jul021)
   primarily. (2may021)
 * charging Pole arms go first (27jul021)
 * log file will need iniative rolls to be useful!  Or a seed say. (27jul021)
+* Generate probability tables for 3 & 4 dice to-hit.

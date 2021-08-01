@@ -102,7 +102,10 @@ if ($restart) {
   srand $seed;
   @log = <LOG>;
   close LOG;
-} else { $seed = srand; }
+} else {
+  $seed = srand;
+  print "Overwrite log file? "; <STDIN>;
+ }
 open LOG, '>log' or die "problem creating log file";
 print LOG "$seed\n";
 
@@ -118,6 +121,7 @@ print "Sorry, not ready to handle this yet." if $q eq 'y';
 ++$turn;
 
 my @dex; # used in loop below, but needs to be accessed by &act
+my @turn_damage;
 do {
   print "\n* Turn $turn:\n";
 
@@ -149,11 +153,12 @@ do {
   # Movement
   # --------
   my $i = 0;
-  my $last = $n-1; # who is last in queue
+  my $last = $n-1; # queue index of last in queue
   $phase = 'movement';
   print "\nMovement phase:\n";
-  # Have dead people move already
-#   foreach (@characters)
+  # Trim dead people from end of order?
+  --$last while $characters[$order[$last]]->{DEAD};
+# foreach (@characters)
 #     $moved[$i] = 1 if $characters[$order[$i]]->{DEAD};
 #     ++$i;
 #   }
@@ -161,7 +166,11 @@ do {
   while (1) {
 
     # skip over people who have gone already
-    while ($moved[$order[$i]]) { ++$i; }
+    $debug && print "skipping over moved characters at front of queue\n";
+    while ($moved[$order[$i]]) {
+      $debug && print "i=$i last=$last $characters[$order[$i]]->{NAME} already moved\n";
+      ++$i;
+    }
 
     if ($i == $last) {
       print "$characters[$order[$i]]->{NAME} moves\n";
@@ -169,11 +178,14 @@ do {
       $i = 0;
       while ($last>=0 && $moved[$order[--$last]]) {}
     } else {
+      $debug && print "order[$i]=$order[$i] last=$last\n";
       my $move = query('d', "$characters[$order[$i]]->{NAME} (m)ove, or (D)efer");
       if ($move eq 'm') {
 	$moved[$order[$i]] = 1;
+	--$last if $i==$last;
 	$i = 0;
-      } elsif ($move eq 'd') { ++$i; }
+      }
+      elsif ($move eq 'd') { ++$i; }
       else { print "unrecognized response [$move]\n"; }
     }
     last if $last<0;
@@ -246,6 +258,7 @@ do {
 
   # Act
   my @chars = 0..$n-1;
+  @turn_damage = ();
   if (@poles) {
     $phase = 'pole weapon charges';
     print "Pole weapon charges:\n";
@@ -344,7 +357,6 @@ sub act {
   print "  name ST adjDX (for created being)\n" if $phase =~ /n/;
   @dexes_keys = sort {$b <=> $a} keys %dexes;
 #   foreach my $dex (sort {$b <=> $a} keys %dexes) { 
-  my @turn_damage;
   while (my $dex = shift @dexes_keys) { # assuming no one has 0 dex! (20apr021)
     # Should I go though all this if there is no tie? (4apr021)
     my $ties = $dexes{$dex};
