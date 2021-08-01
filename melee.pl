@@ -18,7 +18,7 @@ use strict;
 use warnings;
 
 # Setting flags
-my $debug = 1; # 1 ==> max debug output
+my $debug = 0; # 1 ==> max debug output
 my $initiative = 'c'; # c ==> character-based; p ==> party-based
                       # l ==> pLayer-based; s ==> 'side-based
 
@@ -123,6 +123,7 @@ print "Sorry, not ready to handle this yet." if $q eq 'y';
 
 my @dex; # used in loop below, but needs to be accessed by &act
 my @turn_damage;
+my @acted; # who acted this turn
 do {
   print "\n* Turn $turn:\n";
 
@@ -147,8 +148,8 @@ do {
   * <num>
     DEX adjustments as offset from original declared adjDX.  
     Ignore reactions to injury and weapon range penalties.
-  * <p|b>
-    p ==> pole weapon charge
+  * <c|b>
+    c ==> pole weapon charge
     b ==> double shot with bow
   e.g. "2 -4 p" for char 2 doing rear attack as pole weapon charge
 ';
@@ -171,7 +172,7 @@ do {
 	my $plus = '+';
 	$plus = '' if $cmd =~ /^[\+-]/;
 	print " at $plus$cmd DEX = ", $characters[$who]->{ADJDEX}+$cmd;
-      } elsif ($cmd eq 'p') {
+      } elsif ($cmd eq 'c') {
 	push @poles, $who;
 	print " charging with pole weapon";
       } elsif ($cmd eq 'b') {
@@ -198,6 +199,7 @@ do {
   # Act
   my @chars = 0..$n-1;
   @turn_damage = ();
+  @acted = ();
   if (@poles) {
     $phase = 'pole weapon charges';
     print "Pole weapon charges:\n";
@@ -210,6 +212,7 @@ do {
   if (@bow2) {
     $phase = 'second missle shots';
     print "\nSecond bow attacks:\n";
+    $debug && print "for @bow2\n";
     act(@bow2);
   }
 
@@ -283,7 +286,6 @@ sub act {
   # Gather DEXes
   my %dexes; # key dex val array of character indices
   my @dexes_keys; # keys of %dexes, for looping
-  my @acted; # who acted this turn
 #   for $i (0..$n-1) {
   for my $i (@_) {
     push @{$dexes{$dex[$i]}}, $i;
@@ -303,7 +305,7 @@ sub act {
       print "skipping empty dex slot $dex!\n";
       next;
     }
-    print "dex ${dex}s:\n"; # ", 0+@{$ties}, " ties\n";
+    print "dex ${dex}s:\n" if @$ties; # ", 0+@{$ties}, " ties\n";
     # roll initiative
     my @roll;
     foreach (0..$#{$ties}) { push @roll, rand; } # ignoring repeats (4apr021)
@@ -316,7 +318,7 @@ sub act {
       while (1) {
 	my $action = query('', "$characters[$ties->[$i]]->{NAME} action result? (N)o");
 	$acted[$ties->[$i]] = 1;
-	if ($action =~ /(\d+) ?- ?(\d+)/) {
+	if ($action =~ /(\d+) ?- ?(\d+)/) { # Hit!
 	  my $injuredi = $1;
 	  if ($injuredi<0 || $injuredi >= $n) {
 	    print "Invalid character index: $1\n";
@@ -386,7 +388,7 @@ sub act {
 
 	  last; # exit from while (1) damage query loop
 	} # did damage
-	elsif ($action =~ /^(.+) (\d+) (\d+)$/) {
+	elsif ($action =~ /^(.+) (\d+) (\d+)$/) { # Create being
 	  print "$1 created with ST $2 adjDX $3\n";
 	  # Not too sure how to handle this.  Will write explicit code for now, but should put into function which is shared with 'Read parties' code above. (29jul021)
 	  $characters[$n]->{NAME} = $1;

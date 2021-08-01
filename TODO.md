@@ -1,4 +1,5 @@
 #### Urgent:
+* refer to characters with namekey
 * party-wise initiative
 * bugs in bugs file
 * stunned chars go twice when multiply stunned?
@@ -9,6 +10,7 @@
 * name key will choke if run over end of name!  Put monsters first... (27jul021)
 
 #### Non-urgent:
+* Allow creating characters with spaces in name? (action commands are split on spaces) (1aug021)
 * It may help to document the algorithms, so that one understands how to
   implement features. (2may021)
 * Sort out forced retreats (16apr021)
