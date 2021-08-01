@@ -23,7 +23,8 @@ my $initiative = 'c'; # c ==> character-based; p ==> party-based
                       # l ==> pLayer-based; s ==> 'side-based
 
 # Check settings
-die "Only character-based iniative is currently implemented\n" unless $initiative eq 'c';
+# die "Only character- and party-based initiative is currently implemented\n" unless $initiative =~ /^[cp]$/;
+die "Only character-based initiative is currently implemented\n" unless $initiative =~ /^[c]$/;
 
 # Check command line
 die "usage: melee.pl [-l] <party 1> <party 2> <party 3> ...\n" .
@@ -86,7 +87,6 @@ foreach my $partyfile (@ARGV) {
   close FP;
 }
 print "$n characters\n\n"; # with ", 0+@hkeys, " fields\n";
-print "Capital letter is default\n";
 
 # Preparations
 # ------------
@@ -104,7 +104,7 @@ if ($restart) {
   close LOG;
 } else {
   $seed = srand;
-  print "Overwrite log file? "; <STDIN>;
+  print "Overwrite log file? (interrupt (Ctrl-C) if not!)"; <STDIN>;
  }
 open LOG, '>log' or die "problem creating log file";
 print LOG "$seed\n";
@@ -116,6 +116,7 @@ my $turn = 0;
 my $phase = '';
 
 # Surprise
+print "Capital letter is default\n";
 my $q = query('n', 'Surprise? (y)es (N)o');
 print "Sorry, not ready to handle this yet." if $q eq 'y';
 ++$turn;
@@ -125,72 +126,10 @@ my @turn_damage;
 do {
   print "\n* Turn $turn:\n";
 
-  # Initiative
-  # ----------
-  my @roll;
-  for (my $i=0; $i<$n; ++$i) { $roll[$i] = rand; }
-
-  print "\nInitiative order:\n";
-  my @order;
-  my $prev_roll;
-  my $rank;
-  my @moved; # who has moved so far
-  #my $ndead = 0;
-  foreach my $i (sort {$roll[$a] <=> $roll[$b]} 0..$#roll) {
-    my $roll = $roll[$i];
-    if (defined $prev_roll && $prev_roll == $roll) { die "Roll collision!\n"; }
-    else { $prev_roll = $roll; }
-    unless ($characters[$i]->{DEAD}) {
-      print ++$rank, " $characters[$i]->{NAME}\n";
-    } else { $moved[$i] = 1; } # ++$ndead; }
-    push @order, $i;
-  }
-
-  print "\nSpell phase: Renew spells or they end now\n";
-  # need to charge st cost for spells here (3jul021)
-#   query('Finished with spells');
-
   # Movement
   # --------
-  my $i = 0;
-  my $last = $n-1; # queue index of last in queue
-  $phase = 'movement';
-  print "\nMovement phase:\n";
-  # Trim dead people from end of order?
-  --$last while $characters[$order[$last]]->{DEAD};
-# foreach (@characters)
-#     $moved[$i] = 1 if $characters[$order[$i]]->{DEAD};
-#     ++$i;
-#   }
-#   $i=0;
-  while (1) {
-
-    # skip over people who have gone already
-    $debug && print "skipping over moved characters at front of queue\n";
-    while ($moved[$order[$i]]) {
-      $debug && print "i=$i last=$last $characters[$order[$i]]->{NAME} already moved\n";
-      ++$i;
-    }
-
-    if ($i == $last) {
-      print "$characters[$order[$i]]->{NAME} moves\n";
-      $moved[$order[$i]] = 1;
-      $i = 0;
-      while ($last>=0 && $moved[$order[--$last]]) {}
-    } else {
-      $debug && print "order[$i]=$order[$i] last=$last\n";
-      my $move = query('d', "$characters[$order[$i]]->{NAME} (m)ove, or (D)efer");
-      if ($move eq 'm') {
-	$moved[$order[$i]] = 1;
-	--$last if $i==$last;
-	$i = 0;
-      }
-      elsif ($move eq 'd') { ++$i; }
-      else { print "unrecognized response [$move]\n"; }
-    }
-    last if $last<0;
-  } # movement phase
-
+  &movement;
+  
   # Actions
   # -------
   print "\nAction phase:\n";
@@ -245,7 +184,7 @@ do {
   print "\n";
 
   # Compute dex for this turn
-  for $i (0..$n-1) {
+  for my $i (0..$n-1) {
     my $chr = $characters[$i];
     
     $dex[$i] = $chr->{ADJDEX};
@@ -464,4 +403,69 @@ sub act {
       } # what happened during $ties->[$i]'s action
     } # loop over ties
   } # loop over dexes
+}
+
+
+# intiative, spell renewal, & movement
+sub movement {
+  # Initiative
+  # ----------
+  my @roll;
+  for (my $i=0; $i<$n; ++$i) { $roll[$i] = rand; }
+
+  print "\nInitiative order:\n";
+  my @order;
+  my $prev_roll;
+  my $rank;
+  my @moved; # who has moved so far
+  foreach my $i (sort {$roll[$a] <=> $roll[$b]} 0..$#roll) {
+    my $roll = $roll[$i];
+    if (defined $prev_roll && $prev_roll == $roll) { die "Roll collision!\n"; }
+    else { $prev_roll = $roll; }
+    unless ($characters[$i]->{DEAD}) {
+      print ++$rank, " $characters[$i]->{NAME}\n";
+    } else { $moved[$i] = 1; }
+    push @order, $i;
+  }
+
+  print "\nSpell phase: Renew spells or they end now\n";
+  # need to charge st cost for spells here (3jul021)
+#   query('Finished with spells');
+
+  # Movement
+  # --------
+  my $i = 0;
+  my $last = $n-1; # queue index of last in queue
+  $phase = 'movement';
+  print "\nMovement phase:\n";
+  # Trim dead people from end of order
+  --$last while $characters[$order[$last]]->{DEAD};
+
+  while (1) {
+
+    # skip over people who have gone already
+    $debug && print "skipping over moved characters at front of queue\n";
+    while ($moved[$order[$i]]) {
+      $debug && print "i=$i last=$last $characters[$order[$i]]->{NAME} already moved\n";
+      ++$i;
+    }
+
+    if ($i == $last) {
+      print "$characters[$order[$i]]->{NAME} moves\n";
+      $moved[$order[$i]] = 1;
+      $i = 0;
+      while ($last>=0 && $moved[$order[--$last]]) {}
+    } else {
+      $debug && print "order[$i]=$order[$i] last=$last\n";
+      my $move = query('d', "$characters[$order[$i]]->{NAME} (m)ove, or (D)efer");
+      if ($move eq 'm') {
+	$moved[$order[$i]] = 1;
+	--$last if $i==$last;
+	$i = 0;
+      }
+      elsif ($move eq 'd') { ++$i; }
+      else { print "unrecognized response [$move]\n"; }
+    }
+    last if $last<0;
+  } # movement phase
 }
