@@ -23,8 +23,9 @@ my $initiative = 'c'; # c ==> character-based; p ==> party-based
                       # l ==> pLayer-based; s ==> 'side-based
 
 # Check settings
-# die "Only character- and party-based initiative is currently implemented\n" unless $initiative =~ /^[cp]$/;
+# die "Only character- and party-based initiative is currently implemented\n" unless $initiative =~ /^[cpl]$/;
 die "Only character-based initiative is currently implemented\n" unless $initiative =~ /^[c]$/;
+# Side-based initiative is problematic -- I need to add it to the UI somehow.  Should be a property of parties.  Could group the input parties somehow on the command line?  Or maybe better -- have each party file declare a side name at the top! (2AUG021)
 
 # Check command line
 die "usage: melee.pl [-l] <party 1> <party 2> <party 3> ...\n" .
@@ -125,7 +126,23 @@ do {
 
   # Movement
   # --------
-  &movement;
+  my @entities;
+  if ($initiative eq 'c') {
+    foreach my $c (@characters) {
+      push @entities, $c->{NAME} unless $c->{DEAD};
+    }
+  }
+  else {
+    my $type = 'PARTY';
+    $type = 'PLAYER' if $initiative eq 'l';
+    my %entities;
+    foreach my $c (@characters) {
+      next if $c->{DEAD};
+      my $ent = $c->{$type};
+      push @entities, $ent unless $entities{$ent}++;
+    }
+  }      
+  movement(@entities);
   
   # Actions
   # -------
@@ -405,6 +422,7 @@ sub act {
 
 
 # intiative, spell renewal, & movement
+# pass me an array of alive entities
 sub movement {
   # Initiative
   # ----------
