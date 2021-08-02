@@ -35,9 +35,6 @@ if ($ARGV[0] eq '-l') {
   shift @ARGV;
 }
 
-################################################################################
-# code cleaner above this line? (27jul021)
-
 # Data structures
 my @characters; # val hash with below keys
 my %charkeys; # key namekey val index into @characters
@@ -110,10 +107,12 @@ open LOG, '>log' or die "problem creating log file";
 print LOG "$seed\n";
 
 # Manage combat sequence
-# ----------------------
-# Combat sequence phase
+# ======================
 my $turn = 0;
-my $phase = '';
+my $phase = ''; # Combat sequence phase
+my @dex; # used in internal loop below, but needs to be accessed by &act
+my @turn_damage; # amt damage sustained this turn for each character
+my @acted; # who acted so far this turn
 
 # Surprise
 print "Capital letter is default\n";
@@ -121,9 +120,6 @@ my $q = query('n', 'Surprise? (y)es (N)o');
 print "Sorry, not ready to handle this yet." if $q eq 'y';
 ++$turn;
 
-my @dex; # used in loop below, but needs to be accessed by &act
-my @turn_damage;
-my @acted; # who acted this turn
 do {
   print "\n* Turn $turn:\n";
 
@@ -157,8 +153,8 @@ do {
     my $sccmd = query('', "Special consideration, (F)inished");
     last unless $sccmd;
     my @sccmd = split / /, $sccmd;
-    my $who = shift @sccmd;
-    if ($who =~ /[^\d]/ || $who<0 || $who >= $n) {
+    my $who = who(shift @sccmd);
+    if ($who<0) {
       print "Invalid character specification $who\n";
       next;
     }
@@ -255,7 +251,7 @@ sub query {
 }
 
 
-# Character preparations?
+# Character preparations
 sub character_prep {
   my $ci = shift;
 
@@ -294,7 +290,7 @@ sub act {
   }
   # Act in order
   &displayCharacters;
-  print "Actions:\n  who - dam (e.g. 2-4 for 4 damage to character 2 after armor)\n";
+  print "Actions:\n  who - dam (e.g. c-4 for 4 damage to character c after armor)\n";
   print "  name ST adjDX (for created being)\n" if $phase =~ /n/;
   @dexes_keys = sort {$b <=> $a} keys %dexes;
 #   foreach my $dex (sort {$b <=> $a} keys %dexes) { 
@@ -318,10 +314,10 @@ sub act {
       while (1) {
 	my $action = query('', "$characters[$ties->[$i]]->{NAME} action result? (N)o");
 	$acted[$ties->[$i]] = 1;
-	if ($action =~ /(\d+) ?- ?(\d+)/) { # Hit!
-	  my $injuredi = $1;
-	  if ($injuredi<0 || $injuredi >= $n) {
-	    print "Invalid character index: $1\n";
+	if ($action =~ /(.+) ?- ?(\d+)/) { # Hit!
+	  my $injuredi = who($1);
+	  if ($injuredi<0) {
+	    print "Invalid character specification: $1\n";
 	    next;
 	  }
 	  if ($injuredi == $ties->[$i]) {
@@ -470,4 +466,19 @@ sub movement {
     }
     last if $last<0;
   } # movement phase
+}
+
+
+# Returns character index to whom a string refers
+# negative on error
+sub who {
+  my $s = shift;
+  my $retval = $charkeys{$s};
+
+  if (defined $retval) { return $retval; }
+  elsif ($s =~ /^\d/) {
+    if ($s<0 || $s >= $n) { return -2; }
+    return $s;
+  }
+  -1;
 }

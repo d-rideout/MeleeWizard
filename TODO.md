@@ -10,6 +10,7 @@
 * name key will choke if run over end of name!  Put monsters first... (27jul021)
 
 #### Non-urgent:
+* Undo previous entry...  Maybe write a script for this, to undo n entries?  Maybe the script wraps ./melee.pl itself? (2aug021)
 * Allow creating characters with spaces in name? (action commands are split on spaces) (1aug021)
 * It may help to document the algorithms, so that one understands how to
   implement features. (2may021)
