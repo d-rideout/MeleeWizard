@@ -23,8 +23,8 @@ my $initiative = 'c'; # c ==> character-based; p ==> party-based
                       # l ==> pLayer-based; s ==> 'side-based
 
 # Check settings
-# die "Only character- and party-based initiative is currently implemented\n" unless $initiative =~ /^[cpl]$/;
-die "Only character-based initiative is currently implemented\n" unless $initiative =~ /^[c]$/;
+die "Only character- and party-based initiative is currently implemented\n" unless $initiative =~ /^[cpl]$/;
+# die "Only character-based initiative is currently implemented\n" unless $initiative =~ /^[c]$/;
 # Side-based initiative is problematic -- I need to add it to the UI somehow.  Should be a property of parties.  Could group the input parties somehow on the command line?  Or maybe better -- have each party file declare a side name at the top! (2AUG021)
 
 # Check command line
@@ -51,6 +51,7 @@ foreach my $partyfile (@ARGV) {
   unless (open FP, '<', $partyfile) {
     open FP, '<', "parties/$partyfile" or die "Error opening $partyfile: $!\n";
   }
+  $partyfile =~ s/^parties\///;
   print "Reading party $partyfile:\n";
   my $tmp;
   # ignore leading comments
@@ -79,7 +80,6 @@ foreach my $partyfile (@ARGV) {
 #     die "Can only handle 1 or 3 hex characters currently\n"
     # 	unless $nhex==1 || $nhex==3;
     die "Please provide ST for each character\n" unless $chr->{ST};
-    
     $characters[$n++]->{PARTY} = $partyfile;
   }
   close FP;
@@ -141,7 +141,7 @@ do {
       my $ent = $c->{$type};
       push @entities, $ent unless $entities{$ent}++;
     }
-  }      
+  }
   movement(@entities);
   
   # Actions
@@ -424,23 +424,26 @@ sub act {
 # intiative, spell renewal, & movement
 # pass me an array of alive entities
 sub movement {
+  my @ent = @_;
+  
   # Initiative
   # ----------
   my @roll;
-  for (my $i=0; $i<$n; ++$i) { $roll[$i] = rand; }
+  for (my $i=0; $i<@ent; ++$i) { $roll[$i] = rand; }
 
   print "\nInitiative order:\n";
   my @order;
   my $prev_roll;
-  my $rank;
+#   my $rank;
   my @moved; # who has moved so far
   foreach my $i (sort {$roll[$a] <=> $roll[$b]} 0..$#roll) {
     my $roll = $roll[$i];
     if (defined $prev_roll && $prev_roll == $roll) { die "Roll collision!\n"; }
     else { $prev_roll = $roll; }
-    unless ($characters[$i]->{DEAD}) {
-      print ++$rank, " $characters[$i]->{NAME}\n";
-    } else { $moved[$i] = 1; }
+#     unless ($characters[$i]->{DEAD}) {
+#     print ++$rank, " $characters[$i]->{NAME}\n";
+    print " $ent[$i]\n";
+#     } else { $moved[$i] = 1; }
     push @order, $i;
   }
 
@@ -451,29 +454,31 @@ sub movement {
   # Movement
   # --------
   my $i = 0;
-  my $last = $n-1; # queue index of last in queue
+  my $last = $#ent; # queue index of last in queue
   $phase = 'movement';
   print "\nMovement phase:\n";
   # Trim dead people from end of order
-  --$last while $characters[$order[$last]]->{DEAD};
+#   --$last while $characters[$order[$last]]->{DEAD};
 
   while (1) {
 
     # skip over people who have gone already
     $debug && print "skipping over moved characters at front of queue\n";
     while ($moved[$order[$i]]) {
-      $debug && print "i=$i last=$last $characters[$order[$i]]->{NAME} already moved\n";
+#       $debug && print "i=$i last=$last $characters[$order[$i]]->{NAME} already moved\n";
       ++$i;
     }
 
     if ($i == $last) {
-      print "$characters[$order[$i]]->{NAME} moves\n";
+#       print "$characters[$order[$i]]->{NAME} moves\n";
+      print "$ent[$order[$i]] moves\n";
       $moved[$order[$i]] = 1;
       $i = 0;
       while ($last>=0 && $moved[$order[--$last]]) {}
     } else {
       $debug && print "order[$i]=$order[$i] last=$last\n";
-      my $move = query('d', "$characters[$order[$i]]->{NAME} (m)ove, or (D)efer");
+#       my $move = query('d', "$characters[$order[$i]]->{NAME} (m)ove, or (D)efer");
+      my $move = query('d', "$ent[$order[$i]] (m)ove, or (D)efer");
       if ($move eq 'm') {
 	$moved[$order[$i]] = 1;
 	--$last if $i==$last;
