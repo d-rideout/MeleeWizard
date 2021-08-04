@@ -1,11 +1,11 @@
 #### Urgent:
-* bugs in bugs file
 * stunned chars go twice when multiply stunned!
   - and falling too
 * flesh out story in README, and move out local file descriptions
 * mewizseq?
   - blurb at banner time
   - GPL in all source files
+* Check for bugs in bugs file
 
 #### Non-urgent:
 * Undo previous entry...  Maybe write a script for this, to undo n entries?  Maybe the script wraps ./melee.pl itself? (2aug021)

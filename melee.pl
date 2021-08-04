@@ -318,7 +318,7 @@ sub act {
       print "skipping empty dex slot $dex!\n";
       next;
     }
-    print "dex ${dex}s:\n" if $#{$ties}; # ", 0+@{$ties}, " ties\n";
+    print "dex ${dex}s:\n" if @{$ties}; # 0+@{$ties}, " ties\n";
     # roll initiative
     my @roll;
     foreach (0..$#{$ties}) { push @roll, rand; } # ignoring repeats (4apr021)
