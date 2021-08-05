@@ -40,6 +40,7 @@ if ($ARGV[0] eq '-l') {
 my @characters; # val hash with below keys
 my %charkeys; # key namekey val index into @characters
 my %hkeys = (NAME=>1, ST=>1, STrem=>1, ADJDEX=>1, PLAYER=>1, PARTY=>0, STUN=>0, FALL=>0, StunTurn=>0, DEAD=>0, NAMEKEY=>0);
+# FALL how much damage causes fall
 # 1 ==> can appear in party file
 my $n = 0; # total number of characters
 
@@ -116,7 +117,7 @@ my @turn_damage; # amt damage sustained this turn for each character
 my @acted; # who acted so far this turn
 
 # Surprise
-print "Capital letter is default\n";
+print "\nCapital letter is default\n";
 my $q = query('n', 'Surprise? (y)es (N)o');
 print "Sorry, not ready to handle this yet." if $q eq 'y';
 ++$turn;

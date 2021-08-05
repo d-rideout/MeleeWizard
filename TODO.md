@@ -1,14 +1,25 @@
 #### Urgent:
 * stunned chars go twice when multiply stunned!
   - and falling too
+  when stun check if already stunned, and possibly entend by a turn
+  when fall check if damage taken already exceeds FALL threshold
 * flesh out story in README, and move out local file descriptions
+  shield rush to engage to protect wizard
+  advanced rules, with pole arm mention?
+  [-l], etc -- more description on how to use software
+  maybe ask people to submit issue tickets
 * mewizseq?
   - blurb at banner time
   - GPL in all source files
 * Check for bugs in bugs file
+* Names which start with a number will be problematic, since their namekey will
+  be interpreted as a character index.  Should I dispense with character index
+  referencing?  Or disallow names which contain spaces, or begin with a digit?
+  (5aug021)
+* Undo previous entry...  Maybe write a script for this, to undo n entries?
+  Maybe the script wraps ./melee.pl itself? (2aug021)
 
 #### Non-urgent:
-* Undo previous entry...  Maybe write a script for this, to undo n entries?  Maybe the script wraps ./melee.pl itself? (2aug021)
 * Allow creating characters with spaces in name? (action commands are split on spaces) (1aug021)
 * It may help to document the algorithms, so that one understands how to
   implement features. (2may021)
