@@ -1,10 +1,5 @@
 #### Urgent:
-* flesh out story in README, and move out local file descriptions
-  shield rush to engage to protect wizard
-  advanced rules, with pole arm mention?
-  [-l], etc -- more description on how to use software
-  maybe ask people to submit issue tickets
-* mewizseq?
+* mewizseq? meWizSeq? MeWizSeq? combat_sequence?
   - blurb at banner time
   - GPL in all source files
 * Undo previous entry...  Maybe write a script for this, to undo n entries?
@@ -90,4 +85,5 @@
   - and falling too
   when stun check if already stunned, and possibly entend by a turn
   when fall check if damage taken already exceeds FALL threshold (5aug021)
-  
+* flesh out story in README, and move out local file descriptions
+  maybe ask people to submit issue tickets (6aug021)

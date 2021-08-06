@@ -39,7 +39,7 @@ if ($ARGV[0] eq '-l') {
 # Data structures
 my @characters; # val hash with below keys
 my %charkeys; # key namekey val index into @characters
-my %hkeys = (NAME=>1, ST=>1, STrem=>1, ADJDEX=>1, PLAYER=>1, PARTY=>0, STUN=>0, FALL=>0, StunTurn=>0, DEAD=>0, NAMEKEY=>0);
+my %hkeys = (NAME=>1, ST=>1, STrem=>1, adjDX=>1, PLAYER=>1, PARTY=>0, STUN=>0, FALL=>0, StunTurn=>0, DEAD=>0, NAMEKEY=>0);
 # STUN how much damage causes stun
 # StunTurn stunned until this turn
 # FALL how much damage causes fall
@@ -77,8 +77,8 @@ foreach my $partyfile (@ARGV) {
     # Check some field values
     my $chr = $characters[$n];
     #   foreach (keys %hkeys)
-    die "Please provide ADJDEX for all characters\n"
-	unless $characters[$n]->{ADJDEX};
+    die "Please provide adjDX for all characters\n"
+	unless $characters[$n]->{adjDX};
 #     my $nhex = $characters[$n]->{NHEX};
 #     die "Can only handle 1 or 3 hex characters currently\n"
     # 	unless $nhex==1 || $nhex==3;
@@ -121,7 +121,7 @@ my @acted; # who acted so far this turn
 # Surprise
 print "\nCapital letter is default\n";
 my $q = query('n', 'Surprise? (y)es (N)o');
-print "Sorry, not ready to handle this yet." if $q eq 'y';
+print "Sorry, not ready to handle this yet.\n" if $q eq 'y';
 ++$turn;
 
 do {
@@ -155,7 +155,7 @@ do {
   # Declare expected dex adjustments and other special considerations
   my @poles; # pole weapon charges
   my @bow2;  # double bow attacks
-  my @dexadj; # amt to add to ADJDEX
+  my @dexadj; # amt to add to adjDX
   &displayCharacters;
 #   print "DEX adjustments?  Offset from original declared adj dex.  Ignore reactions to injury and weapon range penalties.\nwho +/- num [p|b] (e.g. 2+4p for char 2 doing rear attack as pole weapon charge; b ==> 2x shot with bow)\n";
   # In the future this will ask about pole weapon charges and doubled arrows (29jul021)
@@ -187,7 +187,7 @@ do {
 	$dexadj[$who] = $cmd;
 	my $plus = '+';
 	$plus = '' if $cmd =~ /^[\+-]/;
-	print " at $plus$cmd DEX = ", $characters[$who]->{ADJDEX}+$cmd;
+	print " at $plus$cmd DEX = ", $characters[$who]->{adjDX}+$cmd;
       } elsif ($cmd eq 'c') {
 	push @poles, $who;
 	print " charging with pole weapon";
@@ -204,7 +204,7 @@ do {
   for my $i (0..$n-1) {
     my $chr = $characters[$i];
     
-    $dex[$i] = $chr->{ADJDEX};
+    $dex[$i] = $chr->{adjDX};
     $dex[$i] += $dexadj[$i] if $dexadj[$i]; # (it might be undefined!)
 
     # Reactions to injury
@@ -419,7 +419,7 @@ sub act {
 	  $characters[$n]->{NAME} = $1;
 	  $characters[$n]->{ST} = $2;
 	  $characters[$n]->{STrem} = $2;
-	  $characters[$n]->{ADJDEX} = $3;
+	  $characters[$n]->{adjDX} = $3;
 	  $characters[$n]->{PLAYER} = $characters[$ties->[$i]]->{NAME};
 	  $characters[$n]->{PARTY} = $characters[$ties->[$i]]->{PARTY};
 	  character_prep($n++);
