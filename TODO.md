@@ -1,8 +1,4 @@
 #### Urgent:
-* stunned chars go twice when multiply stunned!
-  - and falling too
-  when stun check if already stunned, and possibly entend by a turn
-  when fall check if damage taken already exceeds FALL threshold
 * flesh out story in README, and move out local file descriptions
   shield rush to engage to protect wizard
   advanced rules, with pole arm mention?
@@ -11,28 +7,34 @@
 * mewizseq?
   - blurb at banner time
   - GPL in all source files
-* Check for bugs in bugs file
+* Undo previous entry...  Maybe write a script for this, to undo n entries?
+  Maybe the script wraps ./melee.pl itself? (2aug021)
 * Names which start with a number will be problematic, since their namekey will
   be interpreted as a character index.  Should I dispense with character index
   referencing?  Or disallow names which contain spaces, or begin with a digit?
   (5aug021)
-* Undo previous entry...  Maybe write a script for this, to undo n entries?
-  Maybe the script wraps ./melee.pl itself? (2aug021)
+* Check for bugs in bugs file
+
+* Put ST before ADJDEX in party samples?
+  ADJDX --> ADJDX?  adjDX?  Conflate all? (5aug021)
+* This tool will be helpful in large battles.
+  Note [meleewizards.com](http://meleewizards.com). (5aug021)
 
 #### Non-urgent:
-* Allow creating characters with spaces in name? (action commands are split on spaces) (1aug021)
+* name key will choke if run over end of name!  Put monsters first... (27jul021)
+* Allow creating characters with spaces in name? (action commands are split on
+  spaces) (1aug021)
 * It may help to document the algorithms, so that one understands how to
   implement features. (2may021)
 * Sort out forced retreats (16apr021)
 * Take into account damage from casting spells! (16apr021)
   - both for renewal and initial cast
   - actually not so crucial -- spell casting desn't seem to count as an injury
-* name key will choke if run over end of name!  Put monsters first... (27jul021)
-
 * Allow deferring action? (27jul021)
 * Compute second bow shot automatically, based on adjdx, rather than entering
   it each turn.  Oh well, for now it must be entered each turn -- automatic
-  will be complicated, as each character will have to declare what type of bow they are using. (30jul021)
+  will be complicated, as each character will have to declare what type of bow
+  they are using. (30jul021)
 
 #### Later / Dunno:
 * What happens with other missing fields? (14apr021)
@@ -84,3 +86,8 @@
   Is this still an issue?? (31jul021)
 * Implement non-character iniative schemes? (27jul021)
 * Allow referencing characters by first letters of name (14apr021)
+* stunned chars go twice when multiply stunned!
+  - and falling too
+  when stun check if already stunned, and possibly entend by a turn
+  when fall check if damage taken already exceeds FALL threshold (5aug021)
+  

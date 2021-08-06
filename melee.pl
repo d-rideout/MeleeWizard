@@ -40,6 +40,8 @@ if ($ARGV[0] eq '-l') {
 my @characters; # val hash with below keys
 my %charkeys; # key namekey val index into @characters
 my %hkeys = (NAME=>1, ST=>1, STrem=>1, ADJDEX=>1, PLAYER=>1, PARTY=>0, STUN=>0, FALL=>0, StunTurn=>0, DEAD=>0, NAMEKEY=>0);
+# STUN how much damage causes stun
+# StunTurn stunned until this turn
 # FALL how much damage causes fall
 # 1 ==> can appear in party file
 my $n = 0; # total number of characters
@@ -311,8 +313,10 @@ sub act {
   print "Actions:\n  who - dam (e.g. c-4 for 4 damage to character c after armor)\n";
   print "  name ST adjDX (for created being)\n" if $phase =~ /n/;
   @dexes_keys = sort {$b <=> $a} keys %dexes;
+  $debug && print "dexes_keys = @dexes_keys\n";
 #   foreach my $dex (sort {$b <=> $a} keys %dexes) { 
   while (my $dex = shift @dexes_keys) { # assuming no one has 0 dex! (20apr021)
+    $debug && print "Doing dex = $dex\n";
     # Should I go though all this if there is no tie? (4apr021)
     my $ties = $dexes{$dex};
     unless (@$ties) {
@@ -324,11 +328,14 @@ sub act {
     my @roll;
     foreach (0..$#{$ties}) { push @roll, rand; } # ignoring repeats (4apr021)
     my @dex_ties = sort {$roll[$b] <=> $roll[$a]} (0..$#{$ties});
+    $debug && print "indices into ties sorted by roll: @dex_ties\n";
     while (defined(my $i = shift @dex_ties)) {
+      next unless defined $ties->[$i];
       $debug && print "people with this dex: ties = @{$ties}\n";
-      $debug && print "remaining ordered people with this dex: @dex_ties\n";
       $debug && print "tie $i goes now, char $ties->[$i]\n";
+      $debug && print "remaining ordered indices: @dex_ties\n";
       next if $acted[$ties->[$i]];
+#       next if $acted[$i];
       while (1) {
 	my $action = query('', "$characters[$ties->[$i]]->{NAME} action result? (N)o");
 	$acted[$ties->[$i]] = 1;
@@ -338,27 +345,30 @@ sub act {
 	    print "Invalid character specification: $1\n";
 	    next;
 	  }
-	  if ($injuredi == $ties->[$i]) {
-	    print "Injuring self!  You must have rolled an 18 as an animal or in HTH combat...\n";
-# 	    next;
-	  }
+	  print 'Injuring self!  You must have rolled an 18 as an animal or '
+	      . "in HTH combat...\n" if $injuredi == $ties->[$i];
 	  my $chr = $characters[$injuredi];
 	  my $damage = $2;
+	  $debug && print "$characters[$ties->[$i]]->{NAME} hits $characters[$injuredi]->{NAME} for $damage damage\n";
 
 	  # Reaction to Injury
 	  print "$damage ST damage to $chr->{NAME}\n";
 	  $chr->{STrem} -= $damage;
+	  my $old_turn_damage = $turn_damage[$injuredi];
+	  $old_turn_damage = 0 unless defined $old_turn_damage;
 	  $turn_damage[$injuredi] += $damage;
 	  print "$chr->{NAME} has taken $turn_damage[$injuredi] damage so far this turn\n"; 
 	  my $turn_damage = $turn_damage[$injuredi];
 	  my $olddex = $dex[$injuredi];
 	  my $newdex = $dex[$injuredi];
-	  if ($turn_damage >= $chr->{STUN}) {
+	  if ($turn_damage >= $chr->{STUN} && $chr->{StunTurn} != $turn+2) {
 	    print "$chr->{NAME} is stunned\n";
 	    $chr->{StunTurn} = $turn+2;
 	    $newdex -= 2;
 	  }
-	  print "$chr->{NAME} falls down\n" if $turn_damage >= $chr->{FALL};
+	  $debug && print "turn_damage=$turn_damage  FALL=$chr->{FALL}  old_turn_damage=$old_turn_damage\n";
+	  print "$chr->{NAME} falls down\n" if $turn_damage >= $chr->{FALL} &&
+	      $old_turn_damage < $chr->{FALL};
 	  if ($chr->{STrem} <4) {
 	    print "$chr->{NAME} is in bad shape...\n";
 	    $newdex -= 3;
@@ -404,6 +414,7 @@ sub act {
 	} # did damage
 	elsif ($action =~ /^(.+) (\d+) (\d+)$/) { # Create being
 	  print "$1 created with ST $2 adjDX $3\n";
+	  print "Animals get automatic disbelieve roll\n";
 	  # Not too sure how to handle this.  Will write explicit code for now, but should put into function which is shared with 'Read parties' code above. (29jul021)
 	  $characters[$n]->{NAME} = $1;
 	  $characters[$n]->{ST} = $2;
