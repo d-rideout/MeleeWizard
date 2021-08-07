@@ -233,7 +233,11 @@ do {
   }
 
   # Force Retreats
-  print "\nForced Retreats phase: execute all forced retreats\n";
+  print '
+Forced Retreats phase: Any figure which has inflicted attack hits on an adjacent
+  figure and has not taken damage this turn may execute a forced retreat on the
+  adjacent figure.  (Attack hits include any physical attack and missle spells.)
+';
   $phase = 'forced retreats';
 # I should probably record everything that happens in this phase, e.g. to
 # decide about forced retreats
@@ -310,6 +314,7 @@ sub act {
   }
   # Act in order
   &displayCharacters;
+  # This section needs to be rewritten to be much simpler.  Use character indices in a list (stack).  Replace for statements with whiles which shift characters off the front of this list.  If someone gets kicked off or added, do a binary search based on roll value, to place them into the proper place.  Just keep the same roll even when shifting down to a smaller DX list. (6aug021)
   print "Actions:\n  who - dam (e.g. c-4 for 4 damage to character c after armor)\n";
   print "  name ST adjDX (for created being)\n" if $phase =~ /n/;
   @dexes_keys = sort {$b <=> $a} keys %dexes;
