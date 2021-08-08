@@ -114,7 +114,7 @@ print LOG "$seed\n";
 # ======================
 my $turn = 0;
 my $phase = ''; # Combat sequence phase
-my @dex; # used in internal loop below, but needs to be accessed by &act
+my @dex; # adjDX for each character for this turn
 my @turn_damage; # amt damage sustained this turn for each character
 my @acted; # who acted so far this turn
 
@@ -157,8 +157,6 @@ do {
   my @bow2;  # double bow attacks
   my @dexadj; # amt to add to adjDX
   &displayCharacters;
-#   print "DEX adjustments?  Offset from original declared adj dex.  Ignore reactions to injury and weapon range penalties.\nwho +/- num [p|b] (e.g. 2+4p for char 2 doing rear attack as pole weapon charge; b ==> 2x shot with bow)\n";
-  # In the future this will ask about pole weapon charges and doubled arrows (29jul021)
   print 'Special considerations: <who> <consideration1> [consideration2]
   Considerations are
   * <num>
@@ -181,9 +179,6 @@ do {
     print "$characters[$who]->{NAME}";
     foreach my $cmd (@sccmd) {
       if ($cmd =~ /^\+?-?\d+$/) { #(\+|-) ?(\d+)( ?([pm]))?/) {
-#       my $index = $1;
-#       my $adj = $3;
-#       $adj *= -1 if $2 eq '-';
 	$dexadj[$who] = $cmd;
 	my $plus = '+';
 	$plus = '' if $cmd =~ /^[\+-]/;
@@ -210,6 +205,7 @@ do {
     # Reactions to injury
     $dex[$i] -= 2 if $turn < $chr->{StunTurn};
     $dex[$i] -= 3 if $chr->{STrem} < 4;
+    # I have to keep track of the two different types of damage for wizards (7aug021)
   }
 
   # Act
@@ -301,6 +297,7 @@ sub character_prep {
 
 
 # Act in order of dex
+# Pass list of characters who will act
 sub act {
   # (not too sure how to handle changing one's mind -- add that later (4apr021))
   # Gather DEXes
