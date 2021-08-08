@@ -1,5 +1,6 @@
 #### Urgent:
 * rewrite action sequence.  It still shows dex xs: for list of characters which have already acted.  When they take damage after they have acted, they should not be placed down in a smaller DX list. (6aug021)
+* fallen character 'acts'
 * mewizseq? meWizSeq? MeWizSeq? combat_sequence?
   - blurb at banner time
   - GPL in all source files

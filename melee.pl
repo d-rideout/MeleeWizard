@@ -16,6 +16,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 use strict;
 use warnings;
+use List::Util qw/max/;
 
 # Setting flags
 my $debug = 0; # 1 ==> max debug output
@@ -116,7 +117,7 @@ my $turn = 0;
 my $phase = ''; # Combat sequence phase
 my @dex; # adjDX for each character for this turn
 my @turn_damage; # amt damage sustained this turn for each character
-my @acted; # who acted so far this turn
+my @acted; # who acted so far this turn, for handling reactions to injuries
 
 # Surprise
 print "\nCapital letter is default\n";
@@ -216,12 +217,14 @@ do {
     $phase = 'pole weapon charges';
     print "Pole weapon charges:\n";
     act(@poles);
-    splice @chars, $_, 1 foreach @poles;
+    splice @chars, $_, 1 foreach @poles; # remove @poles from @chars
   }
   $phase = 'normal actions';
   print "\nNormal attacks:\n";
+  # prune dead characters here?  They may die during this act() call too. (7aug021)
   act(@chars);
   if (@bow2) {
+    @acted = ();
     $phase = 'second missle shots';
     print "\nSecond bow attacks:\n";
     $debug && print "for @bow2\n";
@@ -302,45 +305,63 @@ sub act {
   # (not too sure how to handle changing one's mind -- add that later (4apr021))
   # Gather DEXes
   my %dexes; # key dex val array of character indices
-  my @dexes_keys; # keys of %dexes, for looping
-#   for $i (0..$n-1) {
+  # How about this datastructure:
+  # Let's give everyone a roll at the outset, for simplicity  
+#   my @dexes_keys; # keys of %dexes, for looping
+  my @roll; # indexed by character index
+
+  # Preparations
   for my $i (@_) {
+    next if $characters[$i]->{DEAD};
     push @{$dexes{$dex[$i]}}, $i;
-    if ($characters[$i]->{DEAD}) { $acted[$i] = 1; }
-    else { $acted[$i] = 0; }
+    # Better to prune these before calling act()?  Do we need @acted? (7aug021)
+#     if ($characters[$i]->{DEAD}) { $acted[$i] = 1; }
+    #     else { $acted[$i] = 0; }
+    $roll[$i] = rand;
   }
+  
   # Act in order
   &displayCharacters;
-  # This section needs to be rewritten to be much simpler.  Use character indices in a list (stack).  Replace for statements with whiles which shift characters off the front of this list.  If someone gets kicked off or added, do a binary search based on roll value, to place them into the proper place.  Just keep the same roll even when shifting down to a smaller DX list. (6aug021)
+  # This section needs to be rewritten to be much simpler. :
+  # * Use character indices in a list (stack).
+  # * whiles shift characters off the front of this list.
+  # * If someone gets kicked off or added, do a binary search based on roll
+  #   value, to place them into the proper place.  Just keep the same roll
+  #   even when shifting down to a smaller DX list. (6aug021)
   print "Actions:\n  who - dam (e.g. c-4 for 4 damage to character c after armor)\n";
   print "  name ST adjDX (for created being)\n" if $phase =~ /n/;
-  @dexes_keys = sort {$b <=> $a} keys %dexes;
-  $debug && print "dexes_keys = @dexes_keys\n";
-#   foreach my $dex (sort {$b <=> $a} keys %dexes) { 
-  while (my $dex = shift @dexes_keys) { # assuming no one has 0 dex! (20apr021)
+#   @dexes_keys = sort {$b <=> $a} keys %dexes;
+#   $debug && print "dexes_keys = @dexes_keys\n";
+#   while (my $dex = shift @dexes_keys) { # assuming no one has 0 dex! (20apr021)
+  while (my $dex = max keys %dexes) { # assuming no one has 0 dex! (20apr021)
     $debug && print "Doing dex = $dex\n";
     # Should I go though all this if there is no tie? (4apr021)
     my $ties = $dexes{$dex};
     unless (@$ties) {
       print "skipping empty dex slot $dex!\n";
+      delete $dexes{$dex};
       next;
     }
-    print "dex ${dex}s:\n" if @{$ties}; # 0+@{$ties}, " ties\n";
-    # roll initiative
-    my @roll;
-    foreach (0..$#{$ties}) { push @roll, rand; } # ignoring repeats (4apr021)
-    my @dex_ties = sort {$roll[$b] <=> $roll[$a]} (0..$#{$ties});
-    $debug && print "indices into ties sorted by roll: @dex_ties\n";
-    while (defined(my $i = shift @dex_ties)) {
-      next unless defined $ties->[$i];
+    print "dex ${dex}s:\n"; # if @{$ties}; # 0+@{$ties}, " ties\n";
+
+    # Roll action initiative
+#     foreach (0..$#{$ties}) { push @roll, rand; } # ignoring repeats (4apr021)
+#     my @dex_ties = sort {$roll[$b] <=> $roll[$a]} (0..$#{$ties});
+    my @dex_ties = sort {$roll[$b] <=> $roll[$a]} @$ties;
+#     $debug && print "indices into ties sorted by roll: @dex_ties\n";
+    
+    while (defined(my $act_char = shift @dex_ties)) {
+#       next unless defined $ties->[$act_char];
       $debug && print "people with this dex: ties = @{$ties}\n";
-      $debug && print "tie $i goes now, char $ties->[$i]\n";
-      $debug && print "remaining ordered indices: @dex_ties\n";
-      next if $acted[$ties->[$i]];
-#       next if $acted[$i];
+      $debug && print "ordered: @dex_ties\n";
+#       $debug && print "tie $act_char goes now, char $ties->[$act_char]\n";
+      $debug && print "tie $act_char goes now\n";
+#       next if $acted[$ties->[$act_char]];
+      die "$act_char already acted??" if $acted[$act_char];
+#       next if $acted[$act_char];
       while (1) {
-	my $action = query('', "$characters[$ties->[$i]]->{NAME} action result? (N)o");
-	$acted[$ties->[$i]] = 1;
+	my $action = query('', "$characters[$act_char]->{NAME} action result? (N)o");
+	$acted[$act_char] = 1;
 	if ($action =~ /(.+) ?- ?(\d+)/) { # Hit!
 	  my $injuredi = who($1);
 	  if ($injuredi<0) {
@@ -348,10 +369,10 @@ sub act {
 	    next;
 	  }
 	  print 'Injuring self!  You must have rolled an 18 as an animal or '
-	      . "in HTH combat...\n" if $injuredi == $ties->[$i];
+	      . "in HTH combat...\n" if $injuredi == $act_char;
 	  my $chr = $characters[$injuredi];
 	  my $damage = $2;
-	  $debug && print "$characters[$ties->[$i]]->{NAME} hits $characters[$injuredi]->{NAME} for $damage damage\n";
+	  $debug && print "$characters[$act_char]->{NAME} hits $characters[$injuredi]->{NAME} for $damage damage\n";
 
 	  # Reaction to Injury
 	  print "$damage ST damage to $chr->{NAME}\n";
@@ -404,10 +425,10 @@ sub act {
 	      }
 	    }
 	    # Add a new %dexes key, if there is not yet one for $newdex
-	    unless ($dexes{$newdex}) {
-	      push @dexes_keys, $newdex;
-	      @dexes_keys = sort {$b <=> $a} @dexes_keys;
-	    }
+# 	    unless ($dexes{$newdex}) {
+# 	      push @dexes_keys, $newdex;
+# 	      @dexes_keys = sort {$b <=> $a} @dexes_keys;
+# 	    }
 	    # Add to $dexes{$newdex}
 	    push @{$dexes{$newdex}}, $injuredi;
 	  } # push back in action order
@@ -422,15 +443,16 @@ sub act {
 	  $characters[$n]->{ST} = $2;
 	  $characters[$n]->{STrem} = $2;
 	  $characters[$n]->{adjDX} = $3;
-	  $characters[$n]->{PLAYER} = $characters[$ties->[$i]]->{NAME};
-	  $characters[$n]->{PARTY} = $characters[$ties->[$i]]->{PARTY};
+	  $characters[$n]->{PLAYER} = $characters[$act_char]->{NAME};
+	  $characters[$n]->{PARTY} = $characters[$act_char]->{PARTY};
 	  character_prep($n++);
 	  last; # always last after successful action result
 	} # create being
 	elsif (!$action) { last; } # exits action query for this character
 	else { print "Unrecognized action $action\n"; }
-      } # what happened during $ties->[$i]'s action
+      } # what happened during $act_char's action
     } # loop over ties
+    delete $dexes{$dex};
   } # loop over dexes
 }
 
