@@ -17,6 +17,7 @@
 use strict;
 use warnings;
 use List::Util qw/max/;
+use List::MoreUtils qw/firstidx/;
 
 # Setting flags
 my $debug = 0; # 1 ==> max debug output
@@ -305,18 +306,13 @@ sub act {
   # (not too sure how to handle changing one's mind -- add that later (4apr021))
   # Gather DEXes
   my %dexes; # key dex val array of character indices
-  # How about this datastructure:
-  # Let's give everyone a roll at the outset, for simplicity  
-#   my @dexes_keys; # keys of %dexes, for looping
   my @roll; # indexed by character index
 
   # Preparations
   for my $i (@_) {
     next if $characters[$i]->{DEAD};
+    $debug && print "$characters[$i]->{NAME} has adjDX $dex[$i]\n";
     push @{$dexes{$dex[$i]}}, $i;
-    # Better to prune these before calling act()?  Do we need @acted? (7aug021)
-#     if ($characters[$i]->{DEAD}) { $acted[$i] = 1; }
-    #     else { $acted[$i] = 0; }
     $roll[$i] = rand;
   }
   
@@ -344,11 +340,9 @@ sub act {
     }
     print "dex ${dex}s:\n"; # if @{$ties}; # 0+@{$ties}, " ties\n";
 
-    # Roll action initiative
-#     foreach (0..$#{$ties}) { push @roll, rand; } # ignoring repeats (4apr021)
-#     my @dex_ties = sort {$roll[$b] <=> $roll[$a]} (0..$#{$ties});
+    # Sort characters with $dex by action initiative roll
     my @dex_ties = sort {$roll[$b] <=> $roll[$a]} @$ties;
-#     $debug && print "indices into ties sorted by roll: @dex_ties\n";
+#     $debug && print "character indices sorted by roll: @dex_ties\n";
     
     while (defined(my $act_char = shift @dex_ties)) {
 #       next unless defined $ties->[$act_char];
@@ -357,8 +351,9 @@ sub act {
 #       $debug && print "tie $act_char goes now, char $ties->[$act_char]\n";
       $debug && print "tie $act_char goes now\n";
 #       next if $acted[$ties->[$act_char]];
-      die "$act_char already acted??" if $acted[$act_char];
-#       next if $acted[$act_char];
+#       die "$act_char already acted??" if $acted[$act_char];
+      # dead characters already acted
+      next if $acted[$act_char];
       while (1) {
 	my $action = query('', "$characters[$act_char]->{NAME} action result? (N)o");
 	$acted[$act_char] = 1;
@@ -368,8 +363,8 @@ sub act {
 	    print "Invalid character specification: $1\n";
 	    next;
 	  }
-	  print 'Injuring self!  You must have rolled an 18 as an animal or '
-	      . "in HTH combat...\n" if $injuredi == $act_char;
+	  print "Injuring self!  You must have rolled an 18 while attacking ",
+	      "with your body\n" if $injuredi == $act_char;
 	  my $chr = $characters[$injuredi];
 	  my $damage = $2;
 	  $debug && print "$characters[$act_char]->{NAME} hits $characters[$injuredi]->{NAME} for $damage damage\n";
@@ -380,7 +375,7 @@ sub act {
 	  my $old_turn_damage = $turn_damage[$injuredi];
 	  $old_turn_damage = 0 unless defined $old_turn_damage;
 	  $turn_damage[$injuredi] += $damage;
-	  print "$chr->{NAME} has taken $turn_damage[$injuredi] damage so far this turn\n"; 
+	  print "$chr->{NAME} has taken $turn_damage[$injuredi] damage so far this turn, has $chr->{STrem} ST remaining\n"; 
 	  my $turn_damage = $turn_damage[$injuredi];
 	  my $olddex = $dex[$injuredi];
 	  my $newdex = $dex[$injuredi];
@@ -399,36 +394,35 @@ sub act {
 	  if ($chr->{STrem} <2) {
 	    $chr->{DEAD} = 1;
 	    if ($chr->{STrem} == 1) {print "$chr->{NAME} falls unconscious\n";}
-	    else {print "$chr->{NAME} dies\n";} # if $chr->{STrem} < 1;
+	    else { print "$chr->{NAME} dies\n"; }
 	    $acted[$injuredi] = 1;
 	  }
 
 	  # Push injured back in action order
-	  
-	  # This below does not actually help -- does not remove injured from
-	  # current dex loop if injured has current dex	  
 	  if (!$acted[$injuredi] && $newdex < $olddex) {
-	    # remove from %dexes, but I don't think this matters
-	    for my $j (0..$#{$dexes{$olddex}}) {
-	       if ($dexes{$olddex}->[$j] == $injuredi) {
-		 splice @{$dexes{$olddex}},$j,1;
-		 last;
-	       }
-	    }
+	    # Don't have to worry about initiative order -- that is computed later for each $dex
+	    # 	    for my $j (0..$#{$dexes{$olddex}}) {
+	    # 	       if ($dexes{$olddex}->[$j] == $injuredi) {
+	    # 		 splice @{$dexes{$olddex}},$j,1;
+	    # 		 last;
+	    # 	       }
+	    # 	    }
+	    # Below should replace above code (8aug021)
+	    # https://metacpan.org/pod/List::MoreUtils#first_index-BLOCK-LIST
+	    splice(@{$dexes{$olddex}},
+		   (firstidx {$_==$injuredi} @{$dexes{$olddex}}), 1);
 	    # Remove from current dex queue, if olddex = dex
 	    if ($olddex==$dex) {
-	      for my $j (0..$#dex_ties) {
-		if ($dex_ties[$j] == $injuredi) {
-		  splice @dex_ties,$j,1;
-		  last;
-		}
-	      }
-	    }
-	    # Add a new %dexes key, if there is not yet one for $newdex
-# 	    unless ($dexes{$newdex}) {
-# 	      push @dexes_keys, $newdex;
-# 	      @dexes_keys = sort {$b <=> $a} @dexes_keys;
-# 	    }
+	      # Do I also need to remove $injuredi from @$dexes{$olddex}?  Presumably not. (8aug021)
+	      # 	      for my $j (0..$#dex_ties) {
+	      # 		if ($dex_ties[$j] == $injuredi) {
+	      # 		  splice @dex_ties,$j,1;
+	      # 		  last;
+	      # 		}
+	      # 	      }
+	      # also have to remove injured from current @dex_ties
+	      splice(@dex_ties, (firstidx {$_==$injuredi} @dex_ties), 1);
+	    } #else { die "How did I get here??"; }
 	    # Add to $dexes{$newdex}
 	    push @{$dexes{$newdex}}, $injuredi;
 	  } # push back in action order

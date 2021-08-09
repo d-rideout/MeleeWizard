@@ -58,6 +58,9 @@ restarting, you can edit the `log` file -- it is a simple text file.  Thus
 you can undo any previous entries if you wish.  I plan to make it easier to
 undo entries at some point.)
 
+For the moment you can control the initiative method by setting the
+`$initiative` variable at the top of `melee.pl`.
+
 Please submit issue tickets if you encounter any problems or wish to suggest
 new features.
 

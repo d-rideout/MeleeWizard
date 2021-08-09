@@ -10,6 +10,8 @@
   be interpreted as a character index.  Should I dispense with character index
   referencing?  Or disallow names which contain spaces, or begin with a digit?
   (5aug021)
+* Surprise:  If yes, ask about each party in turn, if they are surprised, and then have everyone else participate in a turn 0.
+  --> Specify space separated list of parties, needs generic version of character listing subroutine (8aug021)
 * Check for bugs in bugs file
 
 * Put ST before ADJDEX in party samples?
