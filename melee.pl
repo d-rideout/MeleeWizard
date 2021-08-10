@@ -385,8 +385,10 @@ sub act {
 	    $newdex -= 2;
 	  }
 	  $debug && print "turn_damage=$turn_damage  FALL=$chr->{FALL}  old_turn_damage=$old_turn_damage\n";
-	  print "$chr->{NAME} falls down\n" if $turn_damage >= $chr->{FALL} &&
-	      $old_turn_damage < $chr->{FALL};
+	  if ($turn_damage >= $chr->{FALL} && $old_turn_damage < $chr->{FALL}) {
+	    print "$chr->{NAME} falls down\n";
+	    $acted[$injuredi] = 1;
+	  }
 	  if ($chr->{STrem} <4) {
 	    print "$chr->{NAME} is in bad shape...\n";
 	    $newdex -= 3;
