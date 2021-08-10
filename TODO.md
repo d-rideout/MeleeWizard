@@ -1,5 +1,4 @@
 #### Urgent:
-* GPL in all source files
 * Surprise:  If yes, ask about each party in turn, if they are surprised, and
   then have everyone else participate in a turn 0.
   --> Specify space separated list of parties, needs generic version of
@@ -14,12 +13,15 @@
   (5aug021)
   Though possibly many people will want spaces in their names?  I think that
   they will have to use underscores for them in their party file. (9aug021)
+  Just check names for potential problems when they are read, including key
+  overflow! (10aug021)
 * Check for bugs in bugs file
 
 * This tool will be helpful in large battles.
   Note [meleewizards.com](http://meleewizards.com). (5aug021)
 
 #### Non-urgent:
+* declare DX and stun status when acting (10aug021)
 * empty dex $dex: is still happening
   I think it can happen if someone gets stunned before acting, so they get
   pushed back in dex order, and then they fall.
@@ -104,3 +106,4 @@
 * fallen character 'acts' (9aug021)
 * Put ST before ADJDEX in party samples?
   ADJDX --> ADJDX?  adjDX?  Conflate all? (5aug021)
+* GPL in all source files (10aug021)

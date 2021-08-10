@@ -193,7 +193,7 @@ do {
 	print " double shot with bow";
       } else { print "Unrecognized consideration $cmd\n"; }
     } # loop over considerations for this character
-    print "\n";
+    print " (- injury adjustments)\n";
   } # special considerations
   print "\n";
 
@@ -225,7 +225,8 @@ do {
   # prune dead characters here?  They may die during this act() call too. (7aug021)
   act(@chars);
   if (@bow2) {
-    @acted = ();
+#     my $i;
+    @acted[$_] = 0 foreach @bow2;
     $phase = 'second missle shots';
     print "\nSecond bow attacks:\n";
     $debug && print "for @bow2\n";
@@ -357,6 +358,7 @@ sub act {
       while (1) {
 	my $action = query('', "$characters[$act_char]->{NAME} action result? (N)o");
 	$acted[$act_char] = 1;
+	$debug && print "act_char=$act_char acted=$acted[$act_char]\n";
 	if ($action =~ /(.+) ?- ?(\d+)/) { # Hit!
 	  my $injuredi = who($1);
 	  if ($injuredi<0) {
@@ -401,6 +403,7 @@ sub act {
 	  }
 
 	  # Push injured back in action order
+	  $debug && print "push back? injuredi=$injuredi acted=$acted[$injuredi] olddex=$olddex newdex=$newdex\n";
 	  if (!$acted[$injuredi] && $newdex < $olddex) {
 	    # Don't have to worry about initiative order -- that is computed later for each $dex
 	    # 	    for my $j (0..$#{$dexes{$olddex}}) {
