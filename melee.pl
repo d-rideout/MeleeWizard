@@ -120,13 +120,34 @@ my @dex; # adjDX for each character for this turn
 my @turn_damage; # amt damage sustained this turn for each character
 my @acted; # who acted so far this turn, for handling reactions to injuries
 
-# Surprise
 print "\nCapital letter is default\n";
-my $q = query('n', 'Surprise? (y)es (N)o');
-print "Sorry, not ready to handle this yet.\n" if $q eq 'y';
-++$turn;
 
-do {
+# Surprise
+# print "Sorry, not ready to handle this yet.\n" if $q eq 'y';
+# ++$turn;
+
+# Main loop
+while (1) {
+  my %surprise_parties;
+  unless ($turn) {
+    my $q = query('n', 'Surprise? (y)es (N)o');
+    if ($q eq 'y') {
+      # Generate list of suprised parties
+      # I assume no one can be dead yet?
+      ++$surprise_parties{$_->{PARTY}} foreach @characters;
+      # no don't use an array.  Leave the surprised parties in a hash.
+#       my @surprise_parties = keys %parties;
+      foreach (keys %surprise_parties) { #my $i (0..$#surprise_parties) {
+# 	$q = query('y', "Is $surprise_parties[$i] surprised? (Y)es (n)o");
+# 	splice @surprise_parties, $i, 1 unless $q eq 'y';
+	$q = query('y', "Is $_ surprised? (Y)es (n)o");
+	delete $surprise_parties{$_} unless $q eq 'y';
+      }
+      # Below if !$turn && $surprise_parties{...PARTY} then skip that character
+#       die "If no parties are surprised then please accept the default '(N)o' for  the 'Surprise?' question\n" unless keys %surprise_parties;
+    } else { ++$turn; }
+  }
+	
   print "\n* Turn $turn:\n";
 
   # Movement
@@ -134,6 +155,7 @@ do {
   my @entities;
   if ($initiative eq 'c') {
     foreach my $c (@characters) {
+      next unless $turn || !$surprise_parties{$c->{PARTY}};
       push @entities, $c->{NAME} unless $c->{DEAD};
     }
   }
@@ -142,11 +164,13 @@ do {
     $type = 'PLAYER' if $initiative eq 'l';
     my %entities;
     foreach my $c (@characters) {
+      next unless $turn || !$surprise_parties{$c->{PARTY}};
       next if $c->{DEAD};
       my $ent = $c->{$type};
       push @entities, $ent unless $entities{$ent}++;
     }
   }
+  die "There is no one available to move!\n" unless @entities;
   movement(@entities);
   
   # Actions
@@ -212,6 +236,13 @@ do {
 
   # Act
   my @chars = 0..$n-1;
+  unless ($turn) { # prune surprised characters
+    foreach (my $i=$#chars; $i>=0; --$i) { # ($#chars..0) {
+      splice @chars, $i, 1 if $surprise_parties{$characters[$i]->{PARTY}};
+#       $debug && print "prunned suprised character $characters[$i]
+    }
+  }
+      
   @turn_damage = ();
   @acted = ();
   if (@poles) {
@@ -242,8 +273,9 @@ Forced Retreats phase: Any figure which has inflicted attack hits on an adjacent
   $phase = 'forced retreats';
 # I should probably record everything that happens in this phase, e.g. to
 # decide about forced retreats
-  
-} while ($turn++);
+
+  ++$turn;
+} # while (++$turn); # Why this check??
 
 
 # Display characters

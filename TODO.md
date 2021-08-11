@@ -1,12 +1,7 @@
 #### Urgent:
-* Surprise:  If yes, ask about each party in turn, if they are surprised, and
-  then have everyone else participate in a turn 0.
-  --> Specify space separated list of parties, needs generic version of
-      character listing subroutine (8aug021)
 * Undo previous entry...  Maybe write a script for this, to undo n entries?
   Maybe the script wraps ./melee.pl itself? (2aug021)
-* mewizseq? meWizSeq? MeWizSeq? combat_sequence? wizlee?
-  - blurb at banner time
+  Or melee.pl relaunches itself! (11aug021)
 * Names which start with a number will be problematic, since their namekey will
   be interpreted as a character index.  Should I dispense with character index
   referencing?  Or disallow names which contain spaces, or begin with a digit?
@@ -15,12 +10,16 @@
   they will have to use underscores for them in their party file. (9aug021)
   Just check names for potential problems when they are read, including key
   overflow! (10aug021)
+* mewizseq? meWizSeq? MeWizSeq? combat_sequence? wizlee?
+  - blurb at banner time
 * Check for bugs in bugs file
 
 * This tool will be helpful in large battles.
   Note [meleewizards.com](http://meleewizards.com). (5aug021)
 
 #### Non-urgent:
+* Specify space separated list of surprised parties, needs generic version of
+      character listing subroutine (8aug021)
 * declare DX and stun status when acting (10aug021)
 * empty dex $dex: is still happening
   I think it can happen if someone gets stunned before acting, so they get
@@ -107,3 +106,5 @@
 * Put ST before ADJDEX in party samples?
   ADJDX --> ADJDX?  adjDX?  Conflate all? (5aug021)
 * GPL in all source files (10aug021)
+* Surprise:  If yes, ask about each party in turn, if they are surprised, and
+  then have everyone else participate in a turn 0. (11aug021)
