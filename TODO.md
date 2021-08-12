@@ -42,6 +42,7 @@
   it each turn.  Oh well, for now it must be entered each turn -- automatic
   will be complicated, as each character will have to declare what type of bow
   they are using. (30jul021)
+* Stunned 'through this turn' or '... next turn'? (12aug021)
 
 #### Later / Dunno:
 * What happens with other missing fields? (14apr021)
@@ -108,3 +109,4 @@
 * GPL in all source files (10aug021)
 * Surprise:  If yes, ask about each party in turn, if they are surprised, and
   then have everyone else participate in a turn 0. (11aug021)
+* Show stun status when acting.  Stunned through this turn or next turn. (11aug021)

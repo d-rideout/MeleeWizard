@@ -43,7 +43,7 @@ my @characters; # val hash with below keys
 my %charkeys; # key namekey val index into @characters
 my %hkeys = (NAME=>1, ST=>1, STrem=>1, adjDX=>1, PLAYER=>1, PARTY=>0, STUN=>0, FALL=>0, StunTurn=>0, DEAD=>0, NAMEKEY=>0);
 # STUN how much damage causes stun
-# StunTurn stunned until this turn
+# StunTurn becomes unstunned on this turn
 # FALL how much damage causes fall
 # 1 ==> can appear in party file
 my $n = 0; # total number of characters
@@ -208,7 +208,7 @@ while (1) {
 	$dexadj[$who] = $cmd;
 	my $plus = '+';
 	$plus = '' if $cmd =~ /^[\+-]/;
-	print " at $plus$cmd DEX = ", $characters[$who]->{adjDX}+$cmd;
+	print " at $plus$cmd DEX = ", $characters[$who]->{adjDX}+$cmd, ' (- injury adjustments)';
       } elsif ($cmd eq 'c') {
 	push @poles, $who;
 	print " charging with pole weapon";
@@ -217,7 +217,7 @@ while (1) {
 	print " double shot with bow";
       } else { print "Unrecognized consideration $cmd\n"; }
     } # loop over considerations for this character
-    print " (- injury adjustments)\n";
+    print "\n";
   } # special considerations
   print "\n";
 
@@ -336,8 +336,6 @@ sub character_prep {
 # Act in order of dex
 # Pass list of characters who will act
 sub act {
-  # (not too sure how to handle changing one's mind -- add that later (4apr021))
-  # Gather DEXes
   my %dexes; # key dex val array of character indices
   my @roll; # indexed by character index
 
@@ -345,26 +343,18 @@ sub act {
   for my $i (@_) {
     next if $characters[$i]->{DEAD};
     $debug && print "$characters[$i]->{NAME} has adjDX $dex[$i]\n";
+    # Gather DEXes
     push @{$dexes{$dex[$i]}}, $i;
+    # Roll initiative
     $roll[$i] = rand;
   }
   
   # Act in order
   &displayCharacters;
-  # This section needs to be rewritten to be much simpler. :
-  # * Use character indices in a list (stack).
-  # * whiles shift characters off the front of this list.
-  # * If someone gets kicked off or added, do a binary search based on roll
-  #   value, to place them into the proper place.  Just keep the same roll
-  #   even when shifting down to a smaller DX list. (6aug021)
   print "Actions:\n  who - dam (e.g. c-4 for 4 damage to character c after armor)\n";
   print "  name ST adjDX (for created being)\n" if $phase =~ /n/;
-#   @dexes_keys = sort {$b <=> $a} keys %dexes;
-#   $debug && print "dexes_keys = @dexes_keys\n";
-#   while (my $dex = shift @dexes_keys) { # assuming no one has 0 dex! (20apr021)
   while (my $dex = max keys %dexes) { # assuming no one has 0 dex! (20apr021)
     $debug && print "Doing dex = $dex\n";
-    # Should I go though all this if there is no tie? (4apr021)
     my $ties = $dexes{$dex};
     unless (@$ties) {
       print "skipping empty dex slot $dex!\n";
@@ -387,8 +377,14 @@ sub act {
 #       die "$act_char already acted??" if $acted[$act_char];
       # dead characters already acted
       next if $acted[$act_char];
+      my $c = $characters[$act_char];
+      print "$c->{NAME}: ST $c->{ST} ($c->{STrem})  adjDX $dex";
+      print " (stunned until turn $c->{StunTurn})" if $turn < $c->{StunTurn};
+      # Stunned 'through this turn' or '... next turn'? (12aug021)
+      print "\n";
       while (1) {
-	my $action = query('', "$characters[$act_char]->{NAME} action result? (N)o");
+# 	my $action = query('', "$characters[$act_char]->{NAME} action result? (N)o");
+	my $action = query('', "Action result? (N)o");
 	$acted[$act_char] = 1;
 	$debug && print "act_char=$act_char acted=$acted[$act_char]\n";
 	if ($action =~ /(.+) ?- ?(\d+)/) { # Hit!
