@@ -364,10 +364,14 @@ sub act {
     $roll[$i] = rand;
   }
   
-  # Act in order
+  # Actions
   &displayCharacters;
-  print "Actions:\n  who - dam (e.g. c-4 for 4 damage to character c after armor)\n";
-  print "  name ST adjDX (for created being)\n" if $phase =~ /n/;
+#   print "Actions:\n  who - dam (e.g. c-4 for 4 damage to character c after armor)\n";
+  print 'Actions:
+  * <who> - <dam> (e.g. c-4 for 4 damage to character c after armor)
+  * s <dex adj>   ready or unready shield, which changes base adjDX
+                  (e.g. s -2 to ready a tower shield)';
+  print "* name ST adjDX (for created being)\n" if $phase =~ /n/;
   while (my $dex = max keys %dexes) { # assuming no one has 0 dex! (20apr021)
     $debug && print "Doing dex = $dex\n";
     my $ties = $dexes{$dex};
@@ -397,6 +401,8 @@ sub act {
       print " (stunned until turn $c->{StunTurn})" if $turn < $c->{StunTurn};
       # Stunned 'through this turn' or '... next turn'? (12aug021)
       print "\n";
+
+      # Action query loop for character with index $act_char
       while (1) {
 # 	my $action = query('', "$characters[$act_char]->{NAME} action result? (N)o");
 	my $action = query('', "Action result? (N)o");
@@ -490,6 +496,11 @@ sub act {
 	  character_prep($n++);
 	  last; # always last after successful action result
 	} # create being
+	elsif ($action =~ /^s ([\d-]+)$/) { # change shield state
+	  my $adjDX = $characters[$act_char]->{adjDX};
+	  print $characters[$act_char]->{NAME}, $1>0 ? ' un' : ' ', "readies shield -- adjDX $adjDX --> ", $adjDX+$1, "\n";
+	  $characters[$act_char]->{adjDX} += $1;
+	}
 	elsif (!$action) { last; } # exits action query for this character
 	else { print "Unrecognized action $action\n"; }
       } # what happened during $act_char's action
