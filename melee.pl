@@ -25,18 +25,19 @@ my $initiative = 'c'; # c ==> character-based; p ==> party-based
                       # l ==> pLayer-based; s ==> 'side-based
 
 # Check settings
-die "Only character- and party-based initiative is currently implemented\n" unless $initiative =~ /^[cpl]$/;
+die "Side-based initiative is not implemented yet\n" unless $initiative =~ /^[cpl]$/;
+# die "Only character- party-based initiative is currently implemented\n" unless $initiative =~ /^[cpl]$/;
 # die "Only character-based initiative is currently implemented\n" unless $initiative =~ /^[c]$/;
 # Side-based initiative is problematic -- I need to add it to the UI somehow.  Should be a property of parties.  Could group the input parties somehow on the command line?  Or maybe better -- have each party file declare a side name at the top! (2AUG021)
 
 # Check command line
-die "usage: melee.pl [-l] <party 1> <party 2> <party 3> ...\n" .
-    "  -l ==> restart from log file\n" unless @ARGV;
 my $restart;
 if ($ARGV[0] eq '-l') {
   $restart = 1;
   shift @ARGV;
 }
+die "usage: melee.pl [-l] <party 1> <party 2> <party 3> ...\n" .
+    "  -l ==> restart from log file\n" unless @ARGV;
 
 # Data structures
 my @characters; # val hash with below keys
@@ -249,7 +250,9 @@ while (1) {
     $phase = 'pole weapon charges';
     print "Pole weapon charges:\n";
     act(@poles);
-    splice @chars, $_, 1 foreach @poles; # remove @poles from @chars
+    # remove @poles from @chars
+    foreach my $p (@poles) { splice @chars, (firstidx {$_==$p} @chars), 1; }
+    # Above seems pretty slow.  This complication only because of surprise round. Rethink all this? (20aug021)
   }
   $phase = 'normal actions';
   print "\nNormal attacks:\n";
@@ -309,10 +312,12 @@ sub query {
 
 
 # Character preparations
+my $uniquify = 0;
+my $msg_space;
 sub character_prep {
   my $ci = shift;
 
-  # stun & fall thresholds
+  # Stun & fall thresholds
   my $char = $characters[$ci];
   my $st = $char->{ST};
   if ($st < 30) { $char->{STUN} = 5; $char->{FALL} = 8; } # normal
@@ -321,11 +326,21 @@ sub character_prep {
   $char->{STrem} = $st unless $char->{STrem};
   $char->{StunTurn} = 0;
 
-  # name keys
+  # Address some potential issues with names
+  print "Replacing spaces with underscores in names\n"
+      if $char->{NAME} =~ s/ /_/g && !$msg_space++;
   my $name = $char->{NAME};
+  print "WARNING: Numeric character specifications are considered as namekeys before character indices.  Character index specifications are deprecated. (20aug021)\n" if $name =~ /^\d/;
+  
+  # Name keys
   my $len = 1;
+  my $length = length $name;
   my $namekey = substr $name, 0, $len;
-  $namekey = substr $name, 0, ++$len while defined $charkeys{$namekey};
+  $namekey = substr $name, 0, ++$len while $len <= $length && defined $charkeys{$namekey};
+  if ($len > $length) {
+    print "WARNING: namekey overflow.  Please use longer or more unique names.\n";
+    $namekey .= $uniquify++;
+  }
   $charkeys{$namekey} = $ci;
   $char->{NAMEKEY} = $namekey;
   # Is this good enough, or do I need to expand both keys? (27jul021)

@@ -2,20 +2,30 @@
 * Undo previous entry...  Maybe write a script for this, to undo n entries?
   Maybe the script wraps ./melee.pl itself? (2aug021)
   Or melee.pl relaunches itself! (11aug021)
-* Names which start with a number will be problematic, since their namekey will
-  be interpreted as a character index.  Should I dispense with character index
-  referencing?  Or disallow names which contain spaces, or begin with a digit?
-  (5aug021)
-  Though possibly many people will want spaces in their names?  I think that
-  they will have to use underscores for them in their party file. (9aug021)
-  Just check names for potential problems when they are read, including key
-  overflow! (10aug021)
+* action to ready or unready a shield, which permanantly changes adjDX! (20aug021)
+* list possible forced retreats (20aug021)
 * mewizseq? meWizSeq? MeWizSeq? combat_sequence? wizlee?
   - blurb at banner time
 * Check for bugs in bugs file
 
 * This tool will be helpful in large battles.
   Note [meleewizards.com](http://meleewizards.com). (5aug021)
+
+
+#### Thoughts:
+* Aid & Rope spells: modifies someone's adjDX (20aug021)
+* Blur spell: decreases adjDX of everyone attacking someone (20aug021)
+  - Have declaration of intent, maybe as part of move?  Or after all moves play out?  It is getting *more* complicated, not less... (20aug021)
+* Character-based move initiative can get fairly thorny with many characters.  Maybe default to party-based?  Player-based?)
+* Hiding information:
+  - Use system `clear` to blank screen
+  - history command to display blow-by-blow, with option to disregard deferred move details
+  - Note that history content itself will have different content for different players!
+  - Maybe have '?' command at all prompts, which displays global command options:
+    * q quit
+    * h<options> history
+    * ? itself
+    * will probably need player mode stuff to indicate which view to display (20aug021)
 
 #### Non-urgent:
 * Specify space separated list of surprised parties, needs generic version of
@@ -110,3 +120,11 @@
 * Surprise:  If yes, ask about each party in turn, if they are surprised, and
   then have everyone else participate in a turn 0. (11aug021)
 * Show stun status when acting.  Stunned through this turn or next turn. (11aug021)
+* Names which start with a number will be problematic, since their namekey will
+  be interpreted as a character index.  Should I dispense with character index
+  referencing?  Or disallow names which contain spaces, or begin with a digit?
+  (5aug021)
+  Though possibly many people will want spaces in their names?  I think that
+  they will have to use underscores for them in their party file. (9aug021)
+  Just check names for potential problems when they are read, including key
+  overflow! (10aug021)
