@@ -32,7 +32,7 @@ die "Side-based initiative is not implemented yet\n" unless $initiative =~ /^[cp
 
 # Check command line
 my $restart;
-if ($ARGV[0] eq '-l') {
+if (@ARGV && $ARGV[0] eq '-l') {
   $restart = 1;
   shift @ARGV;
 }
@@ -120,6 +120,8 @@ my $phase = ''; # Combat sequence phase
 my @dex; # adjDX for each character for this turn
 my @turn_damage; # amt damage sustained this turn for each character
 my @acted; # who acted so far this turn, for handling reactions to injuries
+my @damaged; # who has taken damage this turn
+my @retreats; # possible forced retreats
 
 print "\nCapital letter is default\n";
 
@@ -148,7 +150,7 @@ while (1) {
 #       die "If no parties are surprised then please accept the default '(N)o' for  the 'Surprise?' question\n" unless keys %surprise_parties;
     } else { ++$turn; }
   }
-	
+
   print "\n* Turn $turn:\n";
 
   # Movement
@@ -246,6 +248,8 @@ while (1) {
       
   @turn_damage = ();
   @acted = ();
+  @damaged = (); # who has taken damage this turn
+  @retreats = (); # possible forced retreats
   if (@poles) {
     $phase = 'pole weapon charges';
     print "Pole weapon charges:\n";
@@ -268,15 +272,19 @@ while (1) {
   }
 
   # Force Retreats
-  print '
-Forced Retreats phase: Any figure which has inflicted attack hits on an adjacent
-  figure and has not taken damage this turn may execute a forced retreat on the
-  adjacent figure.  (Attack hits include any physical attack and missle spells.)
-';
+#   print '
+# Forced Retreats phase: Any figure which has inflicted attack hits on an adjacent
+#   figure and has not taken damage this turn may execute a forced retreat on the
+#   adjacent figure.  (Attack hits include any physical attack and missle spells.)
+# ';
   $phase = 'forced retreats';
-# I should probably record everything that happens in this phase, e.g. to
-# decide about forced retreats
-
+  print "\nPossible Forced Retreats: (if two chacters are adjacent)\n";
+  for (my $i=0; $i<@retreats; $i+=2) {
+    my $who = $retreats[$i];
+    print "$characters[$who]->{NAME} on $characters[$retreats[$i+1]]->{NAME}?\n" unless $damaged[$who];
+  }
+#   print "\n";
+  
   ++$turn;
 } # while (++$turn); # Why this check??
 
@@ -366,7 +374,6 @@ sub act {
   
   # Actions
   &displayCharacters;
-#   print "Actions:\n  who - dam (e.g. c-4 for 4 damage to character c after armor)\n";
   print 'Actions:
   * <who> - <dam> (e.g. c-4 for 4 damage to character c after armor)
   * s <dex adj>   ready or unready shield, which changes base adjDX
@@ -376,7 +383,7 @@ sub act {
     $debug && print "Doing dex = $dex\n";
     my $ties = $dexes{$dex};
     unless (@$ties) {
-      print "skipping empty dex slot $dex!\n";
+      $debug && print "skipping empty dex slot $dex!\n";
       delete $dexes{$dex};
       next;
     }
@@ -419,7 +426,9 @@ sub act {
 	  my $chr = $characters[$injuredi];
 	  my $damage = $2;
 	  $debug && print "$characters[$act_char]->{NAME} hits $characters[$injuredi]->{NAME} for $damage damage\n";
-
+	  ++$damaged[$injuredi] if $damage;
+	  push @retreats, $act_char, $injuredi;
+	  
 	  # Reaction to Injury
 	  print "$damage ST damage to $chr->{NAME}\n";
 	  $chr->{STrem} -= $damage;

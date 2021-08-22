@@ -1,5 +1,4 @@
 #### Urgent:
-* list possible forced retreats (20aug021)
 * Undo previous entry...  Maybe write a script for this, to undo n entries?
   Maybe the script wraps ./melee.pl itself? (2aug021)
   Or melee.pl relaunches itself! (11aug021)
@@ -52,6 +51,7 @@
   will be complicated, as each character will have to declare what type of bow
   they are using. (30jul021)
 * Stunned 'through this turn' or '... next turn'? (12aug021)
+* Hide empty dex: slots (21aug021)
 
 #### Later / Dunno:
 * What happens with other missing fields? (14apr021)
@@ -128,3 +128,4 @@
   Just check names for potential problems when they are read, including key
   overflow! (10aug021)
 * action to ready or unready a shield, which permanantly changes adjDX! (20aug021)
+* list possible forced retreats (20aug021)
