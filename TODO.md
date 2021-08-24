@@ -2,6 +2,7 @@
 * Undo previous entry...  Maybe write a script for this, to undo n entries?
   Maybe the script wraps ./melee.pl itself? (2aug021)
   Or melee.pl relaunches itself! (11aug021)
+* http://www.sjgames.com/general/online_policy.html (23aug021)
 * mewizseq? meWizSeq? MeWizSeq? combat_sequence? wizlee? melwizseq?
   - blurb at banner time
 * Check for bugs in bugs file

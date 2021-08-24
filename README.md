@@ -20,7 +20,7 @@ that turn...  This tool is intended to take care of all that, so you can
 focus on the game!  Let the computer tell you whose turn it is, so you don't
 have to keep all these details in your head.
 
-**Note:** I have the (Advanced) version published by Metagaming in 1980.  I
+**Note:** I have the (Advanced) version published by Metagaming in 1982.  I
   do not know if the rules for the more modern version published by Steve
   Jackson Games are the same.  See the [wiki](https://github.com/d-rideout/MeleeWizard/wiki) for some comments on `house rules'.
 

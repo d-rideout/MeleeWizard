@@ -279,6 +279,7 @@ while (1) {
 # ';
   $phase = 'forced retreats';
   print "\nPossible Forced Retreats: (if two chacters are adjacent)\n";
+  print "None.\n" unless @retreats;
   for (my $i=0; $i<@retreats; $i+=2) {
     my $who = $retreats[$i];
     print "$characters[$who]->{NAME} on $characters[$retreats[$i+1]]->{NAME}?\n" unless $damaged[$who];
@@ -377,7 +378,8 @@ sub act {
   print 'Actions:
   * <who> - <dam> (e.g. c-4 for 4 damage to character c after armor)
   * s <dex adj>   ready or unready shield, which changes base adjDX
-                  (e.g. s -2 to ready a tower shield)';
+                  (e.g. s -2 to ready a tower shield)
+';
   print "* name ST adjDX (for created being)\n" if $phase =~ /n/;
   while (my $dex = max keys %dexes) { # assuming no one has 0 dex! (20apr021)
     $debug && print "Doing dex = $dex\n";
