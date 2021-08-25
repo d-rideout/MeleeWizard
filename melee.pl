@@ -30,13 +30,25 @@ die "Side-based initiative is not implemented yet\n" unless $initiative =~ /^[cp
 # die "Only character-based initiative is currently implemented\n" unless $initiative =~ /^[c]$/;
 # Side-based initiative is problematic -- I need to add it to the UI somehow.  Should be a property of parties.  Could group the input parties somehow on the command line?  Or maybe better -- have each party file declare a side name at the top! (2AUG021)
 
+# Banner
+print 'Melee/Wizard turn sequence tool  Copyright (C) 2021  David P. Rideout
+This program comes with ABSOLUTELY NO WARRANTY.
+This is free software, and you are welcome to redistribute it under the
+conditions of the GNU GENERAL PUBLIC LICENSE Version 3; see LICENSE file.
+';
+# This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
+#     This is free software, and you are welcome to redistribute it
+#     under certain conditions; type `show c' for details.
+$debug && print "Debug level $debug\n";
+print "\n";
+
 # Check command line
 my $restart;
 if (@ARGV && $ARGV[0] eq '-l') {
   $restart = 1;
   shift @ARGV;
 }
-die "usage: melee.pl [-l] <party 1> <party 2> <party 3> ...\n" .
+die "Usage: melee.pl [-l] <party 1> <party 2> <party 3> ...\n" .
     "  -l ==> restart from log file\n" unless @ARGV;
 
 # Data structures
@@ -48,9 +60,6 @@ my %hkeys = (NAME=>1, ST=>1, STrem=>1, adjDX=>1, PLAYER=>1, PARTY=>0, STUN=>0, F
 # FALL how much damage causes fall
 # 1 ==> can appear in party file
 my $n = 0; # total number of characters
-
-# Banner
-$debug && print "Debug level $debug\n\n";
 
 # Read parties
 foreach my $partyfile (@ARGV) {
@@ -123,7 +132,7 @@ my @acted; # who acted so far this turn, for handling reactions to injuries
 my @damaged; # who has taken damage this turn
 my @retreats; # possible forced retreats
 
-print "\nCapital letter is default\n";
+print "\nCapital letter is default option for each prompt\n\n";
 
 # Surprise
 # print "Sorry, not ready to handle this yet.\n" if $q eq 'y';
@@ -305,18 +314,33 @@ sub displayCharacters {
 # args: default value, query string
 sub query {
   my $default = shift;
-  print "Turn $turn $phase: ", shift, ' or (q)uit> ';
-  my $input;
-  if ($restart && @log) {
-    print $input = shift @log;
-    chomp $input;
+  my $query = shift;
+  my %global_options = (q=>1, '?'=>1);
+
+  while (1) {
+    #   print "Turn $turn $phase: ", shift, ' or (q)uit> ';
+#     print "Turn $turn $phase: ", $query, ' or global option, (?) for list> ';
+    print "Turn $turn $phase: ", $query, ' or (?) to list global options> ';
+    my $input;
+    if ($restart && @log) {
+      print $input = shift @log;
+      chomp $input;
+    }
+    else { chomp($input = <STDIN>); }
+    #   print "input is [$input]\n";
+    #   print LOG "$input\n" unless $input eq 'q';
+    print LOG "$input\n" unless $global_options{$input};
+    return $default unless $input;
+
+    # Process global options
+    if ($global_options{$input}) {
+      die "Finished.\n" if $input eq 'q';
+      print "(q) to quit\n" if $input eq '?';
+    } else { return $input; }
   }
-  else { chomp($input = <STDIN>); }
-  #   print "input is [$input]\n";
-  print LOG "$input\n" unless $input eq 'q';
-  return $default unless $input;
-  die "Finished.\n" if $input eq 'q';
-  $input;
+  
+  #   $input;
+  'error'; # should never get here?
 }
 
 
