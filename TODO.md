@@ -1,10 +1,7 @@
 #### Urgent:
-* Undo previous entry...  Maybe write a script for this, to undo n entries?
-  Maybe the script wraps ./melee.pl itself? (2aug021)
-  Or melee.pl relaunches itself! (11aug021)
 * http://www.sjgames.com/general/online_policy.html (23aug021)
 * mewizseq? meWizSeq? MeWizSeq? combat_sequence? wizlee? melwizseq?
-  - blurb at banner time
+  tftseq mwseq ... (25aug021)
 * Check for bugs in bugs file
 
 * This tool will be helpful in large battles.
@@ -15,7 +12,10 @@
 * Aid & Rope spells: modifies someone's adjDX (20aug021)
 * Blur spell: decreases adjDX of everyone attacking someone (20aug021)
   - Have declaration of intent, maybe as part of move?  Or after all moves play out?  It is getting *more* complicated, not less... (20aug021)
-* Character-based move initiative can get fairly thorny with many characters.  Maybe default to party-based?  Player-based?)
+* Character-based move initiative can get fairly thorny with many characters.
+  Maybe default to party-based?  Player-based?
+  Though I like it, as it 'reduces variance'.  Less rides on the initiative
+  roll that way. (25aug021)
 * Hiding information:
   - Use system `clear` to blank screen
   - history command to display blow-by-blow, with option to disregard deferred move details
@@ -27,6 +27,8 @@
     * will probably need player mode stuff to indicate which view to display (20aug021)
 
 #### Non-urgent:
+* Global commands will trump local ones.  So far this is not a problem, but
+  should global commands start with a * or something? +? /? (25aug021)
 * Specify space separated list of surprised parties, needs generic version of
       character listing subroutine (8aug021)
 * declare DX and stun status when acting (10aug021)
@@ -130,3 +132,7 @@
   overflow! (10aug021)
 * action to ready or unready a shield, which permanantly changes adjDX! (20aug021)
 * list possible forced retreats (20aug021)
+* Undo previous entry...  Maybe write a script for this, to undo n entries?
+  Maybe the script wraps ./melee.pl itself? (2aug021)
+  Or melee.pl relaunches itself! (11aug021)
+- blurb at banner time

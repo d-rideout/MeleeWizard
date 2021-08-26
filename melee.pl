@@ -60,6 +60,7 @@ my %hkeys = (NAME=>1, ST=>1, STrem=>1, adjDX=>1, PLAYER=>1, PARTY=>0, STUN=>0, F
 # FALL how much damage causes fall
 # 1 ==> can appear in party file
 my $n = 0; # total number of characters
+my $ncommands=0; # number of user entered commands
 
 # Read parties
 foreach my $partyfile (@ARGV) {
@@ -134,12 +135,9 @@ my @retreats; # possible forced retreats
 
 print "\nCapital letter is default option for each prompt\n\n";
 
-# Surprise
-# print "Sorry, not ready to handle this yet.\n" if $q eq 'y';
-# ++$turn;
-
 # Main loop
 while (1) {
+  # Surprise
   my %surprise_parties;
   unless ($turn) {
     my $q = query('n', 'Surprise? (y)es (N)o');
@@ -315,7 +313,7 @@ sub displayCharacters {
 sub query {
   my $default = shift;
   my $query = shift;
-  my %global_options = (q=>1, '?'=>1);
+  my %global_options = (q=>1, '?'=>1, u=>1);
 
   while (1) {
     #   print "Turn $turn $phase: ", shift, ' or (q)uit> ';
@@ -329,13 +327,28 @@ sub query {
     else { chomp($input = <STDIN>); }
     #   print "input is [$input]\n";
     #   print LOG "$input\n" unless $input eq 'q';
-    print LOG "$input\n" unless $global_options{$input};
+    my $cmd = substr $input, 0, 1;
+    unless ($global_options{$cmd}) {
+      print LOG "$input\n";
+      ++$ncommands;
+    }
     return $default unless $input;
 
     # Process global options
-    if ($global_options{$input}) {
+    if ($global_options{$cmd}) {
       die "Finished.\n" if $input eq 'q';
-      print "(q) to quit\n" if $input eq '?';
+      if ($input eq '?') { print "(u <n>) to undo n previous entries; or (q) to quit\n"; }
+      elsif ($input =~ /^u ?(\d+)$/) {
+	print "undoing previous $1 commands and restarting...\n\n";
+	if ($1>$ncommands) {
+	  print "There have only been $ncommands commands so far!\n";
+	  next;
+	}
+	close LOG;
+	system "head -n -$1 log > .junk";
+	system 'mv .junk log';
+	exec "./melee.pl -l @ARGV";
+      } else { print "error in global option [$input]\n"; }
     } else { return $input; }
   }
   
