@@ -417,8 +417,8 @@ sub act {
   * sh <dex adj>   ready or unready shield, which changes base adjDX
                   (e.g. sh -2 to ready a tower shield)
 ';
-  print '* sp<ST>: <name> <ST> <adjDX> (for created being)
-Prefix with sp<ST>: if result is from spell of ST cost <ST>
+  print '  * sp<ST>: <name> <ST> <adjDX> (for created being)
+  Prefix with sp<ST>: if result is from spell of ST cost <ST>
 ' if $phase =~ /n/;
   while (my $dex = max keys %dexes) { # assuming no one has 0 dex! (20apr021)
     $debug && print "Doing dex = $dex\n";
@@ -467,42 +467,43 @@ Prefix with sp<ST>: if result is from spell of ST cost <ST>
 	    print "Invalid character specification: $1\n";
 	    next;
 	  }
-	  print "Injuring self!  You must have rolled an 18 while attacking ",
-	      "with your body\n" if $injuredi == $act_char;
-	  my $chr = $characters[$injuredi];
+	  print "Injuring self!\n" if $injuredi == $act_char;
+#   You must have rolled an 18 while attacking ",
+# 	      "with your body\n"
+	  my $dc = $characters[$injuredi];
 	  my $damage = $2;
 	  $debug && print "$characters[$act_char]->{NAME} hits $characters[$injuredi]->{NAME} for $damage damage\n";
 	  ++$damaged[$injuredi] if $damage;
 	  push @retreats, $act_char, $injuredi;
 	  
 	  # Reaction to Injury
-	  print "$damage ST damage to $chr->{NAME}\n";
-	  $chr->{STrem} -= $damage;
+	  print "$damage ST damage to $dc->{NAME}\n";
+	  $dc->{STrem} -= $damage;
 	  my $old_turn_damage = $turn_damage[$injuredi];
 	  $old_turn_damage = 0 unless defined $old_turn_damage;
 	  $turn_damage[$injuredi] += $damage;
-	  print "$chr->{NAME} has taken $turn_damage[$injuredi] damage so far this turn, has $chr->{STrem} ST remaining\n"; 
+	  print "$dc->{NAME} has taken $turn_damage[$injuredi] damage so far this turn, has $dc->{STrem} ST remaining\n"; 
 	  my $turn_damage = $turn_damage[$injuredi];
 	  my $olddex = $dex[$injuredi];
 	  my $newdex = $dex[$injuredi];
-	  if ($turn_damage >= $chr->{STUN} && $chr->{StunTurn} != $turn+2) {
-	    print "$chr->{NAME} is stunned\n";
-	    $chr->{StunTurn} = $turn+2;
+	  if ($turn_damage >= $dc->{STUN} && $dc->{StunTurn} != $turn+2) {
+	    print "$dc->{NAME} is stunned\n";
+	    $dc->{StunTurn} = $turn+2;
 	    $newdex -= 2;
 	  }
-	  $debug && print "turn_damage=$turn_damage  FALL=$chr->{FALL}  old_turn_damage=$old_turn_damage\n";
-	  if ($turn_damage >= $chr->{FALL} && $old_turn_damage < $chr->{FALL}) {
-	    print "$chr->{NAME} falls down\n";
+	  $debug && print "turn_damage=$turn_damage  FALL=$dc->{FALL}  old_turn_damage=$old_turn_damage\n";
+	  if ($turn_damage >= $dc->{FALL} && $old_turn_damage < $dc->{FALL}) {
+	    print "$dc->{NAME} falls down\n";
 	    $acted[$injuredi] = 1;
 	  }
-	  if ($chr->{STrem} <4) {
-	    print "$chr->{NAME} is in bad shape...\n";
+	  if ($dc->{STrem} <4 && $dc->{STrem}+$damage >3) {
+	    print "$dc->{NAME} is in bad shape...\n";
 	    $newdex -= 3;
 	  }
-	  if ($chr->{STrem} <2) {
-	    $chr->{DEAD} = 1;
-	    if ($chr->{STrem} == 1) {print "$chr->{NAME} falls unconscious\n";}
-	    else { print "$chr->{NAME} dies\n"; }
+	  if ($dc->{STrem} <2) {
+	    $dc->{DEAD} = 1;
+	    if ($dc->{STrem} == 1) {print "$dc->{NAME} falls unconscious\n";}
+	    else { print "$dc->{NAME} dies\n"; }
 	    $acted[$injuredi] = 1;
 	  }
 
