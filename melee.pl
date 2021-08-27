@@ -414,10 +414,12 @@ sub act {
   &displayCharacters;
   print 'Actions:
   * <who> - <dam> (e.g. c-4 for 4 damage to character c after armor)
-  * s <dex adj>   ready or unready shield, which changes base adjDX
-                  (e.g. s -2 to ready a tower shield)
+  * sh <dex adj>   ready or unready shield, which changes base adjDX
+                  (e.g. sh -2 to ready a tower shield)
 ';
-  print "* name ST adjDX (for created being)\n" if $phase =~ /n/;
+  print '* sp<ST>: <name> <ST> <adjDX> (for created being)
+Prefix with sp<ST>: if result is from spell of ST cost <ST>
+' if $phase =~ /n/;
   while (my $dex = max keys %dexes) { # assuming no one has 0 dex! (20apr021)
     $debug && print "Doing dex = $dex\n";
     my $ties = $dexes{$dex};
@@ -442,18 +444,23 @@ sub act {
 #       die "$act_char already acted??" if $acted[$act_char];
       # dead characters already acted
       next if $acted[$act_char];
-      my $c = $characters[$act_char];
-      print "$c->{NAME}: ST $c->{ST} ($c->{STrem})  adjDX $dex";
-      print " (stunned until turn $c->{StunTurn})" if $turn < $c->{StunTurn};
+      my $ac = $characters[$act_char];
+      print "$ac->{NAME}: ST $ac->{ST} ($ac->{STrem})  adjDX $dex";
+      print " (stunned until turn $ac->{StunTurn})" if $turn < $ac->{StunTurn};
       # Stunned 'through this turn' or '... next turn'? (12aug021)
       print "\n";
 
       # Action query loop for character with index $act_char
       while (1) {
-# 	my $action = query('', "$characters[$act_char]->{NAME} action result? (N)o");
 	my $action = query('', "Action result? (N)o");
 	$acted[$act_char] = 1;
 	$debug && print "act_char=$act_char acted=$acted[$act_char]\n";
+	# Spell cost
+	if ($action =~ s/^sp ?(\d+):\s*//) {
+	  $ac->{STrem} -= $1;
+	  print "$ac->{NAME} casts spell, has $ac->{STrem} ST remaining\n";
+	}
+	# Result of action
 	if ($action =~ /(.+) ?- ?(\d+)/) { # Hit!
 	  my $injuredi = who($1);
 	  if ($injuredi<0) {
@@ -544,7 +551,7 @@ sub act {
 	  character_prep($n++);
 	  last; # always last after successful action result
 	} # create being
-	elsif ($action =~ /^s ([\d-]+)$/) { # change shield state
+	elsif ($action =~ /^sh ([\d-]+)$/) { # change shield state
 	  my $adjDX = $characters[$act_char]->{adjDX};
 	  print $characters[$act_char]->{NAME}, $1>0 ? ' un' : ' ', "readies shield -- adjDX $adjDX --> ", $adjDX+$1, "\n";
 	  $characters[$act_char]->{adjDX} += $1;

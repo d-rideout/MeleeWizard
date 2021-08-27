@@ -1,7 +1,9 @@
 #### Urgent:
-* http://www.sjgames.com/general/online_policy.html (23aug021)
+* can get -3 reaction to injury adjustment twice! (26aug021)
+* disbelieve illusions! (26aug021)
+* rope spell (26aug021)
 * mewizseq? meWizSeq? MeWizSeq? combat_sequence? wizlee? melwizseq?
-  tftseq mwseq ... (25aug021)
+  tftseq mwseq ... (25aug021)  tftcomseq comseq combseq
 * Check for bugs in bugs file
 
 * This tool will be helpful in large battles.
@@ -20,11 +22,13 @@
   - Use system `clear` to blank screen
   - history command to display blow-by-blow, with option to disregard deferred move details
   - Note that history content itself will have different content for different players!
-  - Maybe have '?' command at all prompts, which displays global command options:
+
     * q quit
     * h<options> history
     * ? itself
     * will probably need player mode stuff to indicate which view to display (20aug021)
+    * eventually characters will have to declare intent to attack during adjustments phase, to keep track of Blur spells and the like.  Then there will have to be a global option to change one's mind.
+      Though such commands will likely have to be recorded in the log! (26aug021)
 
 #### Non-urgent:
 * Global commands will trump local ones.  So far this is not a problem, but
