@@ -379,7 +379,7 @@ sub character_prep {
   print "Replacing spaces with underscores in names\n"
       if $char->{NAME} =~ s/ /_/g && !$msg_space++;
   my $name = $char->{NAME};
-  print "WARNING: Numeric character specifications are considered as namekeys before character indices.  Character index specifications are deprecated. (20aug021)\n" if $name =~ /^\d/;
+#   print "WARNING: Numeric character specifications are considered as namekeys before character indices.  Character index specifications are deprecated. (20aug021)\n" if $name =~ /^\d/;
   
   # Name keys
   my $len = 1;
@@ -666,9 +666,9 @@ sub who {
   my $retval = $charkeys{$s};
 
   if (defined $retval) { return $retval; }
-  elsif ($s =~ /^\d/) {
-    if ($s<0 || $s >= $n) { return -2; }
-    return $s;
-  }
-  -1;
+#   elsif ($s =~ /^\d/) {
+#     if ($s<0 || $s >= $n) { return -2; }
+#     return $s;
+#   }
+  'x'; # should be an invalid array index
 }

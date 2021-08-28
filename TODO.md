@@ -1,12 +1,11 @@
 #### Urgent:
-* renew spells cost! (27aug021)
-* allow changing shield state during declaration subphase (27aug021)
-* disbelieve illusions! (26aug021)
-* would be nice to have more flexibility in referring to characters.  Long enough prefix string.  But this conflicts with my short string approach? (27aug021)
-  - finish with character by index specifications
+* would be nice to have more flexibility in referring to characters.  Long enough prefix
+  string.  But this conflicts with my short string approach? (27aug021)
   - recommend names which begin with unique characters
   - maybe expand both ends of conflict
   - accept superstrings (27aug021)
+* renew spells cost! (27aug021)
+* disbelieve illusions! (26aug021)
 * rope spell (26aug021)
 * defer action would be really useful, though complicated... (27aug021)
 * Don't repeat forced retreats? (27aug021)
@@ -151,3 +150,5 @@
   Or melee.pl relaunches itself! (11aug021)
 - blurb at banner time
 * can get -3 reaction to injury adjustment twice! (26aug021)
+* allow changing shield state during declaration subphase (27aug021)
+- finish with character by index specifications
