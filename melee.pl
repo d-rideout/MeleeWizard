@@ -444,7 +444,7 @@ sub act {
 #       die "$act_char already acted??" if $acted[$act_char];
       # dead characters already acted
       next if $acted[$act_char];
-      my $ac = $characters[$act_char];
+      my $ac = $characters[$act_char]; # acting character
       print "$ac->{NAME}: ST $ac->{ST} ($ac->{STrem})  adjDX $dex";
       print " (stunned until turn $ac->{StunTurn})" if $turn < $ac->{StunTurn};
       # Stunned 'through this turn' or '... next turn'? (12aug021)
@@ -470,7 +470,7 @@ sub act {
 	  print "Injuring self!\n" if $injuredi == $act_char;
 #   You must have rolled an 18 while attacking ",
 # 	      "with your body\n"
-	  my $dc = $characters[$injuredi];
+	  my $dc = $characters[$injuredi]; # damaged character
 	  my $damage = $2;
 	  $debug && print "$characters[$act_char]->{NAME} hits $characters[$injuredi]->{NAME} for $damage damage\n";
 	  ++$damaged[$injuredi] if $damage;
@@ -486,7 +486,8 @@ sub act {
 	  my $turn_damage = $turn_damage[$injuredi];
 	  my $olddex = $dex[$injuredi];
 	  my $newdex = $dex[$injuredi];
-	  if ($turn_damage >= $dc->{STUN} && $dc->{StunTurn} != $turn+2) {
+	  $debug && print "turn_damage=$turn_damage stun=$dc->{STUN} stun_turn=$dc->{StunTurn} adjDX=$newdex?\n";
+	  if ($turn_damage >= $dc->{STUN} && $dc->{StunTurn} <= $turn) {
 	    print "$dc->{NAME} is stunned\n";
 	    $dc->{StunTurn} = $turn+2;
 	    $newdex -= 2;
@@ -552,17 +553,35 @@ sub act {
 	  character_prep($n++);
 	  last; # always last after successful action result
 	} # create being
-	elsif ($action =~ /^sh ([\d-]+)$/) { # change shield state
-	  my $adjDX = $characters[$act_char]->{adjDX};
-	  print $characters[$act_char]->{NAME}, $1>0 ? ' un' : ' ', "readies shield -- adjDX $adjDX --> ", $adjDX+$1, "\n";
-	  $characters[$act_char]->{adjDX} += $1;
-	}
+	elsif (shield($ac, $action)) {}
+# 	$action =~ /^sh ([\d-]+)$/) { # change shield state
+# 	  my $adjDX = $characters[$act_char]->{adjDX};
+# 	  print $characters[$act_char]->{NAME}, $1>0 ? ' un' : ' ', "readies shield -- adjDX $adjDX --> ", $adjDX+$1, "\n";
+# 	  $characters[$act_char]->{adjDX} += $1;	}
 	elsif (!$action) { last; } # exits action query for this character
 	else { print "Unrecognized action $action\n"; }
       } # what happened during $act_char's action
     } # loop over ties
     delete $dexes{$dex};
   } # loop over dexes
+}
+
+
+# Change shield state
+# pass char ref and input string
+# returns true if input changes shield state
+sub shield {
+#   my $whoi = shift;
+  my $c = shift;
+  my $input = shift;
+
+  if ($input =~ /^sh ([\d-]+)$/) { # change shield state
+#     my $c = $characters[$whoi];
+    my $adjDX = $c->{adjDX};
+    print $c->{NAME}, $1>0 ? ' un' : ' ', "readies shield -- adjDX $adjDX --> ", $adjDX+$1, "\n";
+    $c->{adjDX} += $1;
+    1;
+  } else { 0; }
 }
 
 

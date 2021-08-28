@@ -3,7 +3,13 @@
 * allow changing shield state during declaration subphase (27aug021)
 * disbelieve illusions! (26aug021)
 * would be nice to have more flexibility in referring to characters.  Long enough prefix string.  But this conflicts with my short string approach? (27aug021)
+  - finish with character by index specifications
+  - recommend names which begin with unique characters
+  - maybe expand both ends of conflict
+  - accept superstrings (27aug021)
 * rope spell (26aug021)
+* defer action would be really useful, though complicated... (27aug021)
+* Don't repeat forced retreats? (27aug021)
 * mewizseq? meWizSeq? MeWizSeq? combat_sequence? wizlee? melwizseq?
   tftseq mwseq ... (25aug021)  tftcomseq comseq combseq
 * Check for bugs in bugs file
@@ -13,6 +19,7 @@
 
 
 #### Thoughts:
+* Suprise which only grants initiative? (27aug021)
 * Aid & Rope spells: modifies someone's adjDX (20aug021)
 * Blur spell: decreases adjDX of everyone attacking someone (20aug021)
   - Have declaration of intent, maybe as part of move?  Or after all moves play out?  It is getting *more* complicated, not less... (20aug021)
