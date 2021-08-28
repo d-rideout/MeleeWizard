@@ -195,13 +195,15 @@ while (1) {
   &displayCharacters;
   print 'Special considerations: <who> <consideration1> [consideration2]
   Considerations are
-  * <num>
+  * <adj>
     DEX adjustments as offset from original declared adjDX.  
     Ignore reactions to injury and weapon range penalties.
   * <c|b>
     c ==> pole weapon charge
     b ==> double shot with bow
   e.g. "2 -4 p" for char 2 doing rear attack as pole weapon charge
+  * sh<adj>
+    \'Permanently\' ready or unready a shield
 ';
   while (1) {
     my $sccmd = query('', "Special consideration, (F)inished");
@@ -225,7 +227,8 @@ while (1) {
       } elsif ($cmd eq 'b') {
 	push @bow2, $who;
 	print " double shot with bow";
-      } else { print "Unrecognized consideration $cmd\n"; }
+      } elsif (shield($characters[$who], $cmd)) {}
+      else { print "Unrecognized consideration $cmd\n"; }
     } # loop over considerations for this character
     print "\n";
   } # special considerations
@@ -414,7 +417,7 @@ sub act {
   &displayCharacters;
   print 'Actions:
   * <who> - <dam> (e.g. c-4 for 4 damage to character c after armor)
-  * sh <dex adj>   ready or unready shield, which changes base adjDX
+  * sh<dex adj>   ready or unready shield, which changes base adjDX
                   (e.g. sh -2 to ready a tower shield)
 ';
   print '  * sp<ST>: <name> <ST> <adjDX> (for created being)
@@ -575,7 +578,7 @@ sub shield {
   my $c = shift;
   my $input = shift;
 
-  if ($input =~ /^sh ([\d-]+)$/) { # change shield state
+  if ($input =~ /^sh ?([\d-]+)$/) { # change shield state
 #     my $c = $characters[$whoi];
     my $adjDX = $c->{adjDX};
     print $c->{NAME}, $1>0 ? ' un' : ' ', "readies shield -- adjDX $adjDX --> ", $adjDX+$1, "\n";

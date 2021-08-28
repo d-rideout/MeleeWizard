@@ -10,6 +10,7 @@
 * rope spell (26aug021)
 * defer action would be really useful, though complicated... (27aug021)
 * Don't repeat forced retreats? (27aug021)
+* get rid of : in spell casting action? (27aug021)
 * mewizseq? meWizSeq? MeWizSeq? combat_sequence? wizlee? melwizseq?
   tftseq mwseq ... (25aug021)  tftcomseq comseq combseq
 * Check for bugs in bugs file
