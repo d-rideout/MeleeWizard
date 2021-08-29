@@ -1,8 +1,6 @@
 #### Urgent:
 * would be nice to have more flexibility in referring to characters.  Long enough prefix
   string.  But this conflicts with my short string approach? (27aug021)
-  - recommend names which begin with unique characters
-  - maybe expand both ends of conflict
   - accept superstrings (27aug021)
 * renew spells cost! (27aug021)
 * disbelieve illusions! (26aug021)
@@ -12,13 +10,14 @@
 * get rid of : in spell casting action? (27aug021)
 * mewizseq? meWizSeq? MeWizSeq? combat_sequence? wizlee? melwizseq?
   tftseq mwseq ... (25aug021)  tftcomseq comseq combseq
-* Check for bugs in bugs file
 
 * This tool will be helpful in large battles.
   Note [meleewizards.com](http://meleewizards.com). (5aug021)
 
 
 #### Thoughts:
+* warn on namekey conflicts? (28aug021)
+* recommend names which begin with unique characters? (28aug021)
 * Suprise which only grants initiative? (27aug021)
 * Aid & Rope spells: modifies someone's adjDX (20aug021)
 * Blur spell: decreases adjDX of everyone attacking someone (20aug021)

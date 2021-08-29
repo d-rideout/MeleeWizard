@@ -210,7 +210,7 @@ while (1) {
     last unless $sccmd;
     my @sccmd = split / /, $sccmd;
     my $who = who(shift @sccmd);
-    if ($who<0) {
+    if ($who eq 'x') {
       print "Invalid character specification $who\n";
       next;
     }
@@ -321,7 +321,7 @@ sub query {
   while (1) {
     #   print "Turn $turn $phase: ", shift, ' or (q)uit> ';
 #     print "Turn $turn $phase: ", $query, ' or global option, (?) for list> ';
-    print "Turn $turn $phase: ", $query, ' or (?) to list global options> ';
+    print "Turn $turn $phase: ", $query, ' or (?) for global options> ';
     my $input;
     if ($restart && @log) {
       print $input = shift @log;
@@ -736,12 +736,18 @@ sub movement {
 # negative on error
 sub who {
   my $s = shift;
-  my $retval = $charkeys{$s};
+#   my $retval = $charkeys{$s};
 
-  if (defined $retval) { return $retval; }
+#   if (defined $retval) { return $retval; }
+  my $l = length $s;
+  while ($l) {
+    my $retval = $charkeys{substr $s, 0, $l--};
+    if (defined $retval) { return $retval; }
+  }
 #   elsif ($s =~ /^\d/) {
 #     if ($s<0 || $s >= $n) { return -2; }
 #     return $s;
-#   }
+  #   }
+  # It would be nice to handle errors directly here somehow. (28aug021)
   'x'; # should be an invalid array index
 }
