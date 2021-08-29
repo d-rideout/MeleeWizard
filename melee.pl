@@ -361,8 +361,11 @@ sub query {
 
 
 # Character preparations
-my $uniquify = 0;
-my $msg_space;
+# How are these declarations working?  Don't they have to appear above?? (28aug021)
+# my $uniquify = 0;
+my $msg_space; # Did we output a message about spaces in character names?
+# my @namekeys; # for each character - actually I don't need this, it is already in @characters
+my %namekeys; # key character val char index or hash of next level of %namekeys ...
 sub character_prep {
   my $ci = shift;
 
@@ -382,18 +385,88 @@ sub character_prep {
 #   print "WARNING: Numeric character specifications are considered as namekeys before character indices.  Character index specifications are deprecated. (20aug021)\n" if $name =~ /^\d/;
   
   # Name keys
-  my $len = 1;
-  my $length = length $name;
-  my $namekey = substr $name, 0, $len;
-  $namekey = substr $name, 0, ++$len while $len <= $length && defined $charkeys{$namekey};
-  if ($len > $length) {
-    print "WARNING: namekey overflow.  Please use longer or more unique names.\n";
-    $namekey .= $uniquify++;
-  }
-  $charkeys{$namekey} = $ci;
-  $char->{NAMEKEY} = $namekey;
+#   my $namekey = extend_namekey($ci, '', \%namekeys);
+  extend_namekey($ci, '', \%namekeys);
+  
+#   my $len = 1;
+#   my $length = length $name;
+#   my $namekey = substr $name, 0, $len;
+#   $namekey = substr $name, 0, ++$len while $len <= $length && defined $charkeys{$namekey};
+#   if ($len > $length) {
+#     print "WARNING: namekey overflow.  Please use longer or more unique names.\n";
+#     $namekey .= $uniquify++;
+#   }
   # Is this good enough, or do I need to expand both keys? (27jul021)
   # Actually this could be better, e.g. if two people have the same first name.
+
+#   if (defined $namekey) {
+#     $charkeys{$namekey} = $ci;
+#     $char->{NAMEKEY} = $namekey;
+#   }
+}
+
+
+# Increments namekey (and all others implied by the new addition
+sub extend_namekey {
+  my $whoi = shift;    # character index to extend
+  my $namekey = shift; # namekey so far I guess
+  my $nextLetter = shift; # root in %namekeys ?
+  
+  my $name = $characters[$whoi]->{NAME};
+  my $lkey = length $namekey;
+  my $lname = length $name;
+
+  my $letter = substr $name, $lkey, 1;
+
+  $debug && print "extend_namekey($whoi, $namekey, $nextLetter): name=$name lkey=$lkey lname=$lname letter=$letter\n";
+#   $namekey = substr $name, 0, ++$lkey;
+  #   unless ($nextLetter->{substr $namekey, -1, 1}) {
+  delete $charkeys{$namekey}; # Can I do this globally like this?
+  $namekey .= $letter;
+  my $whatsThere = $nextLetter->{$letter}; # I think this creates $nextLetter if it is an undef
+  if (! defined $whatsThere) { # namekey is not used yet
+    $debug && print "Valid namekey $namekey found for char $whoi: $name\n";
+    $nextLetter->{$letter} = $whoi;
+    #     return $namekey
+    $charkeys{$namekey} = $whoi;
+    $characters[$whoi]->{NAMEKEY} = $namekey;
+#     return $namekey; # . $letter;
+  }
+  elsif (! ref $whatsThere)  { # single character uses this namekey currently
+    die "Two characters with identical names! $name\n" if $name eq $characters[$whatsThere]->{NAME};
+    # I used to be able to uniquify them.  Restore that? (28aug021)
+
+    my @expandNamekeys;
+#     push @expandNamekeys, $nextLetter->{$letter}, $whoi;
+    push @expandNamekeys, $whatsThere, $whoi;
+    $nextLetter->{$letter} = {}; # change its char index value into a new hashref, as new root
+
+    foreach (@expandNamekeys) {
+      # remove this old namekey from %charkeys
+#       delete $charkeys{$namekey};
+    
+#       my $nk = extend_namekey($_, $namekey, $nextLetter->{$letter});
+#       $charkeys{$nk} = $_;
+#       $characters[$_]->{NAMEKEY} = $nk;
+      extend_namekey($_, $namekey, $nextLetter->{$letter});
+
+      # How do I want to handle this?? -- let's do everything inline
+    }
+  } else { # multiple characters' namekey begins with this string
+    #     foreach (keys %$nextLetter) { ???
+    # Keep going (?)
+#     $namekey .= $letter;
+    extend_namekey($whoi, $namekey, $whatsThere);
+  }
+    
+#   $namekey = substr $name, 0, ++$len while $len <= $length && defined $charkeys{$namekey};
+
+  # What to do about overflow??
+#   if ($len > $length) {
+#     print "WARNING: namekey overflow.  Please use longer or more unique names.\n";
+#     $namekey .= $uniquify++;
+#   }
+
 }
 
 
