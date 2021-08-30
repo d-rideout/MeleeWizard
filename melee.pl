@@ -17,7 +17,7 @@
 use strict;
 use warnings;
 use List::Util qw/max/;
-use List::MoreUtils qw/firstidx/;
+use List::MoreUtils qw/firstidx any/;
 
 # Setting flags
 my $debug = 0; # 1 ==> max debug output
@@ -489,12 +489,13 @@ sub act {
   # Actions
   &displayCharacters;
   print 'Actions:
-  * <who> - <dam> (e.g. c-4 for 4 damage to character c after armor)
-  * sh<dex adj>   ready or unready shield, which changes base adjDX
+  * [sp<ST>:] <who> - <dam> (e.g. c-4 for 4 damage to character c after armor)
+  * [sp<ST>:] sh<dex adj>   ready or unready shield, which changes base adjDX
                   (e.g. sh -2 to ready a tower shield)
 ';
   print '  * sp<ST>: <name> <ST> <adjDX> (for created being)
   Prefix with sp<ST>: if result is from spell of ST cost <ST>
+                      (Note that spell can have no result, but still cost ST.)
 ' if $phase =~ /n/;
   while (my $dex = max keys %dexes) { # assuming no one has 0 dex! (20apr021)
     $debug && print "Doing dex = $dex\n";
@@ -586,7 +587,8 @@ sub act {
 
 	  # Push injured back in action order
 	  $debug && print "push back? injuredi=$injuredi acted=$acted[$injuredi] olddex=$olddex newdex=$newdex\n";
-	  if (!$acted[$injuredi] && $newdex < $olddex) {
+	  if (!$acted[$injuredi] && $newdex < $olddex && any {$_==$injuredi}) {
+	    # (last condition is to make sure that injuredi is in the list of actors at all!  This may be a special subphase such as pole-weapon charges (29aug021))
 	    # Don't have to worry about initiative order -- that is computed later for each $dex
 	    # 	    for my $j (0..$#{$dexes{$olddex}}) {
 	    # 	       if ($dexes{$olddex}->[$j] == $injuredi) {
@@ -688,9 +690,23 @@ sub movement {
   }
 
   print "\nSpell phase: Renew spells or they end now\n";
-  # need to charge st cost for spells here (3jul021)
-#   query('Finished with spells');
-
+  my $fmt = "format: <who> <spell cost>\n";
+  while (1) {
+    my $sccmd = query('', 'Spell cost, (F)inished');
+    last unless $sccmd;
+    my @sccmd = split / /, $sccmd;
+#     unless $sccmd =~ /^([^ 
+    my $whoi = shift @sccmd;
+    my $cost = shift @sccmd;
+    if ($whoi eq 'x') { print "Error in character specification $whoi", $fmt; next; }
+    elsif ($cost !~ /^\d+$/) { print "Please use positive integer for ST cost $cost", $fmt; next; }
+    elsif (@sccmd) { print $fmt; next; }
+    my $c = $characters[$whoi];
+    $c->{STrem} -= $cost;
+    print "$c->{NAME} has $c->{STrem} remaining\n";
+    last;
+  }
+  
   # Movement
   # --------
   my $i = 0;

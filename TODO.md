@@ -1,21 +1,29 @@
 #### Urgent:
-* would be nice to have more flexibility in referring to characters.  Long enough prefix
-  string.  But this conflicts with my short string approach? (27aug021)
-  - accept superstrings (27aug021)
 * renew spells cost! (27aug021)
 * disbelieve illusions! (26aug021)
 * rope spell (26aug021)
 * defer action would be really useful, though complicated... (27aug021)
 * Don't repeat forced retreats? (27aug021)
 * get rid of : in spell casting action? (27aug021)
+* expand &query to contain loop which handles errors in syntax and char
+  specification, to uniformize its handling! (29aug021)
+
 * mewizseq? meWizSeq? MeWizSeq? combat_sequence? wizlee? melwizseq?
   tftseq mwseq ... (25aug021)  tftcomseq comseq combseq
 
 * This tool will be helpful in large battles.
-  Note [meleewizards.com](http://meleewizards.com). (5aug021)
+  Note: [meleewizards.com](http://meleewizards.com)! (5aug021)
+  e.g. allows use of original rules on reactions to injury (29aug021)
+  And character-based initiative seems a lot more realistic.  I would think we
+  want to make as little as possible ride on a single coin toss...
+  - Maybe add etiquette guidelines?  To press 'm' unless you have a good reason
+    to defer.  'Can only defer if have a good reason to wait' sort of thing.
+    (29aug021)
 
 
 #### Thoughts:
+* put list of acting chars in hash, for more flexible interaction?
+  get rid of &firstidx calls? (29aug021)
 * warn on namekey conflicts? (28aug021)
 * recommend names which begin with unique characters? (28aug021)
 * Suprise which only grants initiative? (27aug021)
@@ -30,7 +38,6 @@
   - Use system `clear` to blank screen
   - history command to display blow-by-blow, with option to disregard deferred move details
   - Note that history content itself will have different content for different players!
-
     * q quit
     * h<options> history
     * ? itself
@@ -151,3 +158,6 @@
 * can get -3 reaction to injury adjustment twice! (26aug021)
 * allow changing shield state during declaration subphase (27aug021)
 - finish with character by index specifications
+* would be nice to have more flexibility in referring to characters.  Long enough prefix
+  string.  But this conflicts with my short string approach? (27aug021)
+  - accept superstrings (27aug021)
