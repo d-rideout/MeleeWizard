@@ -1,12 +1,15 @@
 #### Urgent:
-* renew spells cost! (27aug021)
 * disbelieve illusions! (26aug021)
 * rope spell (26aug021)
-* defer action would be really useful, though complicated... (27aug021)
+  - allow changing DX mods during any action, as sorta global option, though it needs to be stored in the log!
 * Don't repeat forced retreats? (27aug021)
 * get rid of : in spell casting action? (27aug021)
 * expand &query to contain loop which handles errors in syntax and char
   specification, to uniformize its handling! (29aug021)
+  - takes array which indicates which slots should be char refs?
+  - prob will return list, with char refs as indices? (30aug021)
+* worry about character and command namespace collisions (30aug021)
+* defer action would be really useful, though complicated... (27aug021)
 
 * mewizseq? meWizSeq? MeWizSeq? combat_sequence? wizlee? melwizseq?
   tftseq mwseq ... (25aug021)  tftcomseq comseq combseq
@@ -161,3 +164,4 @@
 * would be nice to have more flexibility in referring to characters.  Long enough prefix
   string.  But this conflicts with my short string approach? (27aug021)
   - accept superstrings (27aug021)
+* renew spells cost! (27aug021)

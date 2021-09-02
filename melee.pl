@@ -208,10 +208,10 @@ while (1) {
   while (1) {
     my $sccmd = query('', "Special consideration, (F)inished");
     last unless $sccmd;
-    my @sccmd = split / /, $sccmd;
+    my @sccmd = split / +/, $sccmd;
     my $who = who(shift @sccmd);
     if ($who eq 'x') {
-      print "Invalid character specification $who\n";
+#       print "Invalid character specification $who\n";
       next;
     }
     print "$characters[$who]->{NAME}";
@@ -228,7 +228,7 @@ while (1) {
 	push @bow2, $who;
 	print " double shot with bow";
       } elsif (shield($characters[$who], $cmd)) {}
-      else { print "Unrecognized consideration $cmd\n"; }
+      else { print "\nUnrecognized consideration [$cmd]\n"; }
     } # loop over considerations for this character
     print "\n";
   } # special considerations
@@ -494,8 +494,9 @@ sub act {
                   (e.g. sh -2 to ready a tower shield)
 ';
   print '  * sp<ST>: <name> <ST> <adjDX> (for created being)
-  Prefix with sp<ST>: if result is from spell of ST cost <ST>
-                      (Note that spell can have no result, but still cost ST.)
+  * d <who>  to disbelieve <who>
+  Prefix with "sp<ST>:" if result is from spell of ST cost <ST>
+                        (Note that spell can have no result, but still cost ST.)
 ' if $phase =~ /n/;
   while (my $dex = max keys %dexes) { # assuming no one has 0 dex! (20apr021)
     $debug && print "Doing dex = $dex\n";
@@ -629,13 +630,24 @@ sub act {
 	  $characters[$n]->{PLAYER} = $characters[$act_char]->{NAME};
 	  $characters[$n]->{PARTY} = $characters[$act_char]->{PARTY};
 	  character_prep($n++);
+	  &displayCharacters;
 	  last; # always last after successful action result
 	} # create being
 	elsif (shield($ac, $action)) {}
 # 	$action =~ /^sh ([\d-]+)$/) { # change shield state
 # 	  my $adjDX = $characters[$act_char]->{adjDX};
 # 	  print $characters[$act_char]->{NAME}, $1>0 ? ' un' : ' ', "readies shield -- adjDX $adjDX --> ", $adjDX+$1, "\n";
-# 	  $characters[$act_char]->{adjDX} += $1;	}
+	# 	  $characters[$act_char]->{adjDX} += $1;	}
+	elsif ($action =~ /^d (.+)$/) { # Disbelieve
+	  my $who = who($1);
+	  if ($who eq 'x') {
+# 	    print "invalid character specification $1\n";
+	    next;
+	  }
+	  $characters[$who]->{DEAD} = 1;
+	  $acted[$who] = 1;
+	  last;
+	} # disbelieve
 	elsif (!$action) { last; } # exits action query for this character
 	else { print "Unrecognized action $action\n"; }
       } # what happened during $act_char's action
@@ -765,5 +777,6 @@ sub who {
 #     return $s;
   #   }
   # It would be nice to handle errors directly here somehow. (28aug021)
+  print "Invalid character specification $s\n";
   'x'; # should be an invalid array index
 }
