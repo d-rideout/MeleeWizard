@@ -1,13 +1,16 @@
 #### Urgent:
-* disbelieve illusions! (26aug021)
-* rope spell (26aug021)
-  - allow changing DX mods during any action, as sorta global option, though it needs to be stored in the log!
 * Don't repeat forced retreats? (27aug021)
 * get rid of : in spell casting action? (27aug021)
 * expand &query to contain loop which handles errors in syntax and char
   specification, to uniformize its handling! (29aug021)
   - takes array which indicates which slots should be char refs?
   - prob will return list, with char refs as indices? (30aug021)
+* rope spell (26aug021)
+  - allow changing DX mods during any action, as sorta global option, though it
+    needs to be stored in the log!
+  - Needs rewrite of DX order code again, either to recompute with each character, or a routine to handle a change. (1sep021)
+  - ACTUALLY I DID THIS ALL WRONG!  tHIS SHOULD BE A REGULAR ACTION!  sO A ROPE SPELL ON X WOULD BE: "sp2: d x -2" (2sep021)
+  - THOUGH THERE IS ALSO THE "sh" ACTION FOR THIS.  hMM... (2SEP021)
 * worry about character and command namespace collisions (30aug021)
 * defer action would be really useful, though complicated... (27aug021)
 
@@ -165,3 +168,4 @@
   string.  But this conflicts with my short string approach? (27aug021)
   - accept superstrings (27aug021)
 * renew spells cost! (27aug021)
+* disbelieve illusions! (26aug021)

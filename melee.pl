@@ -316,7 +316,7 @@ sub displayCharacters {
 sub query {
   my $default = shift;
   my $query = shift;
-  my %global_options = (q=>1, '?'=>1, u=>1);
+  my %global_options = (q=>'n', '?'=>'n', u=>'n'); #, d=>l); # l ==> log; n ==> no log
 
   while (1) {
     #   print "Turn $turn $phase: ", shift, ' or (q)uit> ';
@@ -331,7 +331,7 @@ sub query {
     #   print "input is [$input]\n";
     #   print LOG "$input\n" unless $input eq 'q';
     my $cmd = substr $input, 0, 1;
-    unless ($global_options{$cmd}) {
+    unless ($global_options{$cmd} eq 'n') {
       print LOG "$input\n";
       ++$ncommands;
     }
@@ -340,7 +340,17 @@ sub query {
     # Process global options
     if ($global_options{$cmd}) {
       die "Finished.\n" if $input eq 'q';
-      if ($input eq '?') { print "(u <n>) to undo n previous entries; or (q) to quit\n"; }
+      if ($input eq '?') { print '(u <n>) to undo n previous entries;
+' .
+#(d <who> <DX mod>) to adjust <who>\'s DX by <DX mod>;
+'or (q) to quit
+'; }
+#       elsif ($input =~ /^d (.+) ([-\d]+)$/) {
+# 	my $who = who($1);
+# 	my $c = $characters[$who];
+# 	$c- ... This is really complicated.  I wonder if I should recompute the entire ordering for each character, since anything might change at any moment...
+# 	print "$c->{NAME} adjDX ", $2>=0 ? '+':'', "$2 --> $c->{adjDX}
+# 	print "DX modifications during another characters action (e.g. due to a Rope, Blur, Clumsiness spell) is not implemented yet.\n"; }
       elsif ($input =~ /^u ?(\d+)$/) {
 	print "undoing previous $1 commands and restarting...\n\n";
 	if ($1>$ncommands) {
@@ -495,7 +505,10 @@ sub act {
 ';
   print '  * sp<ST>: <name> <ST> <adjDX> (for created being)
   * d <who>  to disbelieve <who>
-  Prefix with "sp<ST>:" if result is from spell of ST cost <ST>
+' .
+      # * sp<ST>: a <who> <DX mod>      spell which modifies <who>\'s adjDX by <DX mod>
+      #   (e.g. sp2: a x -2  for Rope spell on x (and you have to remember to put a DX adjustment each turn for x)'
+'  Prefix with "sp<ST>:" if result is from spell of ST cost <ST>
                         (Note that spell can have no result, but still cost ST.)
 ' if $phase =~ /n/;
   while (my $dex = max keys %dexes) { # assuming no one has 0 dex! (20apr021)
