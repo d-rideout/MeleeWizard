@@ -331,7 +331,7 @@ sub query {
     #   print "input is [$input]\n";
     #   print LOG "$input\n" unless $input eq 'q';
     my $cmd = substr $input, 0, 1;
-    unless ($global_options{$cmd} eq 'n') {
+    unless ($global_options{$cmd} && $global_options{$cmd} eq 'n') {
       print LOG "$input\n";
       ++$ncommands;
     }
@@ -499,16 +499,16 @@ sub act {
   # Actions
   &displayCharacters;
   print 'Actions:
-  * [sp<ST>:] <who> - <dam> (e.g. c-4 for 4 damage to character c after armor)
-  * [sp<ST>:] sh<dex adj>   ready or unready shield, which changes base adjDX
+  * [sp<ST>] <who> - <dam> (e.g. c-4 for 4 damage to character c after armor)
+  * [sp<ST>] sh<dex adj>   ready or unready shield, which changes base adjDX
                   (e.g. sh -2 to ready a tower shield)
 ';
-  print '  * sp<ST>: <name> <ST> <adjDX> (for created being)
+  print '  * sp<ST> <name> <ST> <adjDX> (for created being)
   * d <who>  to disbelieve <who>
 ' .
-      # * sp<ST>: a <who> <DX mod>      spell which modifies <who>\'s adjDX by <DX mod>
+      # * sp<ST> a <who> <DX mod>      spell which modifies <who>\'s adjDX by <DX mod>
       #   (e.g. sp2: a x -2  for Rope spell on x (and you have to remember to put a DX adjustment each turn for x)'
-'  Prefix with "sp<ST>:" if result is from spell of ST cost <ST>
+'  Prefix with "sp<ST>" if result is from spell of ST cost <ST>
                         (Note that spell can have no result, but still cost ST.)
 ' if $phase =~ /n/;
   while (my $dex = max keys %dexes) { # assuming no one has 0 dex! (20apr021)
@@ -547,7 +547,7 @@ sub act {
 	$acted[$act_char] = 1;
 	$debug && print "act_char=$act_char acted=$acted[$act_char]\n";
 	# Spell cost
-	if ($action =~ s/^sp ?(\d+):\s*//) {
+	if ($action =~ s/^sp ?(\d+)\s*//) {
 	  $ac->{STrem} -= $1;
 	  print "$ac->{NAME} casts spell, has $ac->{STrem} ST remaining\n";
 	}
@@ -601,7 +601,7 @@ sub act {
 
 	  # Push injured back in action order
 	  $debug && print "push back? injuredi=$injuredi acted=$acted[$injuredi] olddex=$olddex newdex=$newdex\n";
-	  if (!$acted[$injuredi] && $newdex < $olddex && any {$_==$injuredi}) {
+	  if (!$acted[$injuredi] && $newdex < $olddex && any {$_==$injuredi} @_) {
 	    # (last condition is to make sure that injuredi is in the list of actors at all!  This may be a special subphase such as pole-weapon charges (29aug021))
 	    # Don't have to worry about initiative order -- that is computed later for each $dex
 	    # 	    for my $j (0..$#{$dexes{$olddex}}) {
@@ -614,6 +614,7 @@ sub act {
 	    # https://metacpan.org/pod/List::MoreUtils#first_index-BLOCK-LIST
 	    splice(@{$dexes{$olddex}},
 		   (firstidx {$_==$injuredi} @{$dexes{$olddex}}), 1);
+	    $debug && print "dx $olddex queue: @{$dexes{$olddex}}\n";
 	    # Remove from current dex queue, if olddex = dex
 	    if ($olddex==$dex) {
 	      # Do I also need to remove $injuredi from @$dexes{$olddex}?  Presumably not. (8aug021)

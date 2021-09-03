@@ -1,6 +1,5 @@
 #### Urgent:
 * Don't repeat forced retreats? (27aug021)
-* get rid of : in spell casting action? (27aug021)
 * expand &query to contain loop which handles errors in syntax and char
   specification, to uniformize its handling! (29aug021)
   - takes array which indicates which slots should be char refs?
@@ -10,8 +9,9 @@
     needs to be stored in the log!
   - Needs rewrite of DX order code again, either to recompute with each character, or a routine to handle a change. (1sep021)
   - ACTUALLY I DID THIS ALL WRONG!  tHIS SHOULD BE A REGULAR ACTION!  sO A ROPE SPELL ON X WOULD BE: "sp2: d x -2" (2sep021)
-  - THOUGH THERE IS ALSO THE "sh" ACTION FOR THIS.  hMM... (2SEP021)
-* worry about character and command namespace collisions (30aug021)
+  - THOUGH THERE IS ALSO THE "sh" ACTION FOR THIS.  hMM...
+    The user can make a 'permanent' change with "sh" or a this-turn-only change with "a". (2SEP021)
+* worry about character and command namespace collisions? (30aug021)
 * defer action would be really useful, though complicated... (27aug021)
 
 * mewizseq? meWizSeq? MeWizSeq? combat_sequence? wizlee? melwizseq?
@@ -28,6 +28,8 @@
 
 
 #### Thoughts:
+* Make all commands two characters, for consistency? (2sep021)
+* Resuming from log does not work if list of input characters changes.  People at the initial, unchanged portion of the list keep their initiative rolls, but after the change rolls will be assigned to different characters.  It is kinda a minor effect.  I am not super-keen on storing initiative rolls in the log file, but this could be done.  But it would not really fix the problem, as the sequence of queries would change.  It would fix movement initiative only.  I am leaning toward not worrying about this.  If you change the list of input characters then it is a different battle.  But this should be documented. (2sep021)
 * put list of acting chars in hash, for more flexible interaction?
   get rid of &firstidx calls? (29aug021)
 * warn on namekey conflicts? (28aug021)
@@ -48,8 +50,11 @@
     * h<options> history
     * ? itself
     * will probably need player mode stuff to indicate which view to display (20aug021)
-    * eventually characters will have to declare intent to attack during adjustments phase, to keep track of Blur spells and the like.  Then there will have to be a global option to change one's mind.
+    * eventually characters will have to declare intent to attack during adjustments phase, to
+      keep track of Blur spells and the like.  Then there will have to be a global option to
+      change one's mind.
       Though such commands will likely have to be recorded in the log! (26aug021)
+
 
 #### Non-urgent:
 * Global commands will trump local ones.  So far this is not a problem, but
@@ -86,14 +91,9 @@
 * Implement deferred actions (4apr021)
 * Allow changing mind about action -- how does that affect turn order?
 * Only put 'q' to quit at beginning?
-* GPL wants a blurb at the opening of the program
 * Should I rename the file to something better, without the .pl extension?
-
-* Flesh out surprise turn 0? (14apr021)
-* Declare deviations from usual rules somewhere?
-* Publish house rules on wiki?
-
 * Is it silly to use different vars to hold query responses? (4apr021)
+  No, I think local variables are good! (2sep021)
 
 #### Less important:
 * use extensions for party files?
@@ -169,3 +169,7 @@
   - accept superstrings (27aug021)
 * renew spells cost! (27aug021)
 * disbelieve illusions! (26aug021)
+* Flesh out surprise turn 0? (14apr021)
+* Declare deviations from usual rules somewhere?
+* Publish house rules on wiki?
+* get rid of : in spell casting action? (27aug021)
