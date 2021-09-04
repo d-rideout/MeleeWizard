@@ -28,5 +28,10 @@ Is this too complicated?  It allows great flexibility in the interpretation of t
 
 ### adjDX Order
 
-Have `&act` take a hashref of characters to act, val 1.
+Have `&act` take a hashref of characters to act. (only uses keys)
+
+`@dexadj` is dex adjustment declared in 'Special considerations'.
+
+`@dex` is adjDX of each character, computed after Considerations
+takes into account reactions to injury
 

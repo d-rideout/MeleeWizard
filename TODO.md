@@ -1,4 +1,6 @@
 #### Urgent:
+* Wizards lose 3 DX when STrem < 4, but this should only be from reaction to injury.  Hmm...! (4sep021)
+
 * rope spell (26aug021)
   - allow changing DX mods during any action, as sorta global option, though it
     needs to be stored in the log!
