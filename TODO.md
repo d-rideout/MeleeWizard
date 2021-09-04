@@ -40,9 +40,9 @@
   while (query(args)) {
     next ==> problem, query again
     last ==> all good
-    # What about internal error?
-    # Either &query has an internal while loop, or it calls itself.
-    # The former may be simpler.
+    \# What about internal error?
+    \# Either &query has an internal while loop, or it calls itself.
+    \# The former may be simpler.
   }
   so same structure within &query itself  while (1) I suppose
   In fact this is what it does already!
