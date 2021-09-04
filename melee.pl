@@ -131,7 +131,7 @@ my @dex; # adjDX for each character for this turn
 my @turn_damage; # amt damage sustained this turn for each character
 my @acted; # who acted so far this turn, for handling reactions to injuries
 my @damaged; # who has taken damage this turn
-my @retreats; # possible forced retreats
+my %retreats; # possible forced retreats  key forcer val hash key forced val num
 
 print "\nCapital letter is default option for each prompt\n\n";
 
@@ -259,7 +259,8 @@ while (1) {
   @turn_damage = ();
   @acted = ();
   @damaged = (); # who has taken damage this turn
-  @retreats = (); # possible forced retreats
+  %retreats = (); # possible forced retreats (I think perl is smart about
+                  # freeing each hash value? (3sep021))
   if (@poles) {
     $phase = 'pole weapon charges';
     print "Pole weapon charges:\n";
@@ -289,10 +290,15 @@ while (1) {
 # ';
   $phase = 'forced retreats';
   print "\nPossible Forced Retreats: (if two chacters are adjacent)\n";
-  print "None.\n" unless @retreats;
-  for (my $i=0; $i<@retreats; $i+=2) {
-    my $who = $retreats[$i];
-    print "$characters[$who]->{NAME} on $characters[$retreats[$i+1]]->{NAME}?\n" unless $damaged[$who];
+  print "None.\n" unless keys %retreats;
+#   for (my $i=0; $i<@retreats; $i+=2) {
+  foreach my $forcer (keys %retreats) {
+#     my $who = $retreats[$i];
+#     print "$characters[$who]->{NAME} on $characters[$retreats[$i+1]]->{NAME}?\n" unless $damaged[$who];
+    next if $damaged[$forcer];
+    foreach my $forced (keys %{$retreats{$forcer}}) {
+      print "$characters[$forcer]->{NAME} on $characters[$forced]->{NAME}?\n";
+    }
   }
 #   print "\n";
   
@@ -565,7 +571,8 @@ sub act {
 	  my $damage = $2;
 	  $debug && print "$characters[$act_char]->{NAME} hits $characters[$injuredi]->{NAME} for $damage damage\n";
 	  ++$damaged[$injuredi] if $damage;
-	  push @retreats, $act_char, $injuredi;
+# 	  push @{$retreats{$act_char}}, $injuredi;
+	  ++$retreats{$act_char}->{$injuredi};
 	  
 	  # Reaction to Injury
 	  print "$damage ST damage to $dc->{NAME}\n";

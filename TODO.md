@@ -1,5 +1,4 @@
 #### Urgent:
-* Don't repeat forced retreats? (27aug021)
 * expand &query to contain loop which handles errors in syntax and char
   specification, to uniformize its handling! (29aug021)
   - takes array which indicates which slots should be char refs?
@@ -173,3 +172,4 @@
 * Declare deviations from usual rules somewhere?
 * Publish house rules on wiki?
 * get rid of : in spell casting action? (27aug021)
+* Don't repeat forced retreats? (27aug021)
