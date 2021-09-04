@@ -1,8 +1,4 @@
 #### Urgent:
-* expand &query to contain loop which handles errors in syntax and char
-  specification, to uniformize its handling! (29aug021)
-  - takes array which indicates which slots should be char refs?
-  - prob will return list, with char refs as indices? (30aug021)
 * rope spell (26aug021)
   - allow changing DX mods during any action, as sorta global option, though it
     needs to be stored in the log!
@@ -10,8 +6,14 @@
   - ACTUALLY I DID THIS ALL WRONG!  tHIS SHOULD BE A REGULAR ACTION!  sO A ROPE SPELL ON X WOULD BE: "sp2: d x -2" (2sep021)
   - THOUGH THERE IS ALSO THE "sh" ACTION FOR THIS.  hMM...
     The user can make a 'permanent' change with "sh" or a this-turn-only change with "a". (2SEP021)
-* worry about character and command namespace collisions? (30aug021)
-* defer action would be really useful, though complicated... (27aug021)
+
+  - May be nice to keep track of Rope deduction for user!  It can get complicated. (4sep021)
+  sp2 r <who>
+  ->{ROPE} holds turn of rope, delete ->{ROPE} if not roped
+  then put rope minus somewhere, as injury or so (4sep021)
+
+* Document all this DX handling stuff, in the maintenance section of the manual.
+  And consider rewriting it, yet again?  So that it is easy to implement new actions etc. (4sep021)
 
 * mewizseq? meWizSeq? MeWizSeq? combat_sequence? wizlee? melwizseq?
   tftseq mwseq ... (25aug021)  tftcomseq comseq combseq
@@ -27,8 +29,35 @@
 
 
 #### Thoughts:
+* worry about character and command namespace collisions? (30aug021)
+* defer action would be really useful, though complicated... (27aug021)
+* expand &query to contain loop which handles errors in syntax and char
+  specification, to uniformize its handling! (29aug021)
+  - takes array which indicates which slots should be char refs?  
+  - prob will return list, with char refs as indices? (30aug021)
+  I don't know that this will work, as each action looks different in this regard.
+  Take 2:
+  while (query(args)) {
+    next ==> problem, query again
+    last ==> all good
+    # What about internal error?
+    # Either &query has an internal while loop, or it calls itself.
+    # The former may be simpler.
+  }
+  so same structure within &query itself  while (1) I suppose
+  In fact this is what it does already!
+  - Whoever calls &who must check for 'x' return value, but the error message is already reported by &who, so
+  next if $who eq 'x';
 * Make all commands two characters, for consistency? (2sep021)
-* Resuming from log does not work if list of input characters changes.  People at the initial, unchanged portion of the list keep their initiative rolls, but after the change rolls will be assigned to different characters.  It is kinda a minor effect.  I am not super-keen on storing initiative rolls in the log file, but this could be done.  But it would not really fix the problem, as the sequence of queries would change.  It would fix movement initiative only.  I am leaning toward not worrying about this.  If you change the list of input characters then it is a different battle.  But this should be documented. (2sep021)
+* Resuming from log does not work if list of input characters changes.
+  People at the initial, unchanged portion of the list keep their initiative
+  rolls, but after the change rolls will be assigned to different characters.
+  It is kinda a minor effect.  I am not super-keen on storing initiative
+  rolls in the log file, but this could be done.  But it would not really fix
+  the problem, as the sequence of queries would change.  It would fix
+  movement initiative only.  I am leaning toward not worrying about this.  If
+  you change the list of input characters then it is a different battle.  But
+  this should be documented. (2sep021)
 * put list of acting chars in hash, for more flexible interaction?
   get rid of &firstidx calls? (29aug021)
 * warn on namekey conflicts? (28aug021)
@@ -36,7 +65,8 @@
 * Suprise which only grants initiative? (27aug021)
 * Aid & Rope spells: modifies someone's adjDX (20aug021)
 * Blur spell: decreases adjDX of everyone attacking someone (20aug021)
-  - Have declaration of intent, maybe as part of move?  Or after all moves play out?  It is getting *more* complicated, not less... (20aug021)
+  - Have declaration of intent, maybe as part of move?  Or after all moves play out?  It is getting
+    *more* complicated, not less... (20aug021)
 * Character-based move initiative can get fairly thorny with many characters.
   Maybe default to party-based?  Player-based?
   Though I like it, as it 'reduces variance'.  Less rides on the initiative
@@ -73,10 +103,6 @@
   spaces) (1aug021)
 * It may help to document the algorithms, so that one understands how to
   implement features. (2may021)
-* Sort out forced retreats (16apr021)
-* Take into account damage from casting spells! (16apr021)
-  - both for renewal and initial cast
-  - actually not so crucial -- spell casting desn't seem to count as an injury
 * Allow deferring action? (27jul021)
 * Compute second bow shot automatically, based on adjdx, rather than entering
   it each turn.  Oh well, for now it must be entered each turn -- automatic
@@ -86,10 +112,11 @@
 * Hide empty dex: slots (21aug021)
 
 #### Later / Dunno:
-* What happens with other missing fields? (14apr021)
+* What happens with other missing fields in party file? (14apr021)
+  Seems to be completely harmless.  Declare which fields are essential? (4sep021)
 * Implement deferred actions (4apr021)
 * Allow changing mind about action -- how does that affect turn order?
-* Only put 'q' to quit at beginning?
+* Only put 'q' to quit at beginning? (Or now '?'. (4sep021))
 * Should I rename the file to something better, without the .pl extension?
 * Is it silly to use different vars to hold query responses? (4apr021)
   No, I think local variables are good! (2sep021)
@@ -99,7 +126,7 @@
   Maybe not for starters.
 * find parties in spite of extensions
 
-#### Questions:
+<!-- #### Questions: -->
 
 
 #### DONE:
@@ -173,3 +200,7 @@
 * Publish house rules on wiki?
 * get rid of : in spell casting action? (27aug021)
 * Don't repeat forced retreats? (27aug021)
+* Sort out forced retreats (16apr021)
+* Take into account damage from casting spells! (16apr021)
+  - both for renewal and initial cast
+  - actually not so crucial -- spell casting desn't seem to count as an injury

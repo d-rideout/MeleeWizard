@@ -345,7 +345,7 @@ sub query {
 
     # Process global options
     if ($global_options{$cmd}) {
-      die "Finished.\n" if $input eq 'q';
+      die "Finished.\n" if $input eq 'q'; # Do we need to exit instead? (4sep021)
       if ($input eq '?') { print '(u <n>) to undo n previous entries;
 ' .
 #(d <who> <DX mod>) to adjust <who>\'s DX by <DX mod>;
@@ -782,7 +782,7 @@ sub movement {
 
 
 # Returns character index to whom a string refers
-# negative on error
+# 'x' on error
 sub who {
   my $s = shift;
 #   my $retval = $charkeys{$s};
