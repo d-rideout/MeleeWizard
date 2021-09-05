@@ -17,7 +17,7 @@
 use strict;
 use warnings;
 use List::Util qw/max/;
-use List::MoreUtils qw/firstidx any/;
+# use List::MoreUtils qw/firstidx any/;
 
 # Setting flags
 my $debug = 0; # 1 ==> max debug output
@@ -67,7 +67,7 @@ foreach my $partyfile (@ARGV) {
   unless (open FP, '<', $partyfile) {
     open FP, '<', "parties/$partyfile" or die "Error opening $partyfile: $!\n";
   }
-  $partyfile =~ s/^parties\///;
+  $partyfile =~ s/^parties\///; # strip parties/ off party names
   print "Reading party $partyfile:\n";
   my $tmp;
   # ignore leading comments
@@ -78,18 +78,17 @@ foreach my $partyfile (@ARGV) {
   foreach (@hkeys) { die "Unrecognized field: $_\n" unless $hkeys{$_}; }
   while (<FP>) {
     next if /^#/;
-    next unless /[^\s]/;
+    next unless /[^\s]/; # ignore pure-whitespace lines
     chomp;
-    next unless $_;
+#     next unless $_; should not be needed anymore (5sep021)
     my @l = split /\t/;
-    print $n+1, "\t$l[0]\n";
+    print $n+1, "\t$l[0]\n"; # I hope they put name first! (5sep021)
     foreach my $i (0..$#hkeys) {
       $characters[$n]->{$hkeys[$i]} = $l[$i];
     }
 
     # Check some field values
     my $chr = $characters[$n];
-    #   foreach (keys %hkeys)
     die "Please provide adjDX for all characters\n"
 	unless $characters[$n]->{adjDX};
 #     my $nhex = $characters[$n]->{NHEX};
@@ -130,7 +129,7 @@ my $phase = ''; # Combat sequence phase
 my @dex; # adjDX for each character for this turn
 my @turn_damage; # amt damage sustained this turn for each character
 my @acted; # who acted so far this turn, for handling reactions to injuries
-my @damaged; # who has taken damage this turn
+# my @damaged; # who has taken damage this turn [why not just use @turn_damage??]
 my %retreats; # possible forced retreats  key forcer val hash key forced val num
 
 print "\nCapital letter is default option for each prompt\n\n";
@@ -259,7 +258,7 @@ while (1) {
       
   @turn_damage = ();
   @acted = ();
-  @damaged = (); # who has taken damage this turn
+#   @damaged = (); # who has taken damage this turn
   %retreats = (); # possible forced retreats (I think perl is smart about
                   # freeing each hash value? (3sep021))
   if (@poles) {
@@ -296,7 +295,7 @@ while (1) {
   foreach my $forcer (keys %retreats) {
 #     my $who = $retreats[$i];
 #     print "$characters[$who]->{NAME} on $characters[$retreats[$i+1]]->{NAME}?\n" unless $damaged[$who];
-    next if $damaged[$forcer];
+    next if $turn_damage[$forcer];
     foreach my $forced (keys %{$retreats{$forcer}}) {
       print "$characters[$forcer]->{NAME} on $characters[$forced]->{NAME}?\n";
     }
@@ -576,7 +575,7 @@ sub act {
 	  my $dc = $characters[$injuredi]; # damaged character
 	  my $damage = $2;
 	  $debug && print "$characters[$act_char]->{NAME} hits $characters[$injuredi]->{NAME} for $damage damage\n";
-	  ++$damaged[$injuredi] if $damage;
+# 	  ++$damaged[$injuredi] if $damage;
 # 	  push @{$retreats{$act_char}}, $injuredi;
 	  ++$retreats{$act_char}->{$injuredi};
 	  
