@@ -492,15 +492,14 @@ sub extend_namekey {
 
 
 # Act in order of dex
-# Pass hash of characters who will act
+# Pass array of characters who will act
 sub act {
-  my $chars = shift;
   my %dexes; # key dex val array of character indices
   my @roll; # indexed by character index
-#   Or should these be put into the above hash? (5sep021)
   
   # Preparations
-  foreach my $i (keys %{$chars}) {
+#   foreach my $i (keys %{$chars}) {
+  for my $i (@_) {
     next if $characters[$i]->{DEAD};
     $debug && print "$characters[$i]->{NAME} has adjDX $dex[$i]\n";
     # Gather DEXes
