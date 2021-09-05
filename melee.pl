@@ -54,7 +54,7 @@ die "Usage: melee.pl [-l] <party 1> <party 2> <party 3> ...\n" .
 # Data structures
 my @characters; # val hash with below keys
 my %charkeys; # key namekey val index into @characters
-my %hkeys = (NAME=>1, ST=>1, STrem=>1, adjDX=>1, PLAYER=>1, PARTY=>0, STUN=>0, FALL=>0, StunTurn=>0, DEAD=>0, NAMEKEY=>0);
+my %hkeys = (NAME=>1, ST=>1, STrem=>1, adjDX=>1, PLAYER=>1, PARTY=>0, STUN=>0, FALL=>0, StunTurn=>0, DEAD=>0, NAMEKEY=>0, BAD=>1);
 # STUN how much damage causes stun
 # StunTurn becomes unstunned on this turn
 # FALL how much damage causes fall
@@ -243,8 +243,9 @@ while (1) {
 
     # Reactions to injury
     $dex[$i] -= 2 if $turn < $chr->{StunTurn};
-    $dex[$i] -= 3 if $chr->{STrem} < 4;
+#     $dex[$i] -= 3 if $chr->{STrem} < 4;
     # I have to keep track of the two different types of damage for wizards (7aug021)
+    $dex[$i] -= 3 if $chr->{BAD} && $chr->{STrem} < 4;
   }
 
   # Act
@@ -393,7 +394,11 @@ sub character_prep {
   else { $char->{STUN} = 15; $char->{FALL} = 25; } # dragons
   $char->{STrem} = $st unless $char->{STrem};
   $char->{StunTurn} = 0;
-
+  if (!$char->{BAD} && $char->{ST}>$char->{STrem} && $char->{STrem}<4) {
+    print "Assuming $char->{NAME} is at -3 DX due to injuries.  If not, please add a BAD column with 0 for this character.\n";
+    $char->{BAD} = 1;
+  }
+  
   # Address some potential issues with names
   print "Replacing spaces with underscores in names\n"
       if $char->{NAME} =~ s/ /_/g && !$msg_space++;
@@ -487,17 +492,19 @@ sub extend_namekey {
 
 
 # Act in order of dex
-# Pass list of characters who will act
+# Pass hash of characters who will act
 sub act {
+  my $chars = shift;
   my %dexes; # key dex val array of character indices
   my @roll; # indexed by character index
-
+#   Or should these be put into the above hash? (5sep021)
+  
   # Preparations
-  for my $i (@_) {
+  foreach my $i (keys %{$chars}) {
     next if $characters[$i]->{DEAD};
     $debug && print "$characters[$i]->{NAME} has adjDX $dex[$i]\n";
     # Gather DEXes
-    push @{$dexes{$dex[$i]}}, $i;
+#     push @{$dexes{$dex[$i]}}, $i;
     # Roll initiative
     $roll[$i] = rand;
   }
@@ -597,6 +604,7 @@ sub act {
 	  }
 	  if ($dc->{STrem} <4 && $dc->{STrem}+$damage >3) {
 	    print "$dc->{NAME} is in bad shape...\n";
+	    ++$dc->{BAD};
 	    $newdex -= 3;
 	  }
 	  if ($dc->{STrem} <2) {
