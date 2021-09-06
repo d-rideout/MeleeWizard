@@ -1,5 +1,29 @@
 #### Urgent:
-* Wizards lose 3 DX when STrem < 4, but this should only be from reaction to injury.  Hmm...! (4sep021)
+
+* get rid of firstidx in removing pole attacks.
+Store lists of actors in hash?  Here we go again...
+Don't the pole people get skipped over anyway, since they have @acted?
+Yes!  I don't know what is wrong here!
+%
+sparse sets pass well in a 'compact' list
+dense sets pass well in a 'spread out' list
+pole attackers will be sparse.  Even more so with surprise.
+But I think the point is the set passed for the normal act phase.  That should almost always be dense.
+So we should pass an array 0..$n-1, which is true if the character is acting in this subphase.
+%
+Actually pole and second bow attacks are super sparse, and normal is dense.  So no one method makes sense.  So maybe I am forced to the hash solution?
+%
+If the acted works for the pole people, I can do
+pole
+everyone
+bow2
+Won't that work well, with the current sparse API? <----------
+(5sep021)
+
+* Rework DX handling again to use new scheme (5sep021)
+
+
+
 
 * rope spell (26aug021)
   - allow changing DX mods during any action, as sorta global option, though it
@@ -85,7 +109,6 @@
       keep track of Blur spells and the like.  Then there will have to be a global option to
       change one's mind.
       Though such commands will likely have to be recorded in the log! (26aug021)
-
 
 #### Non-urgent:
 * Global commands will trump local ones.  So far this is not a problem, but
@@ -206,3 +229,4 @@
 * Take into account damage from casting spells! (16apr021)
   - both for renewal and initial cast
   - actually not so crucial -- spell casting desn't seem to count as an injury
+* Wizards lose 3 DX when STrem < 4, but this should only be from reaction to injury.  Hmm...! (4sep021)

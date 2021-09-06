@@ -1,3 +1,7 @@
+# Melee/Wizard Turn Sequence Tool - User & Maintenance Manual
+
+## User
+
 filename is name of 'party'
 
 The "Overwrite log file? (interrupt (Ctrl-C) if not!)" query is simply a last
@@ -51,10 +55,32 @@ Is this too complicated?  It allows great flexibility in the interpretation of t
 
 ### adjDX Order
 
+[ firstidx is actually used for dealing with pole attacks...  Should be redesigned. ]
+
+#### old scheme:
 `@dex` is adjDX of each character, computed after Considerations
 takes into account reactions to injury
 [deprecate I think]
 
 `@dexadj` is dex adjustment declared in 'Special considerations'.
 
+@dex = adjDX + @dexadj - reactions to injury
 
+`%dexes` list of characters of each dex
+
+`$dex` is the current max dex
+
+`$ties` is the list of people with this dex
+
+`@dex_ties` is `$ties` sorted by `@roll`
+
+`$newdex` is new dex after new injuries
+
+#### new scheme:
+* `@dxmods` misc modifiers to DX
+* `@dxinj` DX modifiers due to injury.  Compute at beginning of &act
+* Both must be maintained.
+
+DX = adjDX + @dxmods + @dxinj
+
+I think it also makes sense to change the &act API to take an array which is true if that char is acting.  So the array index is the char index.

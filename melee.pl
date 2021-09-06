@@ -209,10 +209,11 @@ while (1) {
     last unless $sccmd;
     my @sccmd = split / +/, $sccmd;
     my $who = who(shift @sccmd);
-    if ($who eq 'x') {
-#       print "Invalid character specification $who\n";
-      next;
-    }
+    next if $who eq 'x';
+# ) {
+# #       print "Invalid character specification $who\n";
+#       next;
+#     }
     print "$characters[$who]->{NAME}";
     foreach my $cmd (@sccmd) {
       if ($cmd =~ /^\+?-?\d+$/) { #(\+|-) ?(\d+)( ?([pm]))?/) {
@@ -283,11 +284,9 @@ while (1) {
   }
 
   # Force Retreats
-#   print '
 # Forced Retreats phase: Any figure which has inflicted attack hits on an adjacent
 #   figure and has not taken damage this turn may execute a forced retreat on the
 #   adjacent figure.  (Attack hits include any physical attack and missle spells.)
-# ';
   $phase = 'forced retreats';
   print "\nPossible Forced Retreats: (if two chacters are adjacent)\n";
   print "None.\n" unless keys %retreats;
@@ -303,7 +302,7 @@ while (1) {
 #   print "\n";
   
   ++$turn;
-} # while (++$turn); # Why this check??
+}
 
 
 # Display characters
@@ -380,7 +379,6 @@ sub query {
 # How are these declarations working?  Don't they have to appear above?? (28aug021)
 # my $uniquify = 0;
 my $msg_space; # Did we output a message about spaces in character names?
-# my @namekeys; # for each character - actually I don't need this, it is already in @characters
 my %namekeys; # key character val char index or hash of next level of %namekeys ...
 sub character_prep {
   my $ci = shift;
@@ -486,7 +484,6 @@ sub extend_namekey {
 #     print "WARNING: namekey overflow.  Please use longer or more unique names.\n";
 #     $namekey .= $uniquify++;
 #   }
-
 }
 
 
@@ -570,8 +567,6 @@ sub act {
 	    next;
 	  }
 	  print "Injuring self!\n" if $injuredi == $act_char;
-#   You must have rolled an 18 while attacking ",
-# 	      "with your body\n"
 	  my $dc = $characters[$injuredi]; # damaged character
 	  my $damage = $2;
 	  $debug && print "$characters[$act_char]->{NAME} hits $characters[$injuredi]->{NAME} for $damage damage\n";
