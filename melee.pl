@@ -17,7 +17,7 @@
 use strict;
 use warnings;
 use List::Util qw/max/;
-# use List::MoreUtils qw/firstidx any/;
+use List::MoreUtils qw/firstidx any/;
 
 # Setting flags
 my $debug = 0; # 1 ==> max debug output
@@ -267,12 +267,14 @@ while (1) {
     print "Pole weapon charges:\n";
     act(@poles);
     # remove @poles from @chars
-    foreach my $p (@poles) { splice @chars, (firstidx {$_==$p} @chars), 1; }
+#     foreach my $p (@poles) { splice @chars, (firstidx {$_==$p} @chars), 1; }
     # Above seems pretty slow.  This complication only because of surprise round. Rethink all this? (20aug021)
+    # It should not be necessary to remove the poles, no?  They will have @acted so will get skipped anyway.
   }
   $phase = 'normal actions';
   print "\nNormal attacks:\n";
   # prune dead characters here?  They may die during this act() call too. (7aug021)
+  # (Not sure what I was getting at.  Dead characters get skipped within &act.  No need to prune. (5sep021))
   act(@chars);
   if (@bow2) {
 #     my $i;
@@ -499,7 +501,7 @@ sub act {
     next if $characters[$i]->{DEAD};
     $debug && print "$characters[$i]->{NAME} has adjDX $dex[$i]\n";
     # Gather DEXes
-#     push @{$dexes{$dex[$i]}}, $i;
+    push @{$dexes{$dex[$i]}}, $i;
     # Roll initiative
     $roll[$i] = rand;
   }
