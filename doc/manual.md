@@ -57,8 +57,6 @@ Is this too complicated?  It allows great flexibility in the interpretation of t
 
 ### adjDX Order
 
-[ firstidx is actually used for dealing with pole attacks...  Should be redesigned. ]
-
 #### old scheme:
 `@dex` is adjDX of each character, computed after Considerations
 takes into account reactions to injury
@@ -86,3 +84,4 @@ takes into account reactions to injury
 DX = adjDX + @dxmod + @dxinj
 
 I think it also makes sense to change the &act API to take an array which is true if that char is acting.  So the array index is the char index.
+No, I decided to do it the old way.  Note that it is often called with a single character, for pole and second bow attacks. (6sep021)

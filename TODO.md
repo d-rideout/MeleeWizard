@@ -61,6 +61,16 @@ Won't that work well, with the current sparse API? <----------
 
 
 #### Thoughts:
+* Record sequence of moves?  2d coordinates should be easier than origin-based.
+  The standard Melee map has a nice central axis.  Could be y=0, x=\pm 7.
+  But can also have half coordinates. x = -3-
+  y \in {-1, 1, 2, 3}
+  x = 2+, y \in {-3, -2, -1, 1, 2}
+  (or do I want to use all odd numbers for y coordinates?)
+  Or do I want something which generalizes to other maps more easily?  Maybe better to start with this?
+  Facing could be 0-5 counting from +x-axis and rotating counter-clockwise.
+  (Or can use this facing to describe a hex -- locate hex on x-axis, face in direction, march number of hexes, then rotate facing again.  This is kinda what I mean by an origin-based approach.  It has the advantage of being more generalizable to other maps: All you have to do is select an origin hex and a facing-orientation.) (7sep021)
+
 * worry about character and command namespace collisions? (30aug021)
 * defer action would be really useful, though complicated... (27aug021)
 * expand &query to contain loop which handles errors in syntax and char
