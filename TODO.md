@@ -41,6 +41,12 @@ Won't that work well, with the current sparse API? <----------
 * Document all this DX handling stuff, in the maintenance section of the manual.
   And consider rewriting it, yet again?  So that it is easy to implement new actions etc. (4sep021)
 
+* 'f' option to be finished with movement phase (6sep021)
+
+* Restore "dex x:" output? (6sep021)
+
+* Catch Ctrl-C, so that it does not clobber the log file?  Or save a backup somehow?  It does not get written if I have to C-C out due to a bug... (6sep021)
+
 * mewizseq? meWizSeq? MeWizSeq? combat_sequence? wizlee? melwizseq?
   tftseq mwseq ... (25aug021)  tftcomseq comseq combseq
 

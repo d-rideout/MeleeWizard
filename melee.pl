@@ -17,7 +17,7 @@
 use strict;
 use warnings;
 use List::Util qw/max/;
-use List::MoreUtils qw/firstidx any/;
+# use List::MoreUtils qw/firstidx any/;
 
 # Setting flags
 my $debug = 0; # 1 ==> max debug output
@@ -126,11 +126,15 @@ print LOG "$seed\n";
 # ======================
 my $turn = 0;
 my $phase = ''; # Combat sequence phase
-my @dex; # adjDX for each character for this turn
+# my @dex; # adjDX for each character for this turn
 my @turn_damage; # amt damage sustained this turn for each character
 my @acted; # who acted so far this turn, for handling reactions to injuries
 # my @damaged; # who has taken damage this turn [why not just use @turn_damage??]
 my %retreats; # possible forced retreats  key forcer val hash key forced val num
+my @dxmod = (0) x $n; # amt to add to adjDX
+my @dxinj = (0) x $n; # amt to add to adjDX due to injury
+my @roll; # action initiative roll, indexed by character index
+my $maxdx; # adjDX of acting character
 
 print "\nCapital letter is default option for each prompt\n\n";
 
@@ -190,7 +194,7 @@ while (1) {
   # Declare expected dex adjustments and other special considerations
   my @poles; # pole weapon charges
   my @bow2;  # double bow attacks
-  my @dexadj; # amt to add to adjDX
+
   &displayCharacters;
   print 'Special considerations: <who> <consideration1> [consideration2]
   Considerations are
@@ -217,7 +221,7 @@ while (1) {
     print "$characters[$who]->{NAME}";
     foreach my $cmd (@sccmd) {
       if ($cmd =~ /^\+?-?\d+$/) { #(\+|-) ?(\d+)( ?([pm]))?/) {
-	$dexadj[$who] = $cmd;
+	$dxmod[$who] = $cmd;
 	my $plus = '+';
 	$plus = '' if $cmd =~ /^[\+-]/;
 	print " at $plus$cmd DEX = ", $characters[$who]->{adjDX}+$cmd, ' (- injury adjustments)';
@@ -234,18 +238,18 @@ while (1) {
   } # special considerations
   print "\n";
 
-  # Compute dex for this turn
+  # Compute dx mods due to injury
   for my $i (0..$n-1) {
     my $chr = $characters[$i];
     
-    $dex[$i] = $chr->{adjDX};
-    $dex[$i] += $dexadj[$i] if $dexadj[$i]; # (it might be undefined!)
+#     $dex[$i] = $chr->{adjDX};
+#     $dex[$i] += $dexadj[$i] if $dexadj[$i]; # (it might be undefined!)
 
     # Reactions to injury
-    $dex[$i] -= 2 if $turn < $chr->{StunTurn};
+    $dxinj[$i] = 2 if $turn < $chr->{StunTurn};
 #     $dex[$i] -= 3 if $chr->{STrem} < 4;
     # I have to keep track of the two different types of damage for wizards (7aug021)
-    $dex[$i] -= 3 if $chr->{BAD} && $chr->{STrem} < 4;
+    $dxinj[$i] -= 3 if $chr->{BAD} && $chr->{STrem} < 4;
   }
 
   # Act
@@ -278,7 +282,7 @@ while (1) {
   act(@chars);
   if (@bow2) {
 #     my $i;
-    @acted[$_] = 0 foreach @bow2;
+    !$characters[$_]->{DEAD} && (@acted[$_] = 0) foreach @bow2;
     $phase = 'second missle shots';
     print "\nSecond bow attacks:\n";
     $debug && print "for @bow2\n";
@@ -489,19 +493,45 @@ sub extend_namekey {
 }
 
 
+# Who is next to act?
+sub whosnext {
+  my $maxroll;
+  my $next;
+  $maxdx = -1; # global so it can be used in &act
+
+  foreach (@_) {
+    next if $acted[$_];
+    # This isn't good enough.  acted flags get cleared before 2nd bow shot!
+    # should be fixed now...
+#     print join(' ', @dxmod), "\n";
+    my $dx = $characters[$_]->{adjDX} + $dxmod[$_] + $dxinj[$_];
+    if ($dx > $maxdx) {
+      $next = $_;
+      $maxdx = $dx;
+      $maxroll = $roll[$_];
+    } elsif ($dx == $maxdx && $roll[$_] > $maxroll) {
+      $next = $_;
+      $maxroll = $roll[$_];
+    }
+  }
+#   print "$next is next\n";
+  $next;
+}
+
+
 # Act in order of dex
 # Pass array of characters who will act
 sub act {
-  my %dexes; # key dex val array of character indices
-  my @roll; # indexed by character index
+  my @chars = @_;
+#   my %dexes; # key dex val array of character indices
   
   # Preparations
 #   foreach my $i (keys %{$chars}) {
-  for my $i (@_) {
+  for my $i (@chars) {
     next if $characters[$i]->{DEAD};
-    $debug && print "$characters[$i]->{NAME} has adjDX $dex[$i]\n";
+#     $debug && print "$characters[$i]->{NAME} has adjDX $dex[$i]\n";
     # Gather DEXes
-    push @{$dexes{$dex[$i]}}, $i;
+#     push @{$dexes{$dex[$i]}}, $i;
     # Roll initiative
     $roll[$i] = rand;
   }
@@ -521,32 +551,34 @@ sub act {
 '  Prefix with "sp<ST>" if result is from spell of ST cost <ST>
                         (Note that spell can have no result, but still cost ST.)
 ' if $phase =~ /n/;
-  while (my $dex = max keys %dexes) { # assuming no one has 0 dex! (20apr021)
-    $debug && print "Doing dex = $dex\n";
-    my $ties = $dexes{$dex};
-    unless (@$ties) {
-      $debug && print "skipping empty dex slot $dex!\n";
-      delete $dexes{$dex};
-      next;
-    }
-    print "dex ${dex}s:\n"; # if @{$ties}; # 0+@{$ties}, " ties\n";
-
-    # Sort characters with $dex by action initiative roll
-    my @dex_ties = sort {$roll[$b] <=> $roll[$a]} @$ties;
-#     $debug && print "character indices sorted by roll: @dex_ties\n";
-    
-    while (defined(my $act_char = shift @dex_ties)) {
-#       next unless defined $ties->[$act_char];
-      $debug && print "people with this dex: ties = @{$ties}\n";
-      $debug && print "ordered: @dex_ties\n";
-#       $debug && print "tie $act_char goes now, char $ties->[$act_char]\n";
-      $debug && print "tie $act_char goes now\n";
-#       next if $acted[$ties->[$act_char]];
-#       die "$act_char already acted??" if $acted[$act_char];
-      # dead characters already acted
-      next if $acted[$act_char];
+#   while (my $dex = max keys %dexes) { # assuming no one has 0 dex! (20apr021)
+#     $debug && print "Doing dex = $dex\n";
+#     my $ties = $dexes{$dex};
+#     unless (@$ties) {
+#       $debug && print "skipping empty dex slot $dex!\n";
+#       delete $dexes{$dex};
+#       next;
+#     }
+#     print "dex ${dex}s:\n"; # if @{$ties}; # 0+@{$ties}, " ties\n";
+# 
+#     # Sort characters with $dex by action initiative roll
+#     my @dex_ties = sort {$roll[$b] <=> $roll[$a]} @$ties;
+# #     $debug && print "character indices sorted by roll: @dex_ties\n";
+#     
+#     while (defined(my $act_char = shift @dex_ties)) {
+# #       next unless defined $ties->[$act_char];
+#       $debug && print "people with this dex: ties = @{$ties}\n";
+#       $debug && print "ordered: @dex_ties\n";
+# #       $debug && print "tie $act_char goes now, char $ties->[$act_char]\n";
+#       $debug && print "tie $act_char goes now\n";
+# #       next if $acted[$ties->[$act_char]];
+# #       die "$act_char already acted??" if $acted[$act_char];
+  #       # dead characters already acted
+  my $act_char;
+  while (defined ($act_char = whosnext(@chars))) {
       my $ac = $characters[$act_char]; # acting character
-      print "$ac->{NAME}: ST $ac->{ST} ($ac->{STrem})  adjDX $dex";
+      next if $ac->{DEAD};
+      print "$ac->{NAME}: ST $ac->{ST} ($ac->{STrem})  adjDX $ac->{adjDX} -", -$dxinj[$act_char], $dxmod[$act_char]<0?'':' +', "$dxmod[$act_char] = $maxdx";
       print " (stunned until turn $ac->{StunTurn})" if $turn < $ac->{StunTurn};
       # Stunned 'through this turn' or '... next turn'? (12aug021)
       print "\n";
@@ -554,7 +586,6 @@ sub act {
       # Action query loop for character with index $act_char
       while (1) {
 	my $action = query('', "Action result? (N)o");
-	$acted[$act_char] = 1;
 	$debug && print "act_char=$act_char acted=$acted[$act_char]\n";
 	# Spell cost
 	if ($action =~ s/^sp ?(\d+)\s*//) {
@@ -564,10 +595,11 @@ sub act {
 	# Result of action
 	if ($action =~ /(.+) ?- ?(\d+)/) { # Hit!
 	  my $injuredi = who($1);
-	  if ($injuredi<0) {
-	    print "Invalid character specification: $1\n";
-	    next;
-	  }
+# 	  if ($injuredi<0) {
+# 	    print "Invalid character specification: $1\n";
+# 	    next;
+# 	  }
+	  next if $injuredi eq 'x';
 	  print "Injuring self!\n" if $injuredi == $act_char;
 	  my $dc = $characters[$injuredi]; # damaged character
 	  my $damage = $2;
@@ -584,13 +616,14 @@ sub act {
 	  $turn_damage[$injuredi] += $damage;
 	  print "$dc->{NAME} has taken $turn_damage[$injuredi] damage so far this turn, has $dc->{STrem} ST remaining\n"; 
 	  my $turn_damage = $turn_damage[$injuredi];
-	  my $olddex = $dex[$injuredi];
-	  my $newdex = $dex[$injuredi];
-	  $debug && print "turn_damage=$turn_damage stun=$dc->{STUN} stun_turn=$dc->{StunTurn} adjDX=$newdex?\n";
+# 	  my $olddex = $dex[$injuredi];
+# 	  my $newdex = $dex[$injuredi];
+# 	  $debug && print "turn_damage=$turn_damage stun=$dc->{STUN} stun_turn=$dc->{StunTurn} adjDX=$newdex?\n";
 	  if ($turn_damage >= $dc->{STUN} && $dc->{StunTurn} <= $turn) {
 	    print "$dc->{NAME} is stunned\n";
 	    $dc->{StunTurn} = $turn+2;
-	    $newdex -= 2;
+# 	    $newdex -= 2;
+	    $dxinj[$injuredi] -= 2;
 	  }
 	  $debug && print "turn_damage=$turn_damage  FALL=$dc->{FALL}  old_turn_damage=$old_turn_damage\n";
 	  if ($turn_damage >= $dc->{FALL} && $old_turn_damage < $dc->{FALL}) {
@@ -600,7 +633,8 @@ sub act {
 	  if ($dc->{STrem} <4 && $dc->{STrem}+$damage >3) {
 	    print "$dc->{NAME} is in bad shape...\n";
 	    ++$dc->{BAD};
-	    $newdex -= 3;
+	    # 	    $newdex -= 3;
+	    $dxinj[$injuredi] -= 3;
 	  }
 	  if ($dc->{STrem} <2) {
 	    $dc->{DEAD} = 1;
@@ -609,39 +643,39 @@ sub act {
 	    $acted[$injuredi] = 1;
 	  }
 
-	  # Push injured back in action order
-	  $debug && print "push back? injuredi=$injuredi acted=$acted[$injuredi] olddex=$olddex newdex=$newdex\n";
-	  if (!$acted[$injuredi] && $newdex < $olddex && any {$_==$injuredi} @_) {
-	    # (last condition is to make sure that injuredi is in the list of actors at all!  This may be a special subphase such as pole-weapon charges (29aug021))
-	    # Don't have to worry about initiative order -- that is computed later for each $dex
-	    # 	    for my $j (0..$#{$dexes{$olddex}}) {
-	    # 	       if ($dexes{$olddex}->[$j] == $injuredi) {
-	    # 		 splice @{$dexes{$olddex}},$j,1;
-	    # 		 last;
-	    # 	       }
-	    # 	    }
-	    # Below should replace above code (8aug021)
-	    # https://metacpan.org/pod/List::MoreUtils#first_index-BLOCK-LIST
-	    splice(@{$dexes{$olddex}},
-		   (firstidx {$_==$injuredi} @{$dexes{$olddex}}), 1);
-	    $debug && print "dx $olddex queue: @{$dexes{$olddex}}\n";
-	    # Remove from current dex queue, if olddex = dex
-	    if ($olddex==$dex) {
-	      # Do I also need to remove $injuredi from @$dexes{$olddex}?  Presumably not. (8aug021)
-	      # 	      for my $j (0..$#dex_ties) {
-	      # 		if ($dex_ties[$j] == $injuredi) {
-	      # 		  splice @dex_ties,$j,1;
-	      # 		  last;
-	      # 		}
-	      # 	      }
-	      # also have to remove injured from current @dex_ties
-	      splice(@dex_ties, (firstidx {$_==$injuredi} @dex_ties), 1);
-	    } #else { die "How did I get here??"; }
-	    # Add to $dexes{$newdex}
-	    push @{$dexes{$newdex}}, $injuredi;
-	  } # push back in action order
+# 	  # Push injured back in action order
+# 	  $debug && print "push back? injuredi=$injuredi acted=$acted[$injuredi] olddex=$olddex newdex=$newdex\n";
+# 	  if (!$acted[$injuredi] && $newdex < $olddex && any {$_==$injuredi} @_) {
+# 	    # (last condition is to make sure that injuredi is in the list of actors at all!  This may be a special subphase such as pole-weapon charges (29aug021))
+# 	    # Don't have to worry about initiative order -- that is computed later for each $dex
+# 	    # 	    for my $j (0..$#{$dexes{$olddex}}) {
+# 	    # 	       if ($dexes{$olddex}->[$j] == $injuredi) {
+# 	    # 		 splice @{$dexes{$olddex}},$j,1;
+# 	    # 		 last;
+# 	    # 	       }
+# 	    # 	    }
+# 	    # Below should replace above code (8aug021)
+# 	    # https://metacpan.org/pod/List::MoreUtils#first_index-BLOCK-LIST
+# 	    splice(@{$dexes{$olddex}},
+# 		   (firstidx {$_==$injuredi} @{$dexes{$olddex}}), 1);
+# 	    $debug && print "dx $olddex queue: @{$dexes{$olddex}}\n";
+# 	    # Remove from current dex queue, if olddex = dex
+# 	    if ($olddex==$dex) {
+# 	      # Do I also need to remove $injuredi from @$dexes{$olddex}?  Presumably not. (8aug021)
+# 	      # 	      for my $j (0..$#dex_ties) {
+# 	      # 		if ($dex_ties[$j] == $injuredi) {
+# 	      # 		  splice @dex_ties,$j,1;
+# 	      # 		  last;
+# 	      # 		}
+# 	      # 	      }
+# 	      # also have to remove injured from current @dex_ties
+# 	      splice(@dex_ties, (firstidx {$_==$injuredi} @dex_ties), 1);
+# 	    } #else { die "How did I get here??"; }
+# 	    # Add to $dexes{$newdex}
+# 	    push @{$dexes{$newdex}}, $injuredi;
+# 	  } # push back in action order
 
-	  last; # exit from while (1) damage query loop
+	  last; # exit from while (1) action query loop
 	} # did damage
 	elsif ($action =~ /^(.+) (\d+) (\d+)$/) { # Create being
 	  print "$1 created with ST $2 adjDX $3\n";
@@ -653,6 +687,8 @@ sub act {
 	  $characters[$n]->{adjDX} = $3;
 	  $characters[$n]->{PLAYER} = $characters[$act_char]->{NAME};
 	  $characters[$n]->{PARTY} = $characters[$act_char]->{PARTY};
+	  push @dxmod, 0;
+	  push @dxinj, 0;
 	  character_prep($n++);
 	  &displayCharacters;
 	  last; # always last after successful action result
@@ -675,9 +711,10 @@ sub act {
 	elsif (!$action) { last; } # exits action query for this character
 	else { print "Unrecognized action $action\n"; }
       } # what happened during $act_char's action
-    } # loop over ties
-    delete $dexes{$dex};
-  } # loop over dexes
+      $acted[$act_char] = 1;
+#     } # loop over ties
+#     delete $dexes{$dex};
+  } # loop over actors
 }
 
 

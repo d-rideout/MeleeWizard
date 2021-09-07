@@ -35,6 +35,8 @@ PLAYER | who plays this character (created beings are played by the character wh
 `NAMEKEY` | Any extension of this string will refer to this character.
 `BAD` | STrem has been brought to <=3 by injuries
 
+`%hkeys` 'header keys'  The above keys, with value 1 if they can appear in a party file.
+
 ### Query User
 
 To query the user, use the following code template:
@@ -77,10 +79,10 @@ takes into account reactions to injury
 `$newdex` is new dex after new injuries
 
 #### new scheme:
-* `@dxmods` misc modifiers to DX
+* `@dxmod` misc modifiers to DX
 * `@dxinj` DX modifiers due to injury.  Compute at beginning of &act
 * Both must be maintained.
 
-DX = adjDX + @dxmods + @dxinj
+DX = adjDX + @dxmod + @dxinj
 
 I think it also makes sense to change the &act API to take an array which is true if that char is acting.  So the array index is the char index.
