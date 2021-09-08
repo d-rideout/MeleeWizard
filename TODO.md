@@ -1,54 +1,15 @@
 #### Urgent:
-
-* get rid of firstidx in removing pole attacks.
-Store lists of actors in hash?  Here we go again...
-Don't the pole people get skipped over anyway, since they have @acted?
-Yes!  I don't know what is wrong here!
-%
-sparse sets pass well in a 'compact' list
-dense sets pass well in a 'spread out' list
-pole attackers will be sparse.  Even more so with surprise.
-But I think the point is the set passed for the normal act phase.  That should almost always be dense.
-So we should pass an array 0..$n-1, which is true if the character is acting in this subphase.
-%
-Actually pole and second bow attacks are super sparse, and normal is dense.  So no one method makes sense.  So maybe I am forced to the hash solution?
-%
-If the acted works for the pole people, I can do
-pole
-everyone
-bow2
-Won't that work well, with the current sparse API? <----------
-(5sep021)
-
-* Rework DX handling again to use new scheme (5sep021)
-
-
-
-
-* rope spell (26aug021)
-  - allow changing DX mods during any action, as sorta global option, though it
-    needs to be stored in the log!
-  - Needs rewrite of DX order code again, either to recompute with each character, or a routine to handle a change. (1sep021)
-  - ACTUALLY I DID THIS ALL WRONG!  tHIS SHOULD BE A REGULAR ACTION!  sO A ROPE SPELL ON X WOULD BE: "sp2: d x -2" (2sep021)
-  - THOUGH THERE IS ALSO THE "sh" ACTION FOR THIS.  hMM...
-    The user can make a 'permanent' change with "sh" or a this-turn-only change with "a". (2SEP021)
-
-  - May be nice to keep track of Rope deduction for user!  It can get complicated. (4sep021)
+* 'f' option to be finished with movement phase (6sep021)
+* Catch Ctrl-C, so that it does not clobber the log file?  Or save a backup somehow?  It does not get written if I have to C-C out due to a bug... (6sep021)
+* May be nice to keep track of Rope deduction for user!  It can get complicated. (4sep021)
   sp2 r <who>
   ->{ROPE} holds turn of rope, delete ->{ROPE} if not roped
   then put rope minus somewhere, as injury or so (4sep021)
 
-* Document all this DX handling stuff, in the maintenance section of the manual.
-  And consider rewriting it, yet again?  So that it is easy to implement new actions etc. (4sep021)
-
-* 'f' option to be finished with movement phase (6sep021)
-
-* Restore "dex x:" output? (6sep021)
-
-* Catch Ctrl-C, so that it does not clobber the log file?  Or save a backup somehow?  It does not get written if I have to C-C out due to a bug... (6sep021)
-
 * mewizseq? meWizSeq? MeWizSeq? combat_sequence? wizlee? melwizseq?
-  tftseq mwseq ... (25aug021)  tftcomseq comseq combseq
+  tftseq mwseq ... (25aug021)
+  tftcomseq comseq combseq mewcosq MeWCoSq?
+  Better to start with lower case? (7sep021)
 
 * This tool will be helpful in large battles.
   Note: [meleewizards.com](http://meleewizards.com)! (5aug021)
@@ -61,6 +22,7 @@ Won't that work well, with the current sparse API? <----------
 
 
 #### Thoughts:
+* Restore "dex x:" output? (6sep021)
 * Record sequence of moves?  2d coordinates should be easier than origin-based.
   The standard Melee map has a nice central axis.  Could be y=0, x=\pm 7.
   But can also have half coordinates. x = -3-
@@ -246,3 +208,30 @@ Won't that work well, with the current sparse API? <----------
   - both for renewal and initial cast
   - actually not so crucial -- spell casting desn't seem to count as an injury
 * Wizards lose 3 DX when STrem < 4, but this should only be from reaction to injury.  Hmm...! (4sep021)
+* get rid of firstidx in removing pole attacks.
+Store lists of actors in hash?  Here we go again...
+Don't the pole people get skipped over anyway, since they have @acted?
+Yes!  I don't know what is wrong here!
+%
+sparse sets pass well in a 'compact' list
+dense sets pass well in a 'spread out' list
+pole attackers will be sparse.  Even more so with surprise.
+But I think the point is the set passed for the normal act phase.  That should almost always be dense.
+So we should pass an array 0..$n-1, which is true if the character is acting in this subphase.
+%
+Actually pole and second bow attacks are super sparse, and normal is dense.  So no one method makes sense.  So maybe I am forced to the hash solution?
+%
+If the acted works for the pole people, I can do
+pole
+everyone
+bow2
+Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
+* Document all this DX handling stuff, in the maintenance section of the manual.
+  And consider rewriting it, yet again?  So that it is easy to implement new actions etc. (4sep021)
+* rope spell (26aug021)
+  - allow changing DX mods during any action, as sorta global option, though it
+    needs to be stored in the log!
+  - Needs rewrite of DX order code again, either to recompute with each character, or a routine to handle a change. (1sep021)
+  - ACTUALLY I DID THIS ALL WRONG!  tHIS SHOULD BE A REGULAR ACTION!  sO A ROPE SPELL ON X WOULD BE: "sp2: d x -2" (2sep021)
+  - THOUGH THERE IS ALSO THE "sh" ACTION FOR THIS.  hMM...
+    The user can make a 'permanent' change with "sh" or a this-turn-only change with "a". (2SEP021)

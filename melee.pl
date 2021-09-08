@@ -117,7 +117,7 @@ if ($restart) {
   close LOG;
 } else {
   $seed = srand;
-  print "Overwrite log file? (interrupt (Ctrl-C) if not!)"; <STDIN>;
+  print "\nOverwrite log file? (interrupt (Ctrl-C) if not!)"; <STDIN>;
  }
 open LOG, '>log' or die "problem creating log file";
 print LOG "$seed\n";
@@ -131,7 +131,7 @@ my @turn_damage; # amt damage sustained this turn for each character
 my @acted; # who acted so far this turn, for handling reactions to injuries
 # my @damaged; # who has taken damage this turn [why not just use @turn_damage??]
 my %retreats; # possible forced retreats  key forcer val hash key forced val num
-my @dxmod = (0) x $n; # amt to add to adjDX
+my @dxmod = (0) x $n; # amt to add to adjDX for this turn
 my @dxinj = (0) x $n; # amt to add to adjDX due to injury
 my @roll; # action initiative roll, indexed by character index
 my $maxdx; # adjDX of acting character
@@ -189,12 +189,12 @@ while (1) {
   # Actions
   # -------
   print "\nAction phase:\n";
-  $phase = 'action';
   
   # Declare expected dex adjustments and other special considerations
   my @poles; # pole weapon charges
   my @bow2;  # double bow attacks
 
+  $phase = 'action consideration';
   &displayCharacters;
   print 'Special considerations: <who> <consideration1> [consideration2]
   Considerations are
@@ -209,7 +209,8 @@ while (1) {
     \'Permanently\' ready or unready a shield
 ';
   while (1) {
-    my $sccmd = query('', "Special consideration, (F)inished");
+#     my $sccmd = query('', "Special consideration, (F)inished");
+    my $sccmd = query('', "(F)inished");
     last unless $sccmd;
     my @sccmd = split / +/, $sccmd;
     my $who = who(shift @sccmd);
@@ -254,6 +255,7 @@ while (1) {
 
   # Act
   my @chars = 0..$n-1;
+  $phase = 'action';
   unless ($turn) { # prune surprised characters
     foreach (my $i=$#chars; $i>=0; --$i) { # ($#chars..0) {
       splice @chars, $i, 1 if $surprise_parties{$characters[$i]->{PARTY}};
@@ -313,12 +315,12 @@ while (1) {
 
 # Display characters
 sub displayCharacters {
-  print '-'x25, "\nCharacters:\n";
+  print '-'x26, "\nCharacters:\n";
   for my $i (0..$#characters) {
     my $c = $characters[$i];
     print $i, "\t$c->{NAMEKEY}\t$c->{NAME}\n" unless $c->{DEAD};
   }
-  print '-'x25, "\n";
+  print '-'x26, "\n";
 }
 
 
@@ -538,196 +540,122 @@ sub act {
   
   # Actions
   &displayCharacters;
-  print 'Actions:
-  * [sp<ST>] <who> - <dam> (e.g. c-4 for 4 damage to character c after armor)
-  * [sp<ST>] sh<dex adj>   ready or unready shield, which changes base adjDX
-                  (e.g. sh -2 to ready a tower shield)
-';
-  print '  * sp<ST> <name> <ST> <adjDX> (for created being)
-  * d <who>  to disbelieve <who>
-' .
-      # * sp<ST> a <who> <DX mod>      spell which modifies <who>\'s adjDX by <DX mod>
-      #   (e.g. sp2: a x -2  for Rope spell on x (and you have to remember to put a DX adjustment each turn for x)'
-'  Prefix with "sp<ST>" if result is from spell of ST cost <ST>
-                        (Note that spell can have no result, but still cost ST.)
-' if $phase =~ /n/;
-#   while (my $dex = max keys %dexes) { # assuming no one has 0 dex! (20apr021)
-#     $debug && print "Doing dex = $dex\n";
-#     my $ties = $dexes{$dex};
-#     unless (@$ties) {
-#       $debug && print "skipping empty dex slot $dex!\n";
-#       delete $dexes{$dex};
-#       next;
-#     }
-#     print "dex ${dex}s:\n"; # if @{$ties}; # 0+@{$ties}, " ties\n";
-# 
-#     # Sort characters with $dex by action initiative roll
-#     my @dex_ties = sort {$roll[$b] <=> $roll[$a]} @$ties;
-# #     $debug && print "character indices sorted by roll: @dex_ties\n";
-#     
-#     while (defined(my $act_char = shift @dex_ties)) {
-# #       next unless defined $ties->[$act_char];
-#       $debug && print "people with this dex: ties = @{$ties}\n";
-#       $debug && print "ordered: @dex_ties\n";
-# #       $debug && print "tie $act_char goes now, char $ties->[$act_char]\n";
-#       $debug && print "tie $act_char goes now\n";
-# #       next if $acted[$ties->[$act_char]];
-# #       die "$act_char already acted??" if $acted[$act_char];
-  #       # dead characters already acted
+  print "Actions:\n",
+      "* [sp<ST>] <who>-<dam>\t(e.g. c-4 for 4 damage to character c after armor)\n";
+  print "* [sp<ST>] sh<dex adj>\tready or unready shield, which changes base adjDX\n",
+      "\t\t\t(e.g. 'sh -2' to ready a tower shield)\n",
+      "* sp<ST> <name> <ST> <adjDX>\tcreate being\n",
+      "* d <who>\t\t\tdisbelieve <who>\n",
+      "* sp<ST> a <who> <DX mod>\tspell which modifies <who>\'s adjDX by <DX mod>\n",
+      "\t(e.g. 'sp2 a x -2' for Rope spell on x (remember to put a DX adjustment\n\t each turn on x, during action considerations)\n",
+      "  Prefix with 'sp<ST>' if result is from spell of ST cost <ST>.\n",
+      "  (Note that spell can have no result, but still cost ST.)\n" if $phase =~ /n/;
+  print '-' x 79, "\n";
   my $act_char;
   while (defined ($act_char = whosnext(@chars))) {
-      my $ac = $characters[$act_char]; # acting character
-      next if $ac->{DEAD};
-      print "$ac->{NAME}: ST $ac->{ST} ($ac->{STrem})  adjDX $ac->{adjDX} -", -$dxinj[$act_char], $dxmod[$act_char]<0?'':' +', "$dxmod[$act_char] = $maxdx";
-      print " (stunned until turn $ac->{StunTurn})" if $turn < $ac->{StunTurn};
-      # Stunned 'through this turn' or '... next turn'? (12aug021)
-      print "\n";
+    my $ac = $characters[$act_char]; # acting character
+    next if $ac->{DEAD};
+    print "$ac->{NAME}: ST $ac->{ST} ($ac->{STrem})  adjDX $ac->{adjDX} -", -$dxinj[$act_char], $dxmod[$act_char]<0?'':' +', "$dxmod[$act_char] = $maxdx";
+    print " (stunned until turn $ac->{StunTurn})" if $turn < $ac->{StunTurn};
+    # Stunned 'through this turn' or '... next turn'? (12aug021)
+    print "\n";
 
-      # Action query loop for character with index $act_char
-      while (1) {
-	my $action = query('', "Action result? (N)o");
-	$debug && print "act_char=$act_char acted=$acted[$act_char]\n";
-	# Spell cost
-	if ($action =~ s/^sp ?(\d+)\s*//) {
-	  $ac->{STrem} -= $1;
-	  print "$ac->{NAME} casts spell, has $ac->{STrem} ST remaining\n";
-	}
-	# Result of action
-	if ($action =~ /(.+) ?- ?(\d+)/) { # Hit!
-	  my $injuredi = who($1);
-# 	  if ($injuredi<0) {
-# 	    print "Invalid character specification: $1\n";
-# 	    next;
-# 	  }
-	  next if $injuredi eq 'x';
-	  print "Injuring self!\n" if $injuredi == $act_char;
-	  my $dc = $characters[$injuredi]; # damaged character
-	  my $damage = $2;
-	  $debug && print "$characters[$act_char]->{NAME} hits $characters[$injuredi]->{NAME} for $damage damage\n";
-# 	  ++$damaged[$injuredi] if $damage;
-# 	  push @{$retreats{$act_char}}, $injuredi;
-	  ++$retreats{$act_char}->{$injuredi};
+    # Action query loop for character with index $act_char
+    while (1) {
+      my $action = query('', "Action result? (N)o");
+      $debug && print "act_char=$act_char acted=$acted[$act_char]\n";
+      # Spell cost
+      if ($action =~ s/^sp ?(\d+)\s*//) {
+	$ac->{STrem} -= $1;
+	print "$ac->{NAME} casts spell, has $ac->{STrem} ST remaining\n";
+      }
+      # Result of action
+      if ($action =~ /(.+) ?- ?(\d+)/) { # Hit!
+	my $injuredi = who($1);
+	next if $injuredi eq 'x';
+	print "Injuring self!\n" if $injuredi == $act_char;
+	my $dc = $characters[$injuredi]; # damaged character
+	my $damage = $2;
+	$debug && print "$characters[$act_char]->{NAME} hits $characters[$injuredi]->{NAME} for $damage damage\n";
+	++$retreats{$act_char}->{$injuredi};
 	  
-	  # Reaction to Injury
-	  print "$damage ST damage to $dc->{NAME}\n";
-	  $dc->{STrem} -= $damage;
-	  my $old_turn_damage = $turn_damage[$injuredi];
-	  $old_turn_damage = 0 unless defined $old_turn_damage;
-	  $turn_damage[$injuredi] += $damage;
-	  print "$dc->{NAME} has taken $turn_damage[$injuredi] damage so far this turn, has $dc->{STrem} ST remaining\n"; 
-	  my $turn_damage = $turn_damage[$injuredi];
-# 	  my $olddex = $dex[$injuredi];
-# 	  my $newdex = $dex[$injuredi];
-# 	  $debug && print "turn_damage=$turn_damage stun=$dc->{STUN} stun_turn=$dc->{StunTurn} adjDX=$newdex?\n";
-	  if ($turn_damage >= $dc->{STUN} && $dc->{StunTurn} <= $turn) {
-	    print "$dc->{NAME} is stunned\n";
-	    $dc->{StunTurn} = $turn+2;
-# 	    $newdex -= 2;
-	    $dxinj[$injuredi] -= 2;
-	  }
-	  $debug && print "turn_damage=$turn_damage  FALL=$dc->{FALL}  old_turn_damage=$old_turn_damage\n";
-	  if ($turn_damage >= $dc->{FALL} && $old_turn_damage < $dc->{FALL}) {
-	    print "$dc->{NAME} falls down\n";
-	    $acted[$injuredi] = 1;
-	  }
-	  if ($dc->{STrem} <4 && $dc->{STrem}+$damage >3) {
-	    print "$dc->{NAME} is in bad shape...\n";
-	    ++$dc->{BAD};
-	    # 	    $newdex -= 3;
-	    $dxinj[$injuredi] -= 3;
-	  }
-	  if ($dc->{STrem} <2) {
-	    $dc->{DEAD} = 1;
-	    if ($dc->{STrem} == 1) {print "$dc->{NAME} falls unconscious\n";}
-	    else { print "$dc->{NAME} dies\n"; }
-	    $acted[$injuredi] = 1;
-	  }
-
-# 	  # Push injured back in action order
-# 	  $debug && print "push back? injuredi=$injuredi acted=$acted[$injuredi] olddex=$olddex newdex=$newdex\n";
-# 	  if (!$acted[$injuredi] && $newdex < $olddex && any {$_==$injuredi} @_) {
-# 	    # (last condition is to make sure that injuredi is in the list of actors at all!  This may be a special subphase such as pole-weapon charges (29aug021))
-# 	    # Don't have to worry about initiative order -- that is computed later for each $dex
-# 	    # 	    for my $j (0..$#{$dexes{$olddex}}) {
-# 	    # 	       if ($dexes{$olddex}->[$j] == $injuredi) {
-# 	    # 		 splice @{$dexes{$olddex}},$j,1;
-# 	    # 		 last;
-# 	    # 	       }
-# 	    # 	    }
-# 	    # Below should replace above code (8aug021)
-# 	    # https://metacpan.org/pod/List::MoreUtils#first_index-BLOCK-LIST
-# 	    splice(@{$dexes{$olddex}},
-# 		   (firstidx {$_==$injuredi} @{$dexes{$olddex}}), 1);
-# 	    $debug && print "dx $olddex queue: @{$dexes{$olddex}}\n";
-# 	    # Remove from current dex queue, if olddex = dex
-# 	    if ($olddex==$dex) {
-# 	      # Do I also need to remove $injuredi from @$dexes{$olddex}?  Presumably not. (8aug021)
-# 	      # 	      for my $j (0..$#dex_ties) {
-# 	      # 		if ($dex_ties[$j] == $injuredi) {
-# 	      # 		  splice @dex_ties,$j,1;
-# 	      # 		  last;
-# 	      # 		}
-# 	      # 	      }
-# 	      # also have to remove injured from current @dex_ties
-# 	      splice(@dex_ties, (firstidx {$_==$injuredi} @dex_ties), 1);
-# 	    } #else { die "How did I get here??"; }
-# 	    # Add to $dexes{$newdex}
-# 	    push @{$dexes{$newdex}}, $injuredi;
-# 	  } # push back in action order
-
-	  last; # exit from while (1) action query loop
-	} # did damage
-	elsif ($action =~ /^(.+) (\d+) (\d+)$/) { # Create being
-	  print "$1 created with ST $2 adjDX $3\n";
-	  print "Animals get automatic disbelieve roll\n";
-	  # Not too sure how to handle this.  Will write explicit code for now, but should put into function which is shared with 'Read parties' code above. (29jul021)
-	  $characters[$n]->{NAME} = $1;
-	  $characters[$n]->{ST} = $2;
-	  $characters[$n]->{STrem} = $2;
-	  $characters[$n]->{adjDX} = $3;
-	  $characters[$n]->{PLAYER} = $characters[$act_char]->{NAME};
-	  $characters[$n]->{PARTY} = $characters[$act_char]->{PARTY};
-	  push @dxmod, 0;
-	  push @dxinj, 0;
-	  character_prep($n++);
-	  &displayCharacters;
-	  last; # always last after successful action result
-	} # create being
-	elsif (shield($ac, $action)) {}
-# 	$action =~ /^sh ([\d-]+)$/) { # change shield state
-# 	  my $adjDX = $characters[$act_char]->{adjDX};
-# 	  print $characters[$act_char]->{NAME}, $1>0 ? ' un' : ' ', "readies shield -- adjDX $adjDX --> ", $adjDX+$1, "\n";
-	# 	  $characters[$act_char]->{adjDX} += $1;	}
-	elsif ($action =~ /^d (.+)$/) { # Disbelieve
-	  my $who = who($1);
-	  if ($who eq 'x') {
-# 	    print "invalid character specification $1\n";
-	    next;
-	  }
-	  $characters[$who]->{DEAD} = 1;
-	  $acted[$who] = 1;
-	  last;
-	} # disbelieve
-	elsif (!$action) { last; } # exits action query for this character
-	else { print "Unrecognized action $action\n"; }
-      } # what happened during $act_char's action
-      $acted[$act_char] = 1;
-#     } # loop over ties
-#     delete $dexes{$dex};
+	# Reaction to Injury
+	print "$damage ST damage to $dc->{NAME}\n";
+	$dc->{STrem} -= $damage;
+	my $old_turn_damage = $turn_damage[$injuredi];
+	$old_turn_damage = 0 unless defined $old_turn_damage;
+	$turn_damage[$injuredi] += $damage;
+	print "$dc->{NAME} has taken $turn_damage[$injuredi] damage so far this turn, has $dc->{STrem} ST remaining\n";
+	my $turn_damage = $turn_damage[$injuredi];
+	if ($turn_damage >= $dc->{STUN} && $dc->{StunTurn} <= $turn) {
+	  print "$dc->{NAME} is stunned\n";
+	  $dc->{StunTurn} = $turn+2;
+	  $dxinj[$injuredi] -= 2;
+	}
+	$debug && print "turn_damage=$turn_damage  FALL=$dc->{FALL}  old_turn_damage=$old_turn_damage\n";
+	if ($turn_damage >= $dc->{FALL} && $old_turn_damage < $dc->{FALL}) {
+	  print "$dc->{NAME} falls down\n";
+	  $acted[$injuredi] = 1;
+	}
+	if ($dc->{STrem} <4 && $dc->{STrem}+$damage >3) {
+	  print "$dc->{NAME} is in bad shape...\n";
+	  ++$dc->{BAD};
+	  $dxinj[$injuredi] -= 3;
+	}
+	if ($dc->{STrem} <2) {
+	  $dc->{DEAD} = 1;
+	  if ($dc->{STrem} == 1) {print "$dc->{NAME} falls unconscious\n";}
+	  else { print "$dc->{NAME} dies\n"; }
+	  $acted[$injuredi] = 1;
+	}
+	last; # exit from while (1) action query loop
+      } # did damage
+      elsif ($action =~ /^(.+) (\d+) (\d+)$/) { # Create being
+	print "$1 created with ST $2 adjDX $3\n";
+	print "Animals get automatic disbelieve roll\n";
+	# Not too sure how to handle this.  Will write explicit code for now, but should put into function which is shared with 'Read parties' code above. (29jul021)
+	$characters[$n]->{NAME} = $1;
+	$characters[$n]->{ST} = $2;
+	$characters[$n]->{STrem} = $2;
+	$characters[$n]->{adjDX} = $3;
+	$characters[$n]->{PLAYER} = $characters[$act_char]->{NAME};
+	$characters[$n]->{PARTY} = $characters[$act_char]->{PARTY};
+	push @dxmod, 0;
+	push @dxinj, 0;
+	character_prep($n++);
+	&displayCharacters;
+	last; # always last after successful action result
+      } # create being
+      elsif (shield($ac, $action)) { last; }
+      elsif ($action =~ /^d (.+)$/) { # Disbelieve
+	my $who = who($1);
+	next if $who eq 'x';
+	$characters[$who]->{DEAD} = 1;
+	$acted[$who] = 1;
+	last;
+      } # disbelieve
+      elsif ($action =~ /^a (.+) (-?\d+)$/) {
+	my $targeti = who($1);
+	next if $targeti eq 'x';
+	$dxmod[$targeti] += $2;
+      } # DX mod for this turn only, e.g. from Rope spell
+      elsif (!$action) { last; } # exits action query for this character
+      else { print "Unrecognized action $action\n"; }
+    } # what happened during $act_char's action
+    $acted[$act_char] = 1;
   } # loop over actors
-}
+} # main loop over turns
+
 
 
 # Change shield state
 # pass char ref and input string
 # returns true if input changes shield state
 sub shield {
-#   my $whoi = shift;
   my $c = shift;
   my $input = shift;
 
   if ($input =~ /^sh ?([\d-]+)$/) { # change shield state
-#     my $c = $characters[$whoi];
     my $adjDX = $c->{adjDX};
     print $c->{NAME}, $1>0 ? ' un' : ' ', "readies shield -- adjDX $adjDX --> ", $adjDX+$1, "\n";
     $c->{adjDX} += $1;
@@ -838,6 +766,6 @@ sub who {
 #     return $s;
   #   }
   # It would be nice to handle errors directly here somehow. (28aug021)
-  print "Invalid character specification $s\n";
+  print "Invalid character specification '$s'\n";
   'x'; # should be an invalid array index
 }
