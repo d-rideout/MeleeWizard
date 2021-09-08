@@ -1,5 +1,4 @@
 #### Urgent:
-* 'f' option to be finished with movement phase (6sep021)
 * Catch Ctrl-C, so that it does not clobber the log file?  Or save a backup somehow?  It does not get written if I have to C-C out due to a bug... (6sep021)
 * May be nice to keep track of Rope deduction for user!  It can get complicated. (4sep021)
   sp2 r <who>
@@ -235,3 +234,4 @@ Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
   - ACTUALLY I DID THIS ALL WRONG!  tHIS SHOULD BE A REGULAR ACTION!  sO A ROPE SPELL ON X WOULD BE: "sp2: d x -2" (2sep021)
   - THOUGH THERE IS ALSO THE "sh" ACTION FOR THIS.  hMM...
     The user can make a 'permanent' change with "sh" or a this-turn-only change with "a". (2SEP021)
+* 'f' option to be finished with movement phase (6sep021)

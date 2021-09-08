@@ -677,16 +677,12 @@ sub movement {
   print "\nInitiative order:\n";
   my @order;
   my $prev_roll;
-#   my $rank;
   my @moved; # who has moved so far
   foreach my $i (sort {$roll[$a] <=> $roll[$b]} 0..$#roll) {
     my $roll = $roll[$i];
     if (defined $prev_roll && $prev_roll == $roll) { die "Roll collision!\n"; }
     else { $prev_roll = $roll; }
-#     unless ($characters[$i]->{DEAD}) {
-#     print ++$rank, " $characters[$i]->{NAME}\n";
     print " $ent[$i]\n";
-#     } else { $moved[$i] = 1; }
     push @order, $i;
   }
 
@@ -735,13 +731,14 @@ sub movement {
     } else {
       $debug && print "order[$i]=$order[$i] last=$last\n";
 #       my $move = query('d', "$characters[$order[$i]]->{NAME} (m)ove, or (D)efer");
-      my $move = query('d', "$ent[$order[$i]] (m)ove, or (D)efer");
+      my $move = query('d', "$ent[$order[$i]] (m)ove, (D)efer, (f)inished");
       if ($move eq 'm') {
 	$moved[$order[$i]] = 1;
 	--$last if $i==$last;
 	$i = 0;
       }
       elsif ($move eq 'd') { ++$i; }
+      elsif ($move eq 'f') { last; }
       else { print "unrecognized response [$move]\n"; }
     }
     last if $last<0;
