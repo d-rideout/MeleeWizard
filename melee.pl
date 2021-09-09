@@ -24,6 +24,9 @@ my $debug = 0; # 1 ==> max debug output
 my $initiative = 'c'; # c ==> character-based; p ==> party-based
                       # l ==> pLayer-based; s ==> 'side-based
 
+# Catch signals
+$SIG{INT} = sub { print "\nINT signal received, exiting.\n"; close LOG; exit; };
+
 # Check settings
 die "Side-based initiative is not implemented yet\n" unless $initiative =~ /^[cpl]$/;
 # die "Only character- party-based initiative is currently implemented\n" unless $initiative =~ /^[cpl]$/;
