@@ -1,20 +1,31 @@
 # Melee/Wizard Turn Sequence Tool - User & Maintenance Manual
 
-## User
+## User Manual
 
-filename is name of 'party'
+Party file arguments are described in the README.md.
 
 The "Overwrite log file? (interrupt (Ctrl-C) if not!)" query is simply a last
-chance to avoid clobbering the current log file.  Just press enter unless you
-do not want to clobber the existing log file.
+chance to avoid clobbering the current log file.  Press enter to proceed.  To
+avoid clobbering the existing log file, interrupt the program by pressing
+Ctrl-C (or however you abort the program on your system).
 
-We are starting with character-based initiative, rather than player-based or
+The code defaults to character-based initiative, rather than player-based or
 side-based, as it suggests in the rules.  This will be substantially more
 complicated, but also substantially more realistic?
-Does the computer should make it managable?  Is it fun?
-Yes, I think so!  Though please hit 'm' unless there is some substantial reason not to.
+Try to err on the side of hitting 'm' unless there is some substantial reason not to, to make the movement phase a little less complicated.
+If it is too complicated for you, change the `$initiative` setting at the top of `melee.pl` to `p` for party-based or `l` for pLayer-based initiative.
 
-## Maintenance
+### Commands
+command|description
+-------|-----------
+u<n> | undo <n> previous entries
+? | list 'global' commands (valid at every prompt\*)
+... | all are documented briefly in the program output
+
+\* except the first 'Overwrite log file?' prompt.
+
+
+## Maintenance Manual
 
 ### Data Structures
 
@@ -35,7 +46,7 @@ PLAYER | who plays this character (created beings are played by the character wh
 `NAMEKEY` | Any extension of this string will refer to this character.
 `BAD` | STrem has been brought to <=3 by injuries
 
-`%hkeys` 'header keys'  The above keys, with value 1 if they can appear in a party file.
+`%hkeys` 'header keys':  The above keys, with value 1 if they can appear in a party file.
 
 ### Query User
 
@@ -57,7 +68,7 @@ Is this too complicated?  It allows great flexibility in the interpretation of t
 
 ### adjDX Order
 
-#### old scheme:
+<!-- #### old scheme:
 `@dex` is adjDX of each character, computed after Considerations
 takes into account reactions to injury
 [deprecate I think]
@@ -76,12 +87,13 @@ takes into account reactions to injury
 
 `$newdex` is new dex after new injuries
 
-#### new scheme:
+#### new scheme: -->
 * `@dxmod` misc modifiers to DX
-* `@dxinj` DX modifiers due to injury.  Compute at beginning of &act
+* `@dxinj` DX modifiers due to injury.  Compute at beginning of &act.
 * Both must be maintained.
 
 DX = adjDX + @dxmod + @dxinj
 
+<!--
 I think it also makes sense to change the &act API to take an array which is true if that char is acting.  So the array index is the char index.
-No, I decided to do it the old way.  Note that it is often called with a single character, for pole and second bow attacks. (6sep021)
+No, I decided to do it the old way.  Note that it is often called with a single character, for pole and second bow attacks. (6sep021) -->

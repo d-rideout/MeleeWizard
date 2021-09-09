@@ -26,15 +26,16 @@ have to keep all these details in your head.
 
 ## Instructions
 
-A battle involves two or more *sides*.  Each side if composed of *parties*,
+A battle involves two or more *sides*.  Each side is composed of *parties*,
 which are groups of related *characters*.  Usually a side, especially that of
 the players, has only a single party, but not always.  Each *player* controls
 a number of characters, usually all within a single party.
 
 Before starting the battle, create a file for each party, which details all
 characters in the party, including who is playing them, their current ST, and
-their 'usual' adjusted DX.  (You will have to declare any deviation from this
-adjDX every turn.)
+their 'usual' adjusted DX.  (You will have to declare most deviations from this
+adjDX every turn, though some are taken care of automagically, such as those
+from reactions to injury.)
 There are two sample party files in the `parties/` folder.
 They are tab-separated-value files: you can edit them with your favorite
 spreadsheet program or text editor.
@@ -54,9 +55,7 @@ $ ./melee.pl -l coyotes fair2midlin
 ```
 it reads the seed and enters all commands from this file, so that you can
 restart the battle exactly where you left off.  (Note that, before
-restarting, you can edit the `log` file -- it is a simple text file.  Thus
-you can undo any previous entries if you wish.  I plan to make it easier to
-undo entries at some point.)
+restarting, you can edit the `log` file -- it is a simple text file.)
 
 For the moment you can control the initiative method by setting the
 `$initiative` variable at the top of `melee.pl`.
