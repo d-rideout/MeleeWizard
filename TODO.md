@@ -1,12 +1,7 @@
 #### Urgent:
-* May be nice to keep track of Rope deduction for user!  It can get complicated. (4sep021)
-  sp2 r <who>
-  ->{ROPE} holds turn of rope, delete ->{ROPE} if not roped
-  then put rope minus somewhere, as injury or so (4sep021)
-
 * mewizseq? meWizSeq? MeWizSeq? combat_sequence? wizlee? melwizseq?
   tftseq mwseq ... (25aug021)
-  tftcomseq comseq combseq mewcosq MeWCoSq?
+  tftcomseq comseq combseq mewcosq MeWCoSq?  mewsq?
   Better to start with lower case? (7sep021)
 
 * This tool will be helpful in large battles.
@@ -85,8 +80,18 @@
       keep track of Blur spells and the like.  Then there will have to be a global option to
       change one's mind.
       Though such commands will likely have to be recorded in the log! (26aug021)
+      
+* default interface to &query is a little silly.  Why not just return the
+  empty string as the default always?  An issue is if a user actually tries
+  to enter the default value.  Maybe that will be easier to catch within
+  &query itself.  And maybe ever better yet -- forcucate the user into just
+  pressing Enter for default, to ease pressure on the response namespace.  (I
+  am thinking about move specifications.  I do not expect much agreement on
+  the best approach for that...) (9sep021)
 
 #### Non-urgent:
+* Check if sp2 preceeds r action? (Rope spell)? (10sep021)
+* All these spells will be confusing to keep track of.  Need a more generic spell action. (10sep021)
 * Global commands will trump local ones.  So far this is not a problem, but
   should global commands start with a * or something? +? /? (25aug021)
 * Specify space separated list of surprised parties, needs generic version of
@@ -235,3 +240,9 @@ Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
     The user can make a 'permanent' change with "sh" or a this-turn-only change with "a". (2SEP021)
 * 'f' option to be finished with movement phase (6sep021)
 * Catch Ctrl-C, so that it does not clobber the log file?  Or save a backup somehow?  It does not get written if I have to C-C out due to a bug... (6sep021)
+* May be nice to keep track of Rope deduction for user!  It can get complicated. (4sep021)
+  sp2 r <who>
+  ->{ROPE} holds turn of rope, delete ->{ROPE} if not roped
+  then put rope minus somewhere, as injury or so (4sep021)
+  How do we feel if someone leaves off the sp2?  Maybe they have a 'wand of roping' or something -- may be best to allow maximal flexibility.  Maybe just give a warning for now.
+  u <who> to unrope someone (9sep021)

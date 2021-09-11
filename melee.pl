@@ -57,7 +57,7 @@ die "Usage: melee.pl [-l] <party 1> <party 2> <party 3> ...\n" .
 # Data structures
 my @characters; # val hash with below keys
 my %charkeys; # key namekey val index into @characters
-my %hkeys = (NAME=>1, ST=>1, STrem=>1, adjDX=>1, PLAYER=>1, PARTY=>0, STUN=>0, FALL=>0, StunTurn=>0, DEAD=>0, NAMEKEY=>0, BAD=>1);
+my %hkeys = (NAME=>1, ST=>1, STrem=>1, adjDX=>1, PLAYER=>1, PARTY=>0, STUN=>0, FALL=>0, StunTurn=>0, DEAD=>0, NAMEKEY=>0, BAD=>1, ROPE=>0);
 # STUN how much damage causes stun
 # StunTurn becomes unstunned on this turn
 # FALL how much damage causes fall
@@ -250,10 +250,12 @@ while (1) {
 #     $dex[$i] += $dexadj[$i] if $dexadj[$i]; # (it might be undefined!)
 
     # Reactions to injury
-    $dxinj[$i] = 2 if $turn < $chr->{StunTurn};
+    $dxinj[$i] = -2 if $turn < $chr->{StunTurn};
 #     $dex[$i] -= 3 if $chr->{STrem} < 4;
     # I have to keep track of the two different types of damage for wizards (7aug021)
     $dxinj[$i] -= 3 if $chr->{BAD} && $chr->{STrem} < 4;
+    my $ropeTurn = $chr->{ROPE};
+    $dxinj[$i] -= 2 + $turn - $ropeTurn if $ropeTurn;
   }
 
   # Act
@@ -332,7 +334,7 @@ sub displayCharacters {
 sub query {
   my $default = shift;
   my $query = shift;
-  my %global_options = (q=>'n', '?'=>'n', u=>'n'); #, d=>l); # l ==> log; n ==> no log
+  my %global_options = (q=>'n', '?'=>'n', ud=>'n'); #, d=>l); # l ==> log; n ==> no log
 
   while (1) {
     #   print "Turn $turn $phase: ", shift, ' or (q)uit> ';
@@ -346,8 +348,10 @@ sub query {
     else { chomp($input = <STDIN>); }
     #   print "input is [$input]\n";
     #   print LOG "$input\n" unless $input eq 'q';
-    my $cmd = substr $input, 0, 1;
-    unless ($global_options{$cmd} && $global_options{$cmd} eq 'n') {
+#     my $cmd = substr $input, 0, 1;
+    my @cmd = split / /, $input;
+    my $cmd = $cmd[0];
+    unless ($cmd && $global_options{$cmd} && $global_options{$cmd} eq 'n') {
       print LOG "$input\n";
       ++$ncommands;
     }
@@ -356,7 +360,7 @@ sub query {
     # Process global options
     if ($global_options{$cmd}) {
       die "Finished.\n" if $input eq 'q'; # Do we need to exit instead? (4sep021)
-      if ($input eq '?') { print '(u <n>) to undo n previous entries;
+      if ($input eq '?') { print '(ud <n>) to undo n previous entries;
 ' .
 #(d <who> <DX mod>) to adjust <who>\'s DX by <DX mod>;
 'or (q) to quit
@@ -367,7 +371,7 @@ sub query {
 # 	$c- ... This is really complicated.  I wonder if I should recompute the entire ordering for each character, since anything might change at any moment...
 # 	print "$c->{NAME} adjDX ", $2>=0 ? '+':'', "$2 --> $c->{adjDX}
 # 	print "DX modifications during another characters action (e.g. due to a Rope, Blur, Clumsiness spell) is not implemented yet.\n"; }
-      elsif ($input =~ /^u ?(\d+)$/) {
+      elsif ($input =~ /^ud (\d+)$/) {
 	print "undoing previous $1 commands and restarting...\n\n";
 	if ($1>$ncommands) {
 	  print "There have only been $ncommands commands so far!\n";
@@ -543,22 +547,24 @@ sub act {
   
   # Actions
   &displayCharacters;
-  print "Actions:\n",
+  print "Actions:\n", # in alphabetical order
       "* [sp<ST>] <who>-<dam>\t(e.g. c-4 for 4 damage to character c after armor)\n";
-  print "* [sp<ST>] sh<dex adj>\tready or unready shield, which changes base adjDX\n",
-      "\t\t\t(e.g. 'sh -2' to ready a tower shield)\n",
-      "* sp<ST> <name> <ST> <adjDX>\tcreate being\n",
+  print "* sp<ST> a <who> <DX mod>\tspell which modifies <who>\'s adjDX by <DX mod>\n",
+      "\t(e.g. 'sp3 a x -6' for Clumsiness spell on x (remember to put a DX adjustment\n\t each turn on x, during action considerations)\n",
+      "* sp<ST> <name> <ST> <adjDX>\tcreate being\n", # create being
       "* d <who>\t\t\tdisbelieve <who>\n",
-      "* sp<ST> a <who> <DX mod>\tspell which modifies <who>\'s adjDX by <DX mod>\n",
-      "\t(e.g. 'sp2 a x -2' for Rope spell on x (remember to put a DX adjustment\n\t each turn on x, during action considerations)\n",
+      "* sp2 r <who>\t\t\tcast Rope spell on <who>\n",
+      "* [sp<ST>] sh<dex adj>\tready or unready shield, which changes base adjDX\n",
+	  "\t\t\t(e.g. 'sh -2' to ready a tower shield)\n",
+      "* ur <who>\t\tun-Rope <who>\n",
       "  Prefix with 'sp<ST>' if result is from spell of ST cost <ST>.\n",
-      "  (Note that spell can have no result, but still cost ST.)\n" if $phase =~ /n/;
+      "  (Note that spell can have no result, but still cost ST.)\n" if $phase =~ /normal/;
   print '-' x 79, "\n";
   my $act_char;
   while (defined ($act_char = whosnext(@chars))) {
     my $ac = $characters[$act_char]; # acting character
     next if $ac->{DEAD};
-    print "$ac->{NAME}: ST $ac->{ST} ($ac->{STrem})  adjDX $ac->{adjDX} -", -$dxinj[$act_char], $dxmod[$act_char]<0?'':' +', "$dxmod[$act_char] = $maxdx";
+    print "$ac->{NAME}: ST $ac->{ST} ($ac->{STrem})  adjDX $ac->{adjDX} ", $dxinj[$act_char], $dxmod[$act_char]<0?' ':' +', "$dxmod[$act_char] = $maxdx";
     print " (stunned until turn $ac->{StunTurn})" if $turn < $ac->{StunTurn};
     # Stunned 'through this turn' or '... next turn'? (12aug021)
     print "\n";
@@ -566,14 +572,16 @@ sub act {
     # Action query loop for character with index $act_char
     while (1) {
       my $action = query('', "Action result? (N)o");
-      $debug && print "act_char=$act_char acted=$acted[$act_char]\n";
+      $debug && print "act_char=$act_char action=[$action]\n";
       # Spell cost
       if ($action =~ s/^sp ?(\d+)\s*//) {
 	$ac->{STrem} -= $1;
 	print "$ac->{NAME} casts spell, has $ac->{STrem} ST remaining\n";
       }
-      # Result of action
-      if ($action =~ /(.+) ?- ?(\d+)/) { # Hit!
+      # Result of action (in alphabetical order after Hit-for-damage)
+      if (shield($ac, $action)) { last; } # must precede Hit
+      elsif ($action =~ /(.+) ?- ?(\d+)/) { # Hit!
+	$debug && print "Hit!\n";
 	my $injuredi = who($1);
 	next if $injuredi eq 'x';
 	print "Injuring self!\n" if $injuredi == $act_char;
@@ -613,6 +621,13 @@ sub act {
 	}
 	last; # exit from while (1) action query loop
       } # did damage
+      elsif ($action =~ /^a (.+) (-?\d+)$/) {  # adjust DX
+	my $targeti = who($1);
+	next if $targeti eq 'x';
+	$dxmod[$targeti] += $2;
+	print "$characters[$targeti]->{NAME} adjDX ", $2<0?'':'+', "$2\n";
+	last;
+      } # DX mod for this turn only, e.g. from Clumsiness spell
       elsif ($action =~ /^(.+) (\d+) (\d+)$/) { # Create being
 	print "$1 created with ST $2 adjDX $3\n";
 	print "Animals get automatic disbelieve roll\n";
@@ -629,19 +644,29 @@ sub act {
 	&displayCharacters;
 	last; # always last after successful action result
       } # create being
-      elsif (shield($ac, $action)) { last; }
       elsif ($action =~ /^d (.+)$/) { # Disbelieve
 	my $who = who($1);
 	next if $who eq 'x';
 	$characters[$who]->{DEAD} = 1;
 	$acted[$who] = 1;
+	print "Disbelieve $characters[$who]->{NAME}\n";
 	last;
-      } # disbelieve
-      elsif ($action =~ /^a (.+) (-?\d+)$/) {
-	my $targeti = who($1);
-	next if $targeti eq 'x';
-	$dxmod[$targeti] += $2;
-      } # DX mod for this turn only, e.g. from Rope spell
+      }
+      elsif ($action =~ /^r (.+)$/) { # Rope spell
+	my $whoi = who($1);
+	next if $whoi eq 'x';
+	$characters[$whoi]->{ROPE} = $turn;
+	$dxinj[$whoi] -= 2;
+	print "Cast Rope on $characters[$whoi]->{NAME}\n";
+	last;
+      }
+      elsif ($action =~ /^ur (.+)$/) { # un-Rope
+	my $whoi = who($1);
+	next if $whoi eq 'x';
+	delete $characters[$whoi]->{ROPE};
+	print "un-Rope $characters[$whoi]->{NAME}\n";
+	last;
+      }
       elsif (!$action) { last; } # exits action query for this character
       else { print "Unrecognized action $action\n"; }
     } # what happened during $act_char's action
