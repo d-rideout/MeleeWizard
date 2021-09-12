@@ -1,9 +1,4 @@
 #### Urgent:
-* mewizseq? meWizSeq? MeWizSeq? combat_sequence? wizlee? melwizseq?
-  tftseq mwseq ... (25aug021)
-  tftcomseq comseq combseq mewcosq MeWCoSq?  mewsq?
-  Better to start with lower case? (7sep021)
-
 * This tool will be helpful in large battles.
   Note: [meleewizards.com](http://meleewizards.com)! (5aug021)
   e.g. allows use of original rules on reactions to injury (29aug021)
@@ -13,8 +8,8 @@
     to defer.  'Can only defer if have a good reason to wait' sort of thing.
     (29aug021)
 
-
 #### Thoughts:
+* https://directory.fsf.org/wiki/Free_Software_Directory:Requirements (21apr021)
 * Restore "dex x:" output? (6sep021)
 * Record sequence of moves?  2d coordinates should be easier than origin-based.
   The standard Melee map has a nice central axis.  Could be y=0, x=\pm 7.
@@ -246,3 +241,7 @@ Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
   then put rope minus somewhere, as injury or so (4sep021)
   How do we feel if someone leaves off the sp2?  Maybe they have a 'wand of roping' or something -- may be best to allow maximal flexibility.  Maybe just give a warning for now.
   u <who> to unrope someone (9sep021)
+* mewizseq? meWizSeq? MeWizSeq? combat_sequence? wizlee? melwizseq?
+  tftseq mwseq ... (25aug021)
+  tftcomseq comseq combseq mewcosq MeWCoSq?  mewsq?
+  Better to start with lower case? (7sep021)

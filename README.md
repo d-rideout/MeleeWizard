@@ -43,22 +43,23 @@ spreadsheet program or text editor.
 Run the tool however you launch Perl programs on your computer.  For
 example, from the Linux command line:
 ```
-$ ./melee.pl coyotes fair2midlin
+$ cd <MeleeWizard checkout directory>
+$ ./mewcosq coyotes fair2midlin
 ```
-(melee.pl looks for your party files in `parties/` if you do not specify a
+(mewcosq looks for your party files in `parties/` if you do not specify a
 full path to them.)
 
-melee.pl records all input in a `log` file, along with the random number generator
+mewcosq records all input in a `log` file, along with the random number generator
 seed.  If you run with the `-l` option, e.g.
 ```
-$ ./melee.pl -l coyotes fair2midlin
+$ ./mewcosq -l coyotes fair2midlin
 ```
 it reads the seed and enters all commands from this file, so that you can
 restart the battle exactly where you left off.  (Note that, before
 restarting, you can edit the `log` file -- it is a simple text file.)
 
 For the moment you can control the initiative method by setting the
-`$initiative` variable at the top of `melee.pl`.
+`$initiative` variable at the top of `mewcosq`.
 
 Please submit issue tickets if you encounter any problems or wish to suggest
 new features.
@@ -73,4 +74,4 @@ __File__ | __Description__
 `LICENSE` | GPLv3
 `TODO.md` | some plans for future development
 `map.pl`  | an initial attempt to build an ASCII hex map
-`melee.pl` | the main program
+`mewcosq` | the main program
