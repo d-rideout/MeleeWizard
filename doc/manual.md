@@ -2,7 +2,7 @@
 
 ## User Manual
 
-Party file arguments are described in the README.md.
+Party file arguments are described in the [README.md](../README.md) file.
 
 The "Overwrite log.bak file? (interrupt (Ctrl-C) if not!)" query is simply a
 last chance to avoid clobbering the backup log file.  Press enter to
@@ -13,12 +13,12 @@ The code defaults to character-based initiative, rather than player-based or
 side-based, as it suggests in the rules.  This will be substantially more
 complicated, but also substantially more realistic?
 Try to err on the side of hitting 'm' unless there is some substantial reason not to, to make the movement phase a little less complicated.
-If it is too complicated for you, change the `$initiative` setting at the top of `melee.pl` to `p` for party-based or `l` for pLayer-based initiative.
+If it is too complicated for you, change the `$initiative` setting at the top of `mewcosq` to `p` for party-based or `l` for pLayer-based initiative.
 
 ### Commands
 command|description
 -------|-----------
-u<n> | undo <n> previous entries
+ud <n> | undo <n> previous entries
 ? | list 'global' commands (valid at every prompt\*)
 ... | all are documented briefly in the program output
 
@@ -36,8 +36,9 @@ u<n> | undo <n> previous entries
 `NAME` | name of character
 `ST` | strength of character
 `STrem` | strength remaining
+`DX` | base DX of character
 `adjDX` | 'core' adjusted DX (e.g. after armor and shield deductions)
-PLAYER | who plays this character (created beings are played by the character which created them!)
+`PLAYER` | who plays this character (created beings are played by the character which created them!)
 `PARTY` | In which party is this character?
 `STUN` | How must ST damage in one turn will stun this character?
 `FALL` | How must ST damage in one turn will cause this character to fall?

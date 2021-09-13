@@ -1,6 +1,6 @@
-NAME	PLAYER	ST	adjDX
-D	Dad	9	12
-BlackC	Dad	9	12
-# V	Dad	9	12
+NAME	PLAYER	ST	DX	adjDX
+D	Dad	9	12	12
+BlackC	Dad	9	12	12
+# V	Dad	9	12	12
 # Lines beginning with a '#' are ignored.
 # Maybe two is enough of a challenge...

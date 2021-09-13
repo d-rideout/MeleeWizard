@@ -327,8 +327,9 @@ sub displayCharacters {
 # Interact with user
 # args: default value, query string
 sub query {
-  my $default = shift;
-  my $query = shift;
+#   my $default = shift;
+#   my $query = shift;
+  my ($default, $query) = (@_);
   my %global_options = (q=>'n', '?'=>'n', ud=>'n'); #, d=>l); # l ==> log; n ==> no log
 
   while (1) {
@@ -457,9 +458,10 @@ sub character_prep {
 
 # Increments namekey (and all others implied by the new addition
 sub extend_namekey {
-  my $whoi = shift;    # character index to extend
-  my $namekey = shift; # namekey so far I guess
-  my $nextLetter = shift; # root in %namekeys ?
+#   my $whoi = shift;    # character index to extend
+#   my $namekey = shift; # namekey so far I guess
+#   my $nextLetter = shift; # root in %namekeys ?
+  my ($whoi, $namekey, $nextLetter) = (@_);
   
   my $name = $characters[$whoi]->{NAME};
   my $lkey = length $namekey;
@@ -704,9 +706,10 @@ sub act {
 # pass char ref and input string
 # returns true if input changes shield state
 sub shield {
-  my $c = shift;
-  my $input = shift;
-
+#   my $c = shift;
+#   my $input = shift;
+  my ($c, $input) = (@_);
+  
   if ($input =~ /^sh ?([\d-]+)$/) { # change shield state
     my $adjDX = $c->{adjDX};
     print $c->{NAME}, $1>0 ? ' un' : ' ', "readies shield -- adjDX $adjDX --> ", $adjDX+$1, "\n";

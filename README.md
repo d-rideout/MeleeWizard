@@ -22,7 +22,7 @@ have to keep all these details in your head.
 
 **Note:** I have the (Advanced) version published by Metagaming in 1982.  I
   do not know if the rules for the more modern version published by Steve
-  Jackson Games are the same.  See the [wiki](https://github.com/d-rideout/MeleeWizard/wiki) for some comments on `house rules'.
+  Jackson Games are the same.  See the [wiki](https://github.com/d-rideout/MeleeWizard/wiki) for some comments on 'house rules'.
 
 ## Instructions
 
@@ -64,13 +64,15 @@ For the moment you can control the initiative method by setting the
 Please submit issue tickets if you encounter any problems or wish to suggest
 new features.
 
+See the [manual](doc/manual.md) for some more information.
+
 ## Files
 
 <!-- trying to get it to underline column headers below -->
 __File__ | __Description__
 ---- | -----------
 `doc/to_hit_rolls.pl` | generates to-hit probability tables for 3 and 4 dice
-`parties/` | put your parties here
+`parties/` | contains two sample party files.  Put your own party files here.
 `LICENSE` | GPLv3
 `TODO.md` | some plans for future development
 `map.pl`  | an initial attempt to build an ASCII hex map
