@@ -4,9 +4,9 @@
 
 Party file arguments are described in the README.md.
 
-The "Overwrite log file? (interrupt (Ctrl-C) if not!)" query is simply a last
-chance to avoid clobbering the current log file.  Press enter to proceed.  To
-avoid clobbering the existing log file, interrupt the program by pressing
+The "Overwrite log.bak file? (interrupt (Ctrl-C) if not!)" query is simply a
+last chance to avoid clobbering the backup log file.  Press enter to
+proceed.  To avoid clobbering the log file, interrupt the program by pressing
 Ctrl-C (or however you abort the program on your system).
 
 The code defaults to character-based initiative, rather than player-based or

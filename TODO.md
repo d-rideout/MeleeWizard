@@ -1,4 +1,7 @@
 #### Urgent:
+* TFT-style xp, as in Death Test 2 (11sep021)
+* Rethink HTH rules, based on item 91 in Death Test 2 (12sep021)
+* xp for time spent in battle, as lower bound at least (12sep021)
 * This tool will be helpful in large battles.
   Note: [meleewizards.com](http://meleewizards.com)! (5aug021)
   e.g. allows use of original rules on reactions to injury (29aug021)
@@ -9,6 +12,12 @@
     (29aug021)
 
 #### Thoughts:
+* Save xp earnings in adventure file? (12sep021)
+* Make DX & xp computation optional? (12sep021)
+* Add (IQ-8) theta(IQ-8) to xp value of kill? (12SEP021)
+* Does figure have to die to get xp value?  What about unconscious? (12sep021)
+* initiative mods, like someone winning? (11sep021)
+* Process DeathTest1 file (11sep021)
 * https://directory.fsf.org/wiki/Free_Software_Directory:Requirements (21apr021)
 * Restore "dex x:" output? (6sep021)
 * Record sequence of moves?  2d coordinates should be easier than origin-based.
