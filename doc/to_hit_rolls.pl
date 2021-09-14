@@ -18,21 +18,30 @@ use strict;
 use warnings;
 use List::Util qw/sum/;
 
+my %hist2;
 my %hist3;
 my %hist4;
 
 for (my $i=1; $i<7; ++$i) {
   for (my $j=1; $j<7; ++$j) {
+    ++$hist2{sum($i,$j)};
     for (my $k=1; $k<7; ++$k) {
       ++$hist3{sum($i, $j, $k)};
       for my $l (1..6) { ++$hist4{sum($i, $j, $k, $l)}; }}}}
 
 my $sum;
-print "3d6:\n";
+print "2d6:\n";
+print "roll\tnum\tcum\tprob\n";
+foreach (sort {$a <=> $b} keys %hist2) {
+  $sum += $hist2{$_};
+  printf "$_\t$hist2{$_}\t$sum\t%5.1f\n", 100*$sum/36;
+}
+
+$sum = 0;
+print "\n3d6:\n";
 print "roll\tnum\tcum\tprob\n";
 foreach (sort {$a <=> $b} keys %hist3) {
   $sum += $hist3{$_};
-#   print "$_\t$hist{$_}\t$sum\t", $sum/216, "\n";
   printf "$_\t$hist3{$_}\t$sum\t%5.1f\n", 100*$sum/216;
 }
 
@@ -41,7 +50,6 @@ print "\n4d6:\n";
 print "roll\tnum\tcum\tprob\n";
 foreach (sort {$a <=> $b} keys %hist4) {
   $sum += $hist4{$_};
-#   print "$_\t$hist{$_}\t$sum\t", $sum/216, "\n";
   printf "$_\t$hist4{$_}\t$sum\t%5.1f\n", 100*$sum/1296;
 }
 
