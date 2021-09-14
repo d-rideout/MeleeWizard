@@ -1,7 +1,7 @@
 #### Urgent:
-* TFT-style xp, as in Death Test 2 (11sep021)
-* Rethink HTH rules, based on item 91 in Death Test 2 (12sep021)
 * xp for time spent in battle, as lower bound at least (12sep021)
+* Rethink HTH rules, based on item 91 in Death Test 2 (12sep021)
+  Rethink House Rules presentation? (13sep021)
 * This tool will be helpful in large battles.
   Note: [meleewizards.com](http://meleewizards.com)! (5aug021)
   e.g. allows use of original rules on reactions to injury (29aug021)
@@ -17,6 +17,10 @@
 * Add (IQ-8) theta(IQ-8) to xp value of kill? (12SEP021)
 * Does figure have to die to get xp value?  What about unconscious? (12sep021)
 * initiative mods, like someone winning? (11sep021)
+  Maybe just start with commentary about conversion from d6 to [0,1)
+  initiative.  Note conditioning on two dice being unequal complicates
+  discussion!  +1 initiative \ne "need to exceed other party's initiative by
+  more than 1"! (13sep021)
 * Process DeathTest1 file (11sep021)
 * https://directory.fsf.org/wiki/Free_Software_Directory:Requirements (21apr021)
 * Restore "dex x:" output? (6sep021)
@@ -254,3 +258,4 @@ Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
   tftseq mwseq ... (25aug021)
   tftcomseq comseq combseq mewcosq MeWCoSq?  mewsq?
   Better to start with lower case? (7sep021)
+* TFT-style xp, as in Death Test 2 (11sep021)

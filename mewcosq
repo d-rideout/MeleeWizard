@@ -18,6 +18,7 @@ use strict;
 use warnings;
 use List::Util qw/max/;
 # use List::MoreUtils qw/firstidx any/;
+my $startTime = time;
 
 # Setting flags
 my $debug = 0; # 1 ==> max debug output
@@ -93,13 +94,14 @@ foreach my $partyfile (@ARGV) {
 
     # Check some field values
     my $chr = $characters[$n];
-    die "Please provide adjDX for all characters.\n"
-	unless $characters[$n]->{adjDX};
+    print "Warning: adjacent spaces is name '$chr->{NAME}'. Tab rendered as spaces?\n"
+	if $chr->{NAME} =~ /  /;
+    die "Please provide adjDX for $chr->{NAME}.\n" unless $chr->{adjDX};
+    die "Please provide ST for each character.\n" unless $chr->{ST};
+    die "Please provide DX for each character.\n" unless $chr->{DX};
 #     my $nhex = $characters[$n]->{NHEX};
 #     die "Can only handle 1 or 3 hex characters currently\n"
     # 	unless $nhex==1 || $nhex==3;
-    die "Please provide ST for each character.\n" unless $chr->{ST};
-    die "Please provide DX for each character.\n" unless $chr->{DX};
     $characters[$n++]->{PARTY} = $partyfile;
   }
   close FP;
@@ -356,8 +358,8 @@ sub query {
     # Process global options
     if ($global_options{$cmd}) {
       if ($input eq 'q') {
-	print "Battle finished.\n\n";
-	&xp if @xp;
+	print "Battle finished.\n";
+	&xp; # if @xp;
 	exit;
       }
       if ($input eq '?') { print '(ud <n>) to undo n previous entries;
@@ -392,16 +394,23 @@ sub query {
 
 # Output experience points
 sub xp {
-  print "Experience points earned:\n",
+  my $seconds = time - $startTime;
+  print "$seconds seconds of wallclock time passed.\n"; # for now (13sep021)
+  return unless @xp || $seconds>359;
+  my $timexp = int($seconds/720 + .5);
+  
+  print "\nExperience points earned:\n",
         "------------------------\n";
   foreach my $ci (0..$#xp) {
-    next unless $xp[$ci];
+    next unless $xp[$ci] || $timexp;
     print "$characters[$ci]->{NAME}:\n";
     my $tot;
     while (my ($amt, $desc) = splice @{$xp[$ci]}, 0, 2) {
       print "$amt\t$desc\n";
       $tot += $amt;
     }
+    print "$timexp\t$seconds seconds (", int($seconds/60+.5), " minutes) of wallclock time (at least)\n";
+    $tot += $timexp;
     print "$tot\t:Total\n";
   }
 }
@@ -638,10 +647,10 @@ sub act {
 	}
 	# XP value
 	if ($died) {
-	  push @{$xp[$act_chari]}, $damage, "$damage hits on $dc->{NAME}";
-	} else {
 	  push @{$xp[$act_chari]}, $dc->{STrem}+$damage+$dc->{DX},
 	      "killed $dc->{NAME}";
+	} else {
+	  push @{$xp[$act_chari]}, $damage, "$damage hits on $dc->{NAME}";
 	}
 
 	last; # exit from while (1) action query loop
