@@ -1,7 +1,4 @@
-http://meleewizards.com/rules.html
-has some interesting suggestions re rules:
-* ~ last fire missle weapons count as charge attacks in terms of timing.  Seems sorta reasonable.
-* pole weapon charges only do an extra die damage
+# House Rules
 
 Disengagement:
 -------------
@@ -62,3 +59,12 @@ Questions:
   even its own sample combat does not use!  What to make of it?  It weakens
   disengagement a bit, which may be a good thing.  Otherwise high DX figures
   can just dance around lower DX figures... (10sep021)
+
+---
+Rules from Other Houses:
+-----------------------
+[meleewizards.com](http://meleewizards.com/rules.html)
+has some interesting suggestions re rules:
+* ~ last fire missle weapons count as charge attacks in terms of timing.  Seems sorta reasonable.
+* pole weapon charges only do an extra die damage
+Though I am going to try to stick 'as close as possible' to the original rules for starters.

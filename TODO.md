@@ -1,4 +1,5 @@
 #### Urgent:
+* Need to save wallclock time in log file (14sep021)
 * Rethink HTH rules, based on item 91 in Death Test 2 (12sep021)
   - Rethink House Rules presentation? (13sep021)
   - https://docs.github.com/en/communities/documenting-your-project-with-wikis/changing-access-permissions-for-wikis (14sep021)
@@ -10,8 +11,10 @@
   - Maybe add etiquette guidelines?  To press 'm' unless you have a good reason
     to defer.  'Can only defer if have a good reason to wait' sort of thing.
     (29aug021)
+* defer action would be really useful, though complicated... (27aug021)
 
 #### Thoughts:
+* Note stun can stop double shot with bow (14sep021)
 * Save xp earnings in adventure file? (12sep021)
 * Make DX & xp computation optional? (12sep021)
 * Add (IQ-8) theta(IQ-8) to xp value of kill? (12SEP021)
@@ -35,7 +38,6 @@
   (Or can use this facing to describe a hex -- locate hex on x-axis, face in direction, march number of hexes, then rotate facing again.  This is kinda what I mean by an origin-based approach.  It has the advantage of being more generalizable to other maps: All you have to do is select an origin hex and a facing-orientation.) (7sep021)
 
 * worry about character and command namespace collisions? (30aug021)
-* defer action would be really useful, though complicated... (27aug021)
 * expand &query to contain loop which handles errors in syntax and char
   specification, to uniformize its handling! (29aug021)
   - takes array which indicates which slots should be char refs?  
