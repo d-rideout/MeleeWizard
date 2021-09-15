@@ -1,7 +1,7 @@
 #### Urgent:
-* xp for time spent in battle, as lower bound at least (12sep021)
 * Rethink HTH rules, based on item 91 in Death Test 2 (12sep021)
-  Rethink House Rules presentation? (13sep021)
+  - Rethink House Rules presentation? (13sep021)
+  - https://docs.github.com/en/communities/documenting-your-project-with-wikis/changing-access-permissions-for-wikis (14sep021)
 * This tool will be helpful in large battles.
   Note: [meleewizards.com](http://meleewizards.com)! (5aug021)
   e.g. allows use of original rules on reactions to injury (29aug021)
@@ -259,3 +259,4 @@ Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
   tftcomseq comseq combseq mewcosq MeWCoSq?  mewsq?
   Better to start with lower case? (7sep021)
 * TFT-style xp, as in Death Test 2 (11sep021)
+* xp for time spent in battle, as lower bound at least (12sep021)

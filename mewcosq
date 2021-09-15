@@ -52,7 +52,7 @@ if (@ARGV && $ARGV[0] eq '-l') {
   $restart = 1;
   shift @ARGV;
 }
-die "Usage: melee.pl [-l] <party 1> <party 2> <party 3> ...\n" .
+die "Usage: melee.pl [-l] <party 1> [party 2] [party 3] ...\n" .
     "  -l ==> restart from log file\n" unless @ARGV;
 
 # Data structures
