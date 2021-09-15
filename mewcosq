@@ -411,7 +411,7 @@ sub xp {
     }
     print "$timexp\t$seconds seconds (", int($seconds/60+.5), " minutes) of wallclock time (at least)\n";
     $tot += $timexp;
-    print "$tot\t:Total\n";
+    print "$tot\tTotal\n\n";
   }
 }
 
