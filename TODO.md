@@ -1,8 +1,14 @@
 #### Urgent:
-* Need to save wallclock time in log file (14sep021)
+* throw dice, so they are recorded in the log file
+  (could record results of physical dice, or roll my own)
+  keep records in a file, to check statistics.
+  all 1d6 marginals, and nd6 rolls
+  and maybe some day sequences of rolls (nd6 is a first step in that direction)
+  (Can do same for physical dice!)
 * Rethink HTH rules, based on item 91 in Death Test 2 (12sep021)
   - Rethink House Rules presentation? (13sep021)
   - https://docs.github.com/en/communities/documenting-your-project-with-wikis/changing-access-permissions-for-wikis (14sep021)
+* defer action would be really useful, though complicated... (27aug021)
 * This tool will be helpful in large battles.
   Note: [meleewizards.com](http://meleewizards.com)! (5aug021)
   e.g. allows use of original rules on reactions to injury (29aug021)
@@ -11,9 +17,10 @@
   - Maybe add etiquette guidelines?  To press 'm' unless you have a good reason
     to defer.  'Can only defer if have a good reason to wait' sort of thing.
     (29aug021)
-* defer action would be really useful, though complicated... (27aug021)
 
 #### Thoughts:
+* Remove disbelieved figures from forced retreats? (15sep021)
+* Need to distinguish disbelieved figures from dead ones?  Currently disbelieved figure can earn xp if their final STrem is 1.  Is this a problem? (15sep021)
 * Note stun can stop double shot with bow (14sep021)
 * Save xp earnings in adventure file? (12sep021)
 * Make DX & xp computation optional? (12sep021)
@@ -262,3 +269,4 @@ Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
   Better to start with lower case? (7sep021)
 * TFT-style xp, as in Death Test 2 (11sep021)
 * xp for time spent in battle, as lower bound at least (12sep021)
+* Need to save wallclock time in log file (14sep021)

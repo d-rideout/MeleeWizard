@@ -18,7 +18,6 @@ use strict;
 use warnings;
 use List::Util qw/max/;
 # use List::MoreUtils qw/firstidx any/;
-my $startTime = time;
 
 # Setting flags
 my $debug = 0; # 1 ==> max debug output
@@ -116,19 +115,23 @@ foreach my $ci (0..$#characters) { character_prep($ci); }
 # -------------
 my @log;
 my $seed;
+my $startTime;
 if ($restart) {
   open LOG, '<log' or die "problem reading log file";
   chomp($seed = <LOG>);
+  chomp($startTime = <LOG>);
   srand $seed;
   @log = <LOG>;
   close LOG;
 } else {
+  $startTime = time;
   $seed = srand;
   print "\nOverwrite log.bak file? (interrupt (Ctrl-C) if not!)"; <STDIN>;
 }
 system 'mv log log.bak'; # mv is faster that cp on same filesystem (12sep021)
 open LOG, '>log' or die "problem creating log file";
 print LOG "$seed\n";
+print LOG "$startTime\n";
 
 # Manage combat sequence
 # ======================
@@ -405,8 +408,9 @@ sub xp {
         "------------------------\n";
   foreach my $ci (0..$#xp) {
     next unless $xp[$ci] || $timexp;
-    next if $characters[$ci]->{DEAD};
-    print "$characters[$ci]->{NAME}:\n";
+    my $c = $characters[$ci];
+    next if $c->{DEAD} && $c->{STrem} != 1;
+    print "$c->{NAME}:\n";
     my $tot;
     while (my ($amt, $desc) = splice @{$xp[$ci]}, 0, 2) {
       print "$amt\t$desc\n";
@@ -539,7 +543,7 @@ sub whosnext {
   $maxdx = -1; # global so it can be used in &act
 
   foreach (@_) {
-    next if $acted[$_];
+    next if $acted[$_] || $characters[$_]->{DEAD};
     # This isn't good enough.  acted flags get cleared before 2nd bow shot!
     # should be fixed now...
 #     print join(' ', @dxmod), "\n";
@@ -567,6 +571,8 @@ sub act {
 #   foreach my $i (keys %{$chars}) {
   for my $i (0..$#chars) {
     my $ci = $chars[$i]; # character index
+    next unless defined $ci; # not too sure what is happening here (15sep021)
+    $debug && print "i=$i ci=$ci\n";
     if ($characters[$ci]->{DEAD}) {
       splice @chars, $i, 1;
       next;
@@ -593,7 +599,7 @@ sub act {
   my $act_chari;
   while (defined ($act_chari = whosnext(@chars))) {
     my $ac = $characters[$act_chari]; # acting character
-    next if $ac->{DEAD};
+    die if $ac->{DEAD}; # &whosnext should not return dead figures
     print "$ac->{NAME}: ST $ac->{ST} ($ac->{STrem})  adjDX $ac->{adjDX} ", $dxinj[$act_chari], $dxmod[$act_chari]<0?' ':' +', "$dxmod[$act_chari] = $maxdx";
     print " (stunned until turn $ac->{StunTurn})" if $turn < $ac->{StunTurn};
     # Stunned 'through this turn' or '... next turn'? (12aug021)
