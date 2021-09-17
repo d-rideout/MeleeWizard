@@ -34,7 +34,7 @@ die "Side-based initiative is not implemented yet\n" unless $initiative =~ /^[cp
 # Side-based initiative is problematic -- I need to add it to the UI somehow.  Should be a property of parties.  Could group the input parties somehow on the command line?  Or maybe better -- have each party file declare a side name at the top! (2AUG021)
 
 # Banner
-print 'Melee/Wizard turn sequence tool  Copyright (C) 2021  David P. Rideout
+print 'MElee/Wizard COmbat SeQuence tool  Copyright (C) 2021  David P. Rideout
 This program comes with ABSOLUTELY NO WARRANTY.
 This is free software, and you are welcome to redistribute it under the
 conditions of the GNU GENERAL PUBLIC LICENSE Version 3; see LICENSE file.
@@ -312,6 +312,7 @@ while (1) {
   foreach my $forcer (keys %retreats) {
     next if $turn_damage[$forcer];
     foreach my $forced (keys %{$retreats{$forcer}}) {
+      next if $characters[$forced]->{DEAD};
       print "$characters[$forcer]->{NAME} on $characters[$forced]->{NAME}?\n";
     }
   }
