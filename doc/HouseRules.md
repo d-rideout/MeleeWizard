@@ -1,5 +1,22 @@
 # House Rules
 
+I have *Melee "Micro Game 3"*, published in 1979, *Advanced Melee*, published
+in 1982, *Wizard* Fourth Edition published in 1981, and *Advanced Wizard*
+published in 1980.  I have seen a *Melee* booklet with different cover art --
+perhaps that is a newer version, since mine does not mention multiple
+editions?
+<!--I will refer to the original version as 'Basic', and the newer version as
+'Advanced' (and similarly for the original and Advanced versions of
+Wizard).-->
+
+There are occasional gaps, ambiguities, and discrepancies in these published
+rules.  This document presents some discussion and 'house rules' which
+attempt to address some of these issues.  I am very interested in others'
+opinions on these issues, so please comment.  (Usually one imagines that
+'fun', in the context of games, is a purely subjective thing, but the continuing
+popularity of this relatively ancient game suggests that there are some deep
+principles to learn here.)
+
 Disengagement:
 -------------
 According to (original) Wizard (p19) a figure can attack a disengaging figure
