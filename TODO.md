@@ -1,5 +1,4 @@
 #### Urgent:
-* Control debug mode from command line (16sep021)
 * Rethink HTH rules, based on item 91 in Death Test 2 (12sep021)
   - Rethink House Rules presentation? (13sep021)
   - https://docs.github.com/en/communities/documenting-your-project-with-wikis/changing-access-permissions-for-wikis (14sep021)
@@ -273,3 +272,4 @@ Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
 * xp for time spent in battle, as lower bound at least (12sep021)
 * Need to save wallclock time in log file (14sep021)
 * Seems like cannot forced retreat a dead figure! (adv melee p 22) (16sep021)
+* Control debug mode from command line (16sep021)

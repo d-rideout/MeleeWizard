@@ -42,17 +42,25 @@ conditions of the GNU GENERAL PUBLIC LICENSE Version 3; see LICENSE file.
 # This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
 #     This is free software, and you are welcome to redistribute it
 #     under certain conditions; type `show c' for details.
-$debug && print "Debug level $debug\n";
 print "\n";
 
 # Check command line
 my $restart;
-if (@ARGV && $ARGV[0] eq '-l') {
-  $restart = 1;
-  shift @ARGV;
+if (@ARGV) {
+  while ($ARGV[0]) {
+    if ($ARGV[0] eq '-l') {
+      $restart = 1;
+      shift @ARGV;
+    } elsif ($ARGV[0] eq '-d') {
+      $debug = 1;
+      shift @ARGV;
+    } else { last; }
+  }
 }
-die "Usage: mewcosq [-l] <party 1> [party 2] [party 3] ...\n" .
-    "  -l ==> restart from log file\n" unless @ARGV;
+die "Usage: mewcosq [-l] [-d] <party 1> [party 2] [party 3] ...\n" .
+    "  -l ==> restart from log file\n" .
+    "  -d ==> debug mode\n" unless @ARGV;
+$debug && print "Debug level $debug\n\n";
 
 # Data structures
 my @characters; # val hash with below keys
@@ -401,7 +409,7 @@ sub query {
 # Output experience points
 sub xp {
   my $seconds = time - $startTime;
-  print "$seconds seconds of wallclock time passed.\n"; # for now (13sep021)
+  print $seconds<121?"$seconds seconds":int($seconds/60+.5)." minutes", " of wallclock time passed.\n"; # for now (13sep021)
   return unless @xp || $seconds>359;
   my $timexp = int($seconds/720 + .5);
   
