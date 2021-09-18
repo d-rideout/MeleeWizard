@@ -25,7 +25,7 @@ my $initiative = 'c'; # c ==> character-based; p ==> party-based
                       # l ==> pLayer-based; s ==> 'side-based
 
 # Catch signals
-$SIG{INT} = sub { print "\nINT signal received, exiting.\n"; close LOG; exit; };
+$SIG{INT} = sub { print "\nINT signal received, exiting.\nCheck your log files to ensure you do not lose your history.\n"; close LOG; exit; };
 
 # Check settings
 die "Side-based initiative is not implemented yet\n" unless $initiative =~ /^[cpl]$/;

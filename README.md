@@ -75,5 +75,7 @@ __File__ | __Description__
 `parties/` | contains two sample party files.  Put your own party files here.
 `LICENSE` | GPLv3
 `TODO.md` | some plans for future development
+`log`	  | mewcosq generated log file
+`log.bak` | mewcosq saves backup of log file before overwriting it
 `map.pl`  | an initial attempt to build an ASCII hex map
 `mewcosq` | the main program

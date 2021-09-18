@@ -30,16 +30,30 @@ principles to learn here.)
 * Dead figures cannot be forced to retreat.
 * Rope spell causes -2 DX on the turn it is cast, and -3 DX on the next turn.
 
+These are the '*standard*' house rules.  It will be convenient to allow variants, to facilitate play testing them.  I will present the **named variants in boldface**, so that the choice of rules for a particular game can be easily described using these named variants.
+
 Disengagement:
 -------------
-According to (original) Wizard (p19) a figure can attack a disengaging figure
-even if it has equal or lower adjDX!  It just subtracts the difference in
-adjDX from its adjDX.  (or adds it to his roll)
+A higher adjDX fighter can 'leave stranded' a lower adjDX fighter by
+disengaging, and thereby avoid ever being attacked by them.  Is this
+intended?  Should we allow such a 'stranded fighter' to also move one hex by
+'disengaging' (possibly from nothing)?
+<!-- I will follow the rules as stated in
+this regard, though it seems to give an enormous advantage to the higher
+adjDX fighter. -->
 
+Though note that, according to (original) *Wizard* (p19), a figure can attack
+a disengaging figure even if the figure has equal or lower adjDX!  It just subtracts
+the difference in adjDX from its adjDX (or adds it to its to-hit roll).
 Though Advanced Melee gives the usual account.
-As does the sample battle at the very end of Wizard!!
+As does the sample battle at the very end of *Wizard*!!
 
-So I guess allow this as an optional rule.  Let's subtract an extra point from DX, and downgrade all automatic hits etc by 1, to make the game a little more stable.  But let's avoid this option for now. (25aug021)
+So let's define an optional rule, called **weak disengagement**.  A figure A
+can attack another B which has already disengaged, however A adds adjDX_B -
+adjDX_A + 1 to its to-hit roll.  Note that this makes critical hits less
+likely, however critical misses retain their usual probabilities based on the
+unadjusted die roll.  (I added an additional +1 modifier to the to-hit roll, to
+make the option slightly closer to the *standard* variant.  So the 'action initiative' roll matters in the presence of disengagement.)
 
 Wizard weapons & armor:
 ----------------------
@@ -53,8 +67,8 @@ Advanced Melee is not so clear.
 It *seems* like also all metal must be silver for wizards, so that they can cast spells?
 What about armor?
 I am guessing that they can't cast spells if they have ferrous metal on them anywhere.  And they are at -4 DX if they wield anything with ferrous metal.
-And so yes I guess they can use non-metalic weapons, without any DX nor spell penalty.  Though no one ever does.  So maybe there is some talent issue which prevents it?  A strong wizard would rather use a club than a staff.  Oh, s/he can't cast spells when wielding such a weapon.  That is a reason.  But a wizard without manna will not be casting spells anyway.
-Using non-metalic weapons contradicts the first rule from Wizard, but maybe that was just a simplified rule?  Though it seems kinda wrong somehow, since no example never appears of wizards with clubs, slings, nor bows...  Again, the talents will probably clarify this. (4sep021)
+And so yes I guess they can use non-metallic weapons, without any DX nor spell penalty.  Though no one ever does.  So maybe there is some talent issue which prevents it?  A strong wizard would rather use a club than a staff.  Oh, s/he can't cast spells when wielding such a weapon.  That is a reason.  But a wizard without manna will not be casting spells anyway.
+Using non-metallic weapons contradicts the first rule from Wizard, but maybe that was just a simplified rule?  Though it seems kinda wrong somehow, since no example never appears of wizards with clubs, slings, nor bows...  Again, the talents will probably clarify this. (4sep021)
 
 Broken weapons:
 --------------
@@ -83,7 +97,7 @@ Also why the gargoyle is supposed to be so deadly!
 Questions:
 ---------
 * How are turns counted for the Rope spell?  Is the turn the spell is cast
-  the 1st or the 0th turn?  I am presumming the former, making the spell a
+  the 1st or the 0th turn?  I am presuming the former, making the spell a
   little more powerful. (10sep021)
 * Wizard has a strange rule about attacking figures who disengaged, which
   even its own sample combat does not use!  What to make of it?  It weakens
@@ -95,6 +109,6 @@ Rules from Other Houses:
 -----------------------
 [meleewizards.com](http://meleewizards.com/rules.html)
 has some interesting suggestions re rules:
-* ~ last fire missle weapons count as charge attacks in terms of timing.  Seems sorta reasonable.
+* ~ last fire missile weapons count as charge attacks in terms of timing.  Seems sorta reasonable.
 * pole weapon charges only do an extra die damage
 Though I am going to try to stick 'as close as possible' to the original rules for starters.
