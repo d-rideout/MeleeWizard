@@ -17,6 +17,19 @@ opinions on these issues, so please comment.  (Usually one imagines that
 popularity of this relatively ancient game suggests that there are some deep
 principles to learn here.)
 
+* Minimum attack damage is zero.
+* Advanced rules generally take precedence over the original when they differ.
+* The rules describe player-based initiative.  We also allow party- and character- based initiative.  I think character-based is most realistic and most interesting tactically, though a bit more complicated to execute.
+(Occasionally rules ask for modifiers of initiative rolls.  These rules can be converted to modifiers on our [0,1) initiative 'rolls', however it is not as simple as adding or subtracting multiples of 1/6 to [0,1) 'rolls', in part due to conditioning on the two die rolls being unequal.  I am happy to work this out and implement it as the need arises.)
+* 'Roll out' damage multipliers.  So a double damage dagger attack does 2-2 damage.  This reduces the probability of a hit doing zero damage, which I always find frustrating.
+* ST cost of spells can cause unconsciousness but no DX penalties:
+  - Spell cost does not contribute to being stunned.
+  - A wizard reduced to 4 ST by casting spells, which then suffers 1 hit of damage, will be at -3 DX.
+  - A wizard reduced to 4 ST from damage, which then casts a spell of cost 1, will suffer no DX penalty.
+* An Aid spell can temporarily remove the -3 DX penalty due to ST <= 3, but the penalty returns when the Aid spell wears off.
+* Dead figures cannot be forced to retreat.
+* Rope spell causes -2 DX on the turn it is cast, and -3 DX on the next turn.
+
 Disengagement:
 -------------
 According to (original) Wizard (p19) a figure can attack a disengaging figure
