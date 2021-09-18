@@ -717,7 +717,7 @@ sub act {
 	}
 	# XP value
 	if ($died) {
-	  push @{$xp[$act_chari]}, $dc->{STrem}+$damage+$dc->{DX},
+	  push @{$xp[$act_chari]}, $dc->{STrem}+$dc->{DX},
 	      "killed $dc->{NAME}";
 	} else {
 	  push @{$xp[$act_chari]}, $damage, "$damage hits on $dc->{NAME}";
