@@ -53,7 +53,7 @@ ud <n> | undo <n> previous entries
 
 To query the user, use the following code template:
 
-```
+```perl
 while (my $response = query(<default>, <query string>)) {
   next if problem, e.g.
   my @args = split / +/, $response;

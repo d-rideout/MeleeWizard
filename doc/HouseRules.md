@@ -30,7 +30,7 @@ principles to learn here.)
 * Dead figures cannot be forced to retreat.
 * Rope spell causes -2 DX on the turn it is cast, and -3 DX on the next turn.
 
-These are the '*standard*' house rules.  It will be convenient to allow variants, to facilitate play testing them.  I will present the **named variants in boldface**, so that the choice of rules for a particular game can be easily described using these named variants.
+These are the '**standard**' house rules.  It will be convenient to allow variants, to facilitate play testing them.  I will present the **named variants in boldface**, so that the choice of rules for a particular game can be easily described using these named variants.
 
 Disengagement:
 -------------
@@ -53,7 +53,48 @@ can attack another B which has already disengaged, however A adds adjDX_B -
 adjDX_A + 1 to its to-hit roll.  Note that this makes critical hits less
 likely, however critical misses retain their usual probabilities based on the
 unadjusted die roll.  (I added an additional +1 modifier to the to-hit roll, to
-make the option slightly closer to the *standard* variant.  So the 'action initiative' roll matters in the presence of disengagement.)
+make the option slightly closer to the *standard* variant.  So the 'action initiative' roll also matters when using **weak disengagement**.)
+
+Hand-To-Hand (HTH) Combat:
+-------------------------
+I find the description of the HTH rules confusing, and the original and Advanced rules appear to differ slightly.  In short, the original rules seem to describe engaging in HTH combat as an *action*, while the Advanced rules seem to describe it as a *movement*.  <!-- Although we generally adopt the Advanced rules where they differ, in this case -->
+I think that the original rules lead to a better game: allowing engaging in HTH as a movement is simply too powerful -- it allows a higher MA character to almost completely trump any non-ranged attack, by simply engaging the attacking figure in HTH combat before they get a chance to act.  ([Musings from Myriangia](https://myriangia.wordpress.com/2020/10/07/getting-a-grip-in-hand-to-hand-combat/) has a nice page on this, which includes further rules on grappling.  For the moment I am just trying to get a handle on the 'pure' Melee/Wizard rules.)
+However, item 91 of *Death Test 2* makes it pretty clear that the intent is for HTH engagement to happen during *movement*, as it discusses differences between initiative rolls, which would make no sense if HTH engagement were an action.
+
+Thus, with some trepidation, I will regard the following HTH rules as standard, which I will also call **HTH-as-move**:
+
+The attacker moves onto the enemy figure *during the movement phase* (using option IIe: a disengaged figure may move up to half its MA, while an engaged figure can only shift onto the opponent), and the outcome of the attempt is resolved then.  <!-- I *presume* that an attacking figure may pass through the front hex of the enemy figure during this movement?  What if another figure is facing that hex?  Can it still pass through it, or are only the front hexes of the attacked enemy figure 'cancelled' by the HTH attack? -->
+Note that, unless it is already engaged with the target, the attacking figure must enter the target's hex from the side or rear, as otherwise it will become engaged and must stop when it enters a front hex of the target (subject to questions about what exactly causes engagement, below).
+(I find the absense of this remark in the official, published rules confusing, since it seems to follow from the rules as stated, if we interpret HTH engagement as a movement.)
+The attacking figure *also* gets an action during the action phase, e.g. to attack, or disengage!
+
+**HTH-as-action** is an alternate rule:
+
+To engage in HTH combat, the attacking figure moves as with any other attack move: up to 1/2 MA if disengaged or shift 0-1 hexes if engaged.  
+During the action phase, it moves a *further* hex, on to the target figure, and rolls the outcome as described in the rules.
+
+There are two obvious further variants: We could allow *both* **HTH-as-move** and **HTH-as-action**, or neither.  I tended to play with the latter in my youth, since the rules were confusing.  But maybe the former is best option??
+<!--, e.g. because it better handles entering from a front hex.-->
+
+---
+
+### Rules from *Wizard*:
+Wizard in HTH gets -4 DX for spell casting
+Wizard at -4 DX for drawing dagger
+See ../art/urls for an interesting approach:
+https://tft.brainiac.com/RicksTFT/Fighting/HTH_InTFT.html
+He makes the point that the official rules really do seem to indicate engaging in HTH is a movement.  But that it led to the abuse I was concerned with:
+engaging and then immediately disengaging!
+
+### Pinning a Foe:
+The Pinning a Foe rules seem grossly unrealistic, since they have almost no regard for ST.  (And they are slightly ambiguous: I assume the success roll is against the attacker's adjDX, as with an ordinary attack.)  A ST 4 adjDX 14 goblin can pin a ST 30 adjDX 11 bear with a roll of 14+3/2=15 or less on 3 dice, and hold it immobile for two entire turns!  Let's also add a ST difference modifier to the success roll, so the goblin's success roll is now 14 + 3/2 - 26/2 = 2 or less on 3 dice.  That seems much more reasonable.
+
+Death Test 2 seems to imagine HTH happening during movement!  Hmm...!
+There are modifiers to the initiative roll.  So it is not completely
+arbitrary.  That is probably why they seem to imagine that it matters so much
+in Death Test!
+Also why the gargoyle is supposed to be so deadly!
+
 
 Wizard weapons & armor:
 ----------------------
@@ -79,21 +120,6 @@ Forced retreats:
 If a forced retreat figure has no adjacent unoccupied hex to retreat to, it
 must roll against adjDX to remain standing! (Wizard)
 
-HTH:
----
-Wizard in HTH gets -4 DX for spell casting
-Wizard at -4 DX for drawing dagger
-See ../art/urls for an interesting approach:
-https://tft.brainiac.com/RicksTFT/Fighting/HTH_InTFT.html
-He makes the point that the official rules really do seem to indicate engaging in HTH is a movement.  But that it led to the abuse I was concerned with:
-engaging and then immediately disengaging!
-
-Death Test 2 seems to imagine HTH happening during movement!  Hmm...!
-There are modifiers to the initiative roll.  So it is not completely
-arbitrary.  That is probably why they seem to imagine that it matters so much
-in Death Test!
-Also why the gargoyle is supposed to be so deadly!
-
 Questions:
 ---------
 * How are turns counted for the Rope spell?  Is the turn the spell is cast
@@ -103,6 +129,7 @@ Questions:
   even its own sample combat does not use!  What to make of it?  It weakens
   disengagement a bit, which may be a good thing.  Otherwise high DX figures
   can just dance around lower DX figures... (10sep021)
+* If a figure has multiple weapons ready, and another rolls a 6 when engaging it in HTH combat, does the attacking figure get hit with all ready weapons, or just one of the defender's choice? (18sep021)
 
 ---
 Rules from Other Houses:
@@ -111,4 +138,10 @@ Rules from Other Houses:
 has some interesting suggestions re rules:
 * ~ last fire missile weapons count as charge attacks in terms of timing.  Seems sorta reasonable.
 * pole weapon charges only do an extra die damage
-Though I am going to try to stick 'as close as possible' to the original rules for starters.
+Though I am going to try to stick 'as close as possible' to the original rules for starters.[^1]
+
+[^1]: 'a note?'
+
+
+<!--### Alternate HTH rules:
+It is worth play testing the Advanced rules, say with the front hexes of the attacked-enemy-figure-only option below:-->
