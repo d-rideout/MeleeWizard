@@ -2,7 +2,6 @@
 * Rethink HTH rules, based on item 91 in Death Test 2 (12sep021)
   - Rethink House Rules presentation? (13sep021)
   - https://docs.github.com/en/communities/documenting-your-project-with-wikis/changing-access-permissions-for-wikis (14sep021)
-* defer action would be really useful, though complicated... (27aug021)
 * This tool will be helpful in large battles.
   Note: [meleewizards.com](http://meleewizards.com)! (5aug021)
   e.g. allows use of original rules on reactions to injury (29aug021)
@@ -106,6 +105,8 @@
   pressing Enter for default, to ease pressure on the response namespace.  (I
   am thinking about move specifications.  I do not expect much agreement on
   the best approach for that...) (9sep021)
+
+* I think @chars API to &act is a tad silly, in that figures never get prunned from the list.  However indexing into the list is non-trivial, so I don't know that it is worth trying to fix this. (19sep021)
 
 #### Non-urgent:
 * Check if sp2 preceeds r action? (Rope spell)? (10sep021)
@@ -273,3 +274,4 @@ Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
 * Need to save wallclock time in log file (14sep021)
 * Seems like cannot forced retreat a dead figure! (adv melee p 22) (16sep021)
 * Control debug mode from command line (16sep021)
+* defer action would be really useful, though complicated... (27aug021)

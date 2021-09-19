@@ -443,6 +443,7 @@ sub character_prep {
   # Stun & fall thresholds
   my $char = $characters[$ci];
   my $st = $char->{ST};
+  die "ST is not numeric.  tab vs space issue in party file?\n" if $st =~ /[^\d]/;
   if ($st < 30) { $char->{STUN} = 5; $char->{FALL} = 8; } # normal
   elsif ($st < 50) { $char->{STUN} = 9; $char->{FALL} = 16; } # giants
   else { $char->{STUN} = 15; $char->{FALL} = 25; } # dragons
@@ -549,7 +550,7 @@ sub extend_namekey {
 sub whosnext {
   my $maxroll;
   my $next;
-  $maxdx = -1; # global so it can be used in &act
+  $maxdx = -99; # global so it can be used in &act
 
   foreach (@_) {
     next if $acted[$_] || $characters[$_]->{DEAD};
@@ -582,7 +583,7 @@ sub act {
     my $ci = $chars[$i]; # character index
     next unless defined $ci; # not too sure what is happening here (15sep021)
     $debug && print "i=$i ci=$ci\n";
-    if ($characters[$ci]->{DEAD}) {
+    if ($acted[$ci] || $characters[$ci]->{DEAD}) {
       splice @chars, $i, 1;
       next;
     }
@@ -593,11 +594,12 @@ sub act {
   # Actions
   &displayCharacters;
   print "Actions:\n", # in alphabetical order
-      "* [sp<ST>] <who>-<dam>\t(e.g. c-4 for 4 damage to character c after armor)\n";
+      "* [sp<ST>] <who>-<dam>\t(e.g. c-4 for 4 damage to character c after armor)\n",
+      "* de\tdefer action\n";
   print "* sp<ST> a <who> <DX mod>\tspell which modifies <who>\'s adjDX by <DX mod>\n",
       "\t(e.g. 'sp3 a x -6' for Clumsiness spell on x (remember to put a DX adjustment\n\t each turn on x, during action considerations)\n",
       "* sp<ST> <name> <ST> <adjDX>\tcreate being\n", # create being
-      "* d <who>\t\t\tdisbelieve <who>\n",
+      "* di <who>\t\t\tdisbelieve <who>\n",
       "* sp2 r <who>\t\t\tcast Rope spell on <who>\n",
       "* [sp<ST>] sh<dex adj>\tready or unready shield, which changes base adjDX\n",
 	  "\t\t\t(e.g. 'sh -2' to ready a tower shield)\n",
@@ -606,7 +608,9 @@ sub act {
       "  (Note that spell can have no result, but still cost ST.)\n" if $phase =~ /normal/;
   print '-' x 79, "\n";
   my $act_chari;
+#   print 0+@chars, " chars @ START\n";
   while (defined ($act_chari = whosnext(@chars))) {
+#     print 0+@chars, " chars\n";
     my $ac = $characters[$act_chari]; # acting character
     die if $ac->{DEAD}; # &whosnext should not return dead figures
     print "$ac->{NAME}: ST $ac->{ST} ($ac->{STrem})  adjDX $ac->{adjDX} ", $dxinj[$act_chari], $dxmod[$act_chari]<0?' ':' +', "$dxmod[$act_chari] = $maxdx";
@@ -615,6 +619,7 @@ sub act {
     print "\n";
 
     # Action query loop for character with index $act_chari
+    my $defer;
     while (1) {
       my $action = query('', "Action result? (N)o");
       $debug && print "act_chari=$act_chari action=[$action]\n";
@@ -651,7 +656,11 @@ sub act {
 	&displayCharacters;
 	last; # always last after successful action result
       } # create being
-      elsif ($action =~ /^d (.+)$/) { # Disbelieve
+      elsif ($action eq 'de') { # Defer action
+	$defer = 1;
+	last;
+      }
+      elsif ($action =~ /^di (.+)$/) { # Disbelieve
 	my $who = who($1);
 	next if $who eq 'x';
 	$characters[$who]->{DEAD} = 1;
@@ -717,8 +726,8 @@ sub act {
 	}
 	# XP value
 	if ($died) {
-	  push @{$xp[$act_chari]}, $dc->{STrem}+$dc->{DX},
-	      "killed $dc->{NAME}";
+	  push @{$xp[$act_chari]}, $dc->{STrem}+$damage+$dc->{DX}, "killed $dc->{NAME}";
+	  # damage added because it has been subtracted from STrem already (19sep021)
 	} else {
 	  push @{$xp[$act_chari]}, $damage, "$damage hits on $dc->{NAME}";
 	}
@@ -728,7 +737,7 @@ sub act {
       else { print "Unrecognized action $action\n"; }
     } # what happened during $act_chari's action
     $debug && print "$ac->{NAME} acted\n";
-    $acted[$act_chari] = 1;
+    $acted[$act_chari] = 1 unless $defer;
   } # loop over actors
   $debug && print "actions finished\n";
 } # main loop over turns
