@@ -578,33 +578,33 @@ sub whosnext {
 # Act in order of dex
 # Pass array of characters who will act
 sub act {
-  $debug && print join(':', @_), " passed to &act\n";
-  my @chars = (@_);
-  $debug && print join(':', @_), " is chars\n";
-  my $nchars = @chars;
+#   $debug && print join(':', @_), " passed to &act\n";
+  my @chars = @_;
+#   $debug && print join(':', @_), " is chars\n";
+#   my $nchars = @chars;
   
   # Preparations
   #   foreach my $i (keys %{$chars}) {
-#   for my $i (0..$#chars) {
-  my $i = -1;
-  while (++$i < $nchars) { #(0..$#chars) {
-    $debug && print join(':', @_), " is chars beginning $i\n";
-    $debug && print join(':', @chars), " is chars beginning $i\n";
-    my $ci = $chars[$i]; # character index
-    $debug && print "chars[$i] = $ci\n";
+  for my $ci (@chars) {
+#   my $i = -1;
+#   while (++$i < $nchars) { #(0..$#chars) {
+#     $debug && print join(':', @_), " is chars beginning $i\n";
+#     $debug && print join(':', @chars), " is chars beginning $i\n";
+#     my $ci = $chars[$i]; # character index
+#     $debug && print "chars[$i] = $ci\n";
     die unless defined $ci; # not too sure what is happening here (15sep021)
     # Roll initiative
     $roll[$ci] = rand; # I think it is safer to roll for everybody... (20sep021)
-    $debug && print "i=$i ci=$ci roll=$roll[$ci]\n";
+#     $debug && print "i=$i ci=$ci roll=$roll[$ci]\n";
 
-    if ($acted[$ci] || $characters[$ci]->{DEAD}) {
-      # I think this prunning is probably silly? (20sep021)
-      $debug && print "pruning at i=$i, ci=$ci\n";
-      splice @chars, $i, 1;
-      --$nchars;
-#       next;
-    }
-    $debug && print join(':', @_), " is chars end $i\n";
+#     if ($acted[$ci] || $characters[$ci]->{DEAD}) {
+#       # I think this prunning is probably silly? (20sep021)
+#       $debug && print "pruning at i=$i, ci=$ci\n";
+#       splice @chars, $i, 1;
+#       --$nchars;
+# #       next;
+#     }
+#     $debug && print join(':', @_), " is chars end $i\n";
   }
   
   # Actions
