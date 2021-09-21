@@ -48,16 +48,16 @@ print "\n";
 my $restart;
 if (@ARGV) {
   while ($ARGV[0]) {
-    if ($ARGV[0] eq '-l') {
-      $restart = 1;
-      shift @ARGV;
-    } elsif ($ARGV[0] eq '-d') {
-      $debug = 1;
-      shift @ARGV;
-    } else { last; }
+    print "first arg: [$ARGV[0]]\n";
+    last unless $ARGV[0] =~ /^\-([ld]+)$/;
+    my $options = $1;
+    $restart = 1 if $options =~ /l/;
+    $debug = 1 if $options =~ /d/;
+    $debug && print "options: $options\n";
+    shift @ARGV;
   }
 }
-die "Usage: mewcosq [-l] [-d] <party 1> [party 2] [party 3] ...\n" .
+die "Usage: mewcosq [-ld] <party 1> [party 2] [party 3] ...\n" .
     "  -l ==> restart from log file\n" .
     "  -d ==> debug mode\n" unless @ARGV;
 $debug && print "Debug level $debug\n\n";
@@ -319,6 +319,7 @@ while (1) {
   print "\nPossible Forced Retreats: (if two chacters are adjacent)\n";
   print "None.\n" unless keys %retreats;
   foreach my $forcer (keys %retreats) {
+    $debug && print "considering forcer $forcer\n";
     next if $turn_damage[$forcer];
     foreach my $forced (keys %{$retreats{$forcer}}) {
       next if $characters[$forced]->{DEAD};
