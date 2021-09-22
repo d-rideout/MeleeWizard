@@ -76,15 +76,11 @@ During the action phase, it moves a *further* hex, on to the target figure, and 
 There are two obvious further variants: We could allow *both* **HTH-as-move** and **HTH-as-action**, or neither.  I tended to play with the latter in my youth, since the rules were confusing.  But maybe the former is the best option??
 <!--, e.g. because it better handles entering from a front hex.-->
 
----
-
 ### Rules from *Wizard*:
-Wizard in HTH gets -4 DX for spell casting
-Wizard at -4 DX for drawing dagger
-See ../art/urls for an interesting approach:
-https://tft.brainiac.com/RicksTFT/Fighting/HTH_InTFT.html
-He makes the point that the official rules really do seem to indicate engaging in HTH is a movement.  But that it led to the abuse I was concerned with:
-engaging and then immediately disengaging!
+* A wizard in HTH gets -4 DX for spell casting.
+* A wizard in HTH is at -4 DX for drawing a dagger.
+
+---
 
 ### Pinning a Foe:
 The Pinning a Foe rules seem grossly unrealistic, since they have almost no regard for ST.  (And they are slightly ambiguous: I assume the success roll is against the attacker's adjDX, as with an ordinary attack.)  A ST 4 adjDX 14 goblin can pin a ST 30 adjDX 11 bear with a roll of 14+3/2=15 or less on 3 dice, and hold it immobile for two entire turns!  Let's also add a ST difference modifier to the success roll, so the goblin's success roll is now 14 + 3/2 - 26/2 = 2 or less on 3 dice.  That seems much more reasonable.
@@ -134,11 +130,20 @@ Questions:
 ---
 Rules from Other Houses:
 -----------------------
-[meleewizards.com](http://meleewizards.com/rules.html)
+There are lots of great suggestions for modifications to the official rules
+to address various concerns, some of which I raise above.  Though I am going
+to try to stick 'as close as possible' to the original rules for now.[^1]
+
+* [meleewizards.com](http://meleewizards.com/rules.html)
 has some interesting suggestions re rules:
-* ~ last fire missile weapons count as charge attacks in terms of timing.  Seems sorta reasonable.
-* pole weapon charges only do an extra die damage
-Though I am going to try to stick 'as close as possible' to the original rules for starters.[^1]
+    - ~ last fire missile weapons count as charge attacks in terms of timing.  Seems sorta reasonable.
+    - pole weapon charges only do an extra die damage
+
+* https://tft.brainiac.com/RicksTFT/Fighting/HTH_InTFT.html
+
+  He makes the point that the official rules really do seem to indicate engaging in HTH is a movement.  But that it led to the abuse I was concerned with:
+  engaging in HTH to get any figure disarmed and onto the ground, and then immediately disengaging!
+
 
 [^1]: 'a note?'
 
