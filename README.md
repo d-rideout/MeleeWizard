@@ -15,14 +15,22 @@ the wizard?"
 Unfortunately, I tend to forget where I am in the combat sequence around the
 third or fourth turn or so.  After doing the tie-breaking initiative roll to
 determine the order of action for the three characters who happen to have
-adjusted DEX 11 because of their previous injuries and chosen actions during
+adjusted DX 11 because of their previous injuries and chosen actions during
 that turn...  This tool is intended to take care of all that, so you can
 focus on the game!  Let the computer tell you whose turn it is, so you don't
 have to keep all these details in your head.
+It also keeps track of experience points earned during combat, presenting
+them at the end of the battle.
 
-**Note:** I have the (Advanced) version published by Metagaming in 1982.  I
-  do not know if the rules for the more modern version published by Steve
-  Jackson Games are the same.  See the [wiki](https://github.com/d-rideout/MeleeWizard/wiki) for some comments on 'house rules'.
+**Note:** I have the (Advanced and 'basic') versions published by Metagaming circa 1982.  I
+  do not know if the rules for the more modern versions published by Steve
+  Jackson Games are the same.  See the
+  [wiki](https://github.com/d-rideout/MeleeWizard/wiki "repository wiki"),
+  and [doc/HouseRules.md](doc/HouseRules.md "House Rules documentation") for some comments on 'house rules'.
+
+Keep in mind that this tool is not intended to enforce rules, it is merely a
+game aid.  The onus is on the user to ensure that the game rules are followed
+properly.  The ubiquitous undo command `ud` can be helpful in this regard...
 
 ## Instructions
 
@@ -79,3 +87,4 @@ __File__ | __Description__
 `log.bak` | mewcosq saves backup of log file before overwriting it
 `map.pl`  | an initial attempt to build an ASCII hex map
 `mewcosq` | the main program
+`mewcosq-gui` | first steps toward a GUI interface to mewcosq

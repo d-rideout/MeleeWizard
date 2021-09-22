@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+# Manage turn sequence in The Fantasy Trip's Melee/Wizard
+# GUI interface to mewcosq
+# Copyright (C) 2021 David P. Rideout
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+# First step is to prepare the input files and command line for mewcosq:
+# ---------------------------------------------------------------------
+import tkinter as tk
+from tkinter import ttk
+root = tk.Tk()
+root.title('MElee/WizardCOmbatSeQuence  ') # Window
+# root.geometry('600x400+50+50') # XxY+x+y
+# print('screen width =', root.winfo_screenwidth())
+# print('screen height =', root.winfo_screenheight())
+# Includes all screens together.
+# root.resizable(False, False) # (width, height) prevents resizing
+# window.minsize(min_width, min_height) # min and max size
+# window.maxsize(min_height, max_height)
+root.attributes('-alpha', 0.5) # supposed to set transparancy, but does not seem to work on reginald (21sep021)
+# window stacking stuff:
+# window.attributes('-topmost', 1) # always on top (don't know what the 1 does)
+# window.lift()
+# window.lift(another_window) # maybe these are relative to another window?
+# window.lower()
+# window.lower(another_window)
+# root.iconbitmap('./Troll.ico') doesn't work, don't know why (21sep021)
+
+# Text label:
+# message = tk.Label(root, text='MElee Wizard COmbat SeQuence tool').pack()
+message = ttk.Label(root, text='MElee Wizard COmbat SeQuence tool').pack() # Widget
+# message['text'] = 'MElee Wizard COmbat SeQuence tool' # dict method 
+# message.config(text='MElee Wizard COmbat SeQuence tool') # config method
+# message.pack()
+
+# Button:
+def button_fn():
+    print('button clicked')
+button = ttk.Button(root, text='button', command=button_fn)
+button.pack()
+
+# Text box:
+# name = tk.StringVar()
+# textbox = ttk.Entry(root, textvariable=name)
+# textbox.focus()
+# textbox.pack()
+# print(name.get())
+
+# print('window geometry =', root.geometry()) # not too clear on what the output means
+
+root.mainloop()
+
+# Now we can call mewcosq and interact with it:
+# --------------------------------------------
+# import subprocess
+# https://docs.python.org/3/library/subprocess.html#module-subprocess
+# https://www.askpython.com/python-modules/python-system-command
+# https://www.python-engineer.com/blog/python-execute-system-command/

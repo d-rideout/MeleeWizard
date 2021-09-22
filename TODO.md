@@ -1,5 +1,4 @@
 #### Urgent:
-* -dl -ld (20sep021)
 * Rethink HTH rules, based on item 91 in Death Test 2 (12sep021)
   - Rethink House Rules presentation? (13sep021)
   - https://docs.github.com/en/communities/documenting-your-project-with-wikis/changing-access-permissions-for-wikis (14sep021)
@@ -276,3 +275,4 @@ Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
 * Seems like cannot forced retreat a dead figure! (adv melee p 22) (16sep021)
 * Control debug mode from command line (16sep021)
 * defer action would be really useful, though complicated... (27aug021)
+* -dl -ld (20sep021)

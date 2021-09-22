@@ -63,9 +63,9 @@ However, item 91 of *Death Test 2* makes it pretty clear that the intent is for 
 
 Thus, with some trepidation, I will regard the following HTH rules as standard, which I will also call **HTH-as-move**:
 
-The attacker moves onto the enemy figure *during the movement phase* (using option IIe: a disengaged figure may move up to half its MA, while an engaged figure can only shift onto the opponent), and the outcome of the attempt is resolved then.  <!-- I *presume* that an attacking figure may pass through the front hex of the enemy figure during this movement?  What if another figure is facing that hex?  Can it still pass through it, or are only the front hexes of the attacked enemy figure 'cancelled' by the HTH attack? -->
+The attacker moves onto the enemy figure *during the movement phase* (using option IIe: a disengaged figure may move up to half its MA, while an engaged figure can only shift onto the opponent), and the outcome of the attempt is resolved then.  <!-- I *presume* that an attacking figure may pass through the front hex of the enemy figure during this movement?  What if another figure is facing that hex?  Can it still pass through it, or are only the front hexes of the attacked enemy figure 'canceled' by the HTH attack? -->
 Note that, unless it is already engaged with the target, the attacking figure must enter the target's hex from the side or rear, as otherwise it will become engaged and must stop when it enters a front hex of the target (subject to questions about what exactly causes engagement, below).
-(I find the absense of this remark in the official, published rules confusing, since it seems to follow from the rules as stated, if we interpret HTH engagement as a movement.)
+(I find the absence of this remark in the official, published rules confusing, since it seems to follow from the rules as stated, if we interpret HTH engagement as a movement.)
 The attacking figure *also* gets an action during the action phase, e.g. to attack, or disengage!
 
 **HTH-as-action** is an alternate rule:
@@ -73,7 +73,7 @@ The attacking figure *also* gets an action during the action phase, e.g. to atta
 To engage in HTH combat, the attacking figure moves as with any other attack move: up to 1/2 MA if disengaged or shift 0-1 hexes if engaged.  
 During the action phase, it moves a *further* hex, on to the target figure, and rolls the outcome as described in the rules.
 
-There are two obvious further variants: We could allow *both* **HTH-as-move** and **HTH-as-action**, or neither.  I tended to play with the latter in my youth, since the rules were confusing.  But maybe the former is best option??
+There are two obvious further variants: We could allow *both* **HTH-as-move** and **HTH-as-action**, or neither.  I tended to play with the latter in my youth, since the rules were confusing.  But maybe the former is the best option??
 <!--, e.g. because it better handles entering from a front hex.-->
 
 ---
