@@ -1,4 +1,4 @@
-# MeleeWizard
+# MElee-Wizard COmbat SeQuence tool
 > Tool to manage the combat sequence in Steve Jackson's Melee-Wizard
 
 Melee-Wizard is the combat engine for *The Fantasy Trip* role-playing game.

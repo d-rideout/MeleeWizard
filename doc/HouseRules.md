@@ -80,17 +80,19 @@ There are two obvious further variants: We could allow *both* **HTH-as-move** an
 * A wizard in HTH gets -4 DX for spell casting.
 * A wizard in HTH is at -4 DX for drawing a dagger.
 
----
-
 ### Pinning a Foe:
-The Pinning a Foe rules seem grossly unrealistic, since they have almost no regard for ST.  (And they are slightly ambiguous: I assume the success roll is against the attacker's adjDX, as with an ordinary attack.)  A ST 4 adjDX 14 goblin can pin a ST 30 adjDX 11 bear with a roll of 14+3/2=15 or less on 3 dice, and hold it immobile for two entire turns!  Let's also add a ST difference modifier to the success roll, so the goblin's success roll is now 14 + 3/2 - 26/2 = 2 or less on 3 dice.  That seems much more reasonable.
+The Pinning a Foe rules in Advanced Melee seem grossly unrealistic, since
+they have almost no regard for ST.  (Some other website pointed this out but I
+can't find the reference right now.)
+And they are slightly ambiguous: I
+assume the success roll is against the attacker's adjDX, as with an ordinary
+attack.  A ST 4 adjDX 14 goblin can pin a ST 30 adjDX 11 bear with a roll of
+14+3/2=15 or less on 3 dice, and hold it immobile for two entire turns!
+Let's also add a ST difference modifier to the success roll, so the goblin's
+success roll is now 14 + 3/2 - 26/2 = 2 or less on 3 dice.  That seems much
+more reasonable.
 
-Death Test 2 seems to imagine HTH happening during movement!  Hmm...!
-There are modifiers to the initiative roll.  So it is not completely
-arbitrary.  That is probably why they seem to imagine that it matters so much
-in Death Test!
-Also why the gargoyle is supposed to be so deadly!
-
+---
 
 Wizard weapons & armor:
 ----------------------
@@ -132,7 +134,7 @@ Rules from Other Houses:
 -----------------------
 There are lots of great suggestions for modifications to the official rules
 to address various concerns, some of which I raise above.  Though I am going
-to try to stick 'as close as possible' to the original rules for now.[^1]
+to try to stick 'as close as possible' to the original rules for now.
 
 * [meleewizards.com](http://meleewizards.com/rules.html)
 has some interesting suggestions re rules:
@@ -143,9 +145,6 @@ has some interesting suggestions re rules:
 
   He makes the point that the official rules really do seem to indicate engaging in HTH is a movement.  But that it led to the abuse I was concerned with:
   engaging in HTH to get any figure disarmed and onto the ground, and then immediately disengaging!
-
-
-[^1]: 'a note?'
 
 
 <!--### Alternate HTH rules:
