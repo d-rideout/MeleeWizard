@@ -2,6 +2,8 @@
 * Rethink HTH rules, based on item 91 in Death Test 2 (12sep021)
   - Rethink House Rules presentation? (13sep021)
   - https://docs.github.com/en/communities/documenting-your-project-with-wikis/changing-access-permissions-for-wikis (14sep021)
+  - Get xowa working? (23sep021)
+  - Use wiki format on wiki?  See computer notes. (23sep021)
 * This tool will be helpful in large battles.
   Note: [meleewizards.com](http://meleewizards.com)! (5aug021)
   e.g. allows use of original rules on reactions to injury (29aug021)

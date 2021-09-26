@@ -154,6 +154,7 @@ my @dxmod; # amt to add to adjDX for this turn
 my @dxinj; # amt to add to adjDX due to injury
 my @roll; # action initiative roll, indexed by character index
 my $maxdx; # adjDX of acting character
+my $ndefer = 0; # num deferred characters
 
 print "\nCapital letter is default option for each prompt\n\n";
 
@@ -292,6 +293,7 @@ while (1) {
 #   @damaged = (); # who has taken damage this turn
   %retreats = (); # possible forced retreats (I think perl is smart about
                   # freeing each hash value? (3sep021))
+  
   if (@poles) {
     $phase = 'pole weapon charges';
     print "Pole weapon charges:\n";
@@ -637,7 +639,6 @@ sub act {
 
     # Action query loop for character with index $act_chari
     my $defer;
-    my $ndefer = 0;
     while (1) {
       my $action = query('', "Action result? (N)o");
       $debug && print "act_chari=$act_chari action=[$action]\n";
@@ -755,9 +756,10 @@ sub act {
       } # did damage
       else { print "Unrecognized action $action\n"; }
     } # what happened during $act_chari's action
-    $debug && print "$ac->{NAME} acted\n";
+    $debug && print "ndefer=$ndefer  before \@acted: ", join(':', @acted), "\n";
     if ($defer) { $acted[$act_chari] = -1; }
     else {
+      $debug && print "$ac->{NAME} acted\n";
       if ($ndefer) {
 	# clear all defer flags
 	# 	foreach my $i (0..$#acted) { $acted[$i] = 0 if $acted[$i] < 0; }
@@ -770,6 +772,8 @@ sub act {
       }
       $acted[$act_chari] = 1;
     } # acted
+    $debug && print 'after @acted: ', join(':', @acted), "\n";
+
   } # loop over actors
   $debug && print "actions finished\n";
 } # main loop over turns
