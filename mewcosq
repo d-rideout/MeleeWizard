@@ -364,7 +364,8 @@ sub query {
     else { chomp($input = <STDIN>); }
     #   print "input is [$input]\n";
     #   print LOG "$input\n" unless $input eq 'q';
-#     my $cmd = substr $input, 0, 1;
+    #     my $cmd = substr $input, 0, 1;
+    $input =~ s/^\s+//; # strip leading whitespace
     my @cmd = split / /, $input;
     my $cmd = $cmd[0];
     unless ($cmd && $global_options{$cmd} && $global_options{$cmd} eq 'n') {

@@ -1,5 +1,4 @@
 #### Urgent:
-* Do single leading spaces cause any trouble?  such as alone? (26sep021)
 * create being DX too!
 * make neater table of possible actions!
 * keep trask of number of hexes moved!
@@ -288,3 +287,4 @@ Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
 * Control debug mode from command line (16sep021)
 * defer action would be really useful, though complicated... (27aug021)
 * -dl -ld (20sep021)
+* Do single leading spaces cause any trouble?  such as alone? (26sep021)
