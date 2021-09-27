@@ -1,5 +1,15 @@
 #### Urgent:
+* Do single leading spaces cause any trouble?  such as alone? (26sep021)
+* create being DX too!
+* make neater table of possible actions!
+* keep trask of number of hexes moved!
+* make move prompt smaller
+* combine spell recharges
+* uncharged creation needs to disappear
+* merge shield command into adjust, with a duration, and accept inf as duration (26sep021)
+* turn spell is cast is turn 0 -- this strengthens Aid and weakens Rope.  Put this into the house rules. (26sep021)
 * Rethink HTH rules, based on item 91 in Death Test 2 (12sep021)
+  - Consider FAQ at end of Codex!! (sep021)
   - Rethink House Rules presentation? (13sep021)
   - https://docs.github.com/en/communities/documenting-your-project-with-wikis/changing-access-permissions-for-wikis (14sep021)
   - Get xowa working? (23sep021)
