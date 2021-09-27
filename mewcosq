@@ -170,7 +170,7 @@ while (1) {
       ++$surprise_parties{$_->{PARTY}} foreach @characters;
       # no don't use an array.  Leave the surprised parties in a hash.
 #       my @surprise_parties = keys %parties;
-      foreach (keys %surprise_parties) { #my $i (0..$#surprise_parties) {
+      foreach (sort keys %surprise_parties) { #my $i (0..$#surprise_parties) {
 # 	$q = query('y', "Is $surprise_parties[$i] surprised? (Y)es (n)o");
 # 	splice @surprise_parties, $i, 1 unless $q eq 'y';
 	$q = query('y', "Is $_ surprised? (Y)es (n)o");
