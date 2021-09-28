@@ -1,10 +1,13 @@
 #### Urgent:
-* create being DX too!
-* make neater table of possible actions!
-* keep trask of number of hexes moved!
-* make move prompt smaller
+* special rolls before each turn?
+* wait for an opening
+* separate time xp from rest
+
 * combine spell recharges
-* uncharged creation needs to disappear
+* make neater table of possible actions!
+  - maybe store formats, descriptions, applicability, for each command? (27sep021)
+* keep track of number of hexes moved!
+* make move prompt smaller
 * merge shield command into adjust, with a duration, and accept inf as duration (26sep021)
 * turn spell is cast is turn 0 -- this strengthens Aid and weakens Rope.  Put this into the house rules. (26sep021)
 * Rethink HTH rules, based on item 91 in Death Test 2 (12sep021)
@@ -23,6 +26,8 @@
     (29aug021)
 
 #### Thoughts:
+* Have 'machine mode' for interacting with GUI frontend? (27sep021)
+* Should created beings move with creator? (27sep021)
 * break or drop weapon as action result -- so can remind next turn! (16sep021)
 * throw dice, so they are recorded in the log file
   (could record results of physical dice, or roll my own)
@@ -288,3 +293,6 @@ Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
 * defer action would be really useful, though complicated... (27aug021)
 * -dl -ld (20sep021)
 * Do single leading spaces cause any trouble?  such as alone? (26sep021)
+* create being DX too!
+* uncharged creation needs to disappear
+  'discontinue' <who>

@@ -19,8 +19,9 @@ adjusted DX 11 because of their previous injuries and chosen actions during
 that turn...  This tool is intended to take care of all that, so you can
 focus on the game!  Let the computer tell you whose turn it is, so you don't
 have to keep all these details in your head.
-It also keeps track of experience points earned during combat, presenting
-them at the end of the battle.
+It also keeps track of each figure's ST remaining, and experience points earned during combat, presenting
+them at the end of the battle, so that less record keeping is required
+during a battle.
 
 **Note:** I have the (Advanced and 'basic') versions published by Metagaming circa 1982.  I
   do not know if the rules for the more modern versions published by Steve

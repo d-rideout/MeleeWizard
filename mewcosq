@@ -618,7 +618,7 @@ sub act {
       "* de\tdefer action\n";
   print "* sp<ST> a <who> <DX mod>\tspell which modifies <who>\'s adjDX by <DX mod>\n",
       "\t(e.g. 'sp3 a x -6' for Clumsiness spell on x (remember to put a DX adjustment\n\t each turn on x, during action considerations)\n",
-      "* sp<ST> <name> <ST> <adjDX>\tcreate being\n", # create being
+      "* sp<ST> <name> <ST> <DX> <adjDX>\tcreate being\n", # create being
       "* di <who>\t\t\tdisbelieve <who>\n",
       "* sp2 r <who>\t\t\tcast Rope spell on <who>\n",
       "* [sp<ST>] sh<dex adj>\tready or unready shield, which changes base adjDX\n",
@@ -644,13 +644,13 @@ sub act {
       my $action = query('', "Action result? (N)o");
       $debug && print "act_chari=$act_chari action=[$action]\n";
 #       elsif (!$action) { last; } # exits action query for this character
-      last unless $action;
       # Spell cost
       if ($action =~ s/^sp ?(\d+)\s*//) {
 	$ac->{STrem} -= $1;
 	print "$ac->{NAME} casts spell, has $ac->{STrem} ST remaining\n";
 	push @{$xp[$act_chari]}, $1, "$1 ST spell";
       }
+      last unless $action;
       # Result of action (in alphabetical order after Hit-for-damage)
       if (shield($ac, $action)) { last; } # must precede Hit
       elsif ($action =~ /^a (.+) (-?\d+)$/) {  # adjust DX
@@ -660,14 +660,17 @@ sub act {
 	print "$characters[$targeti]->{NAME} adjDX ", $2<0?'':'+', "$2\n";
 	last;
       } # DX mod for this turn only, e.g. from Clumsiness spell
-      elsif ($action =~ /^(.+) (\d+) (\d+)$/) { # Create being
-	print "$1 created with ST $2 adjDX $3\n";
+      elsif ($action =~ /^(.+) (\d+) (\d+) ?(\d+)?$/) { # Create being
+	my $adjdx = $4;
+	$adjdx = $3 unless defined $adjdx;
+	print "$1 created with ST $2 DX $3 ($adjdx)\n";
 	print "Animals get automatic disbelieve roll\n";
 	# Not too sure how to handle this.  Will write explicit code for now, but should put into function which is shared with 'Read parties' code above. (29jul021)
 	$characters[$n]->{NAME} = $1;
 	$characters[$n]->{ST} = $2;
 	$characters[$n]->{STrem} = $2;
-	$characters[$n]->{adjDX} = $3;
+	$characters[$n]->{DX} = $3;
+	$characters[$n]->{adjDX} = $adjdx;
 	$characters[$n]->{PLAYER} = $characters[$act_chari]->{NAME};
 	$characters[$n]->{PARTY} = $characters[$act_chari]->{PARTY};
 	push @dxmod, 0;
@@ -760,16 +763,20 @@ sub act {
     $debug && print "ndefer=$ndefer  before \@acted: ", join(':', @acted), "\n";
     if ($defer) { $acted[$act_chari] = -1; }
     else {
-      $debug && print "$ac->{NAME} acted\n";
+      $debug && print "$ac->{NAME} acted  ndefer=$ndefer\n";
+      --$ndefer if $acted[$act_chari] && $acted[$act_chari] < 0; # if this was a deferred figure
       if ($ndefer) {
 	# clear all defer flags
 	# 	foreach my $i (0..$#acted) { $acted[$i] = 0 if $acted[$i] < 0; }
 	my $i = 0;
 	while ($ndefer--) {
-	  while ($acted[$i]>=0) { ++$i; }
+	  while ($acted[$i]>=0) { ++$i;
+# 				  print "$ndefer $i $acted[$i]\n"; <STDIN>;
+	  }
 	  $acted[$i] = 0;
 	  ++$i;
 	}
+	$ndefer = 0; # maybe i should use different logic above (28sep021)
       }
       $acted[$act_chari] = 1;
     } # acted
@@ -819,25 +826,36 @@ sub movement {
     print " $ent[$i]\n";
     push @order, $i;
   }
+  print "\n";
 
   $phase = 'renew spells';
-  my $fmt = "format: <who> <cost>\n";
-  print "\nSpell phase: Renew spells or they end now\n$fmt";
+  my $fmt = "format: <who> <cost>\n    or: di <who>  to discontinue created figure\n";
+  &displayCharacters;
+  print "Spell phase: Renew spells or they end now\n$fmt";
   while (1) {
     my $sccmd = query('', 'Spell cost, (F)inished');
     last unless $sccmd;
     my @sccmd = split / /, $sccmd;
-#     unless $sccmd =~ /^([^ 
-    my $whoi = who(shift @sccmd);
-    my $cost = shift @sccmd;
-    if ($whoi eq 'x') { print "Error in character specification $whoi", $fmt; next; }
-    elsif ($cost !~ /^\d+$/) { print "Please use positive integer for ST cost $cost", $fmt; next; }
-    elsif (@sccmd) { print $fmt; next; }
-    my $c = $characters[$whoi];
-    $c->{STrem} -= $cost;
-    print "$c->{NAME} has $c->{STrem} remaining\n";
-    push @{$xp[$whoi]}, $cost, 'spell renewal';
-    next;
+    #     unless $sccmd =~ /^([^
+    if ($sccmd[0] eq 'di') {
+      my $whoi = who(pop @sccmd);
+      next if $whoi eq 'x';
+      my $c = $characters[$whoi];
+      print "$c->{NAME} disappears\n";
+      $c->{DEAD} = 1;
+    } else {
+      my $whoi = who(shift @sccmd);
+      my $cost = shift @sccmd;
+      next if $whoi eq 'x'; #) { print "Error in character specification $whoi", $fmt; next; }
+      if ($cost !~ /^\d+$/) {
+	print "Please use positive integer for ST cost $cost\n", $fmt; next; }
+      elsif (@sccmd) { print $fmt; next; }
+      my $c = $characters[$whoi];
+      $c->{STrem} -= $cost;
+      print "$c->{NAME} has $c->{STrem} remaining\n";
+      push @{$xp[$whoi]}, $cost, 'spell renewal';
+    }
+#     next;
   }
   
   # Movement
