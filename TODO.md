@@ -1,7 +1,5 @@
 #### Urgent:
-* special rolls before each turn?
 * wait for an opening
-* separate time xp from rest
 
 * combine spell recharges
 * make neater table of possible actions!
@@ -26,6 +24,8 @@
     (29aug021)
 
 #### Thoughts:
+* Note time is measured from start of log file, so can't sleep on it or whatever! (28sep021)
+* Are there rolls to check before each turn? (28sep021)
 * Have 'machine mode' for interacting with GUI frontend? (27sep021)
 * Should created beings move with creator? (27sep021)
 * break or drop weapon as action result -- so can remind next turn! (16sep021)
@@ -296,3 +296,4 @@ Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
 * create being DX too!
 * uncharged creation needs to disappear
   'discontinue' <who>
+* separate time xp from rest
