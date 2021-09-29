@@ -1,13 +1,10 @@
 #### Urgent:
-* wait for an opening
-
-* combine spell recharges
-* make neater table of possible actions!
-  - maybe store formats, descriptions, applicability, for each command? (27sep021)
 * keep track of number of hexes moved!
 * make move prompt smaller
 * merge shield command into adjust, with a duration, and accept inf as duration (26sep021)
-* turn spell is cast is turn 0 -- this strengthens Aid and weakens Rope.  Put this into the house rules. (26sep021)
+
+* turn spell is cast is turn 0 -- this strengthens Aid and weakens Rope.  Put this into
+  the house rules, and adjust code. (26sep021)
 * Rethink HTH rules, based on item 91 in Death Test 2 (12sep021)
   - Consider FAQ at end of Codex!! (sep021)
   - Rethink House Rules presentation? (13sep021)
@@ -24,6 +21,7 @@
     (29aug021)
 
 #### Thoughts:
+* Maybe store formats, descriptions, subphase applicability, for each command? (27sep021)
 * Note time is measured from start of log file, so can't sleep on it or whatever! (28sep021)
 * Are there rolls to check before each turn? (28sep021)
 * Have 'machine mode' for interacting with GUI frontend? (27sep021)
@@ -297,3 +295,6 @@ Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
 * uncharged creation needs to disappear
   'discontinue' <who>
 * separate time xp from rest
+* wait for an opening
+* combine spell recharges
+* make neater table of possible actions!

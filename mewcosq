@@ -73,6 +73,7 @@ my %hkeys = (NAME=>1, ST=>1, STrem=>1, DX=>1, adjDX=>1, PLAYER=>1, PARTY=>0, STU
 my $n = 0; # total number of characters
 my $ncommands=0; # number of user entered commands
 my @xp; # indexed by char, value array of pairs num, description
+my @spellRenewalxp; # add it all up for each character
 
 # Read parties
 foreach my $partyfile (@ARGV) {
@@ -417,18 +418,21 @@ sub query {
 sub xp {
   my $seconds = time - $startTime;
   print "\n", $seconds<121?"$seconds seconds":int($seconds/60+.5)." minutes", " of wallclock time passed.\n"; # for now (13sep021)
-  return unless @xp || $seconds>359;
+  return unless @xp || @spellRenewalxp || $seconds>359;
   my $timexp = int($seconds/720 + .5);
   print "Each survivor earns (at least) $timexp xp for wallclock time\n";
   
   print "\nExperience points earned:\n",
         "------------------------\n";
-  foreach my $ci (0..$#xp) {
-    next unless $xp[$ci] || $timexp;
+  foreach my $ci (0..$n-1) {
+    my $srxp = $spellRenewalxp[$ci];
+    $debug && print "$characters[$ci]->{NAME}\tsrxp=$srxp timexp=$timexp\n";
+    next unless $timexp || $xp[$ci] || $srxp;
     my $c = $characters[$ci];
     next if $c->{DEAD} && $c->{STrem} != 1;
+    push @{$xp[$ci]}, $srxp, 'spell renewal' if $srxp;
     print "$c->{NAME}:\n";
-    my $tot;
+    my $tot = 0;
     while (my ($amt, $desc) = splice @{$xp[$ci]}, 0, 2) {
       print "$amt\t$desc\n";
       $tot += $amt;
@@ -619,15 +623,16 @@ sub act {
   
   # Actions
   &displayCharacters;
-  print "Actions:\n\n", # in alphabetical order
-      "* [sp<ST>] <who>-<dam>\t(e.g. c-4 for 4 damage to character c after armor)\n",
-      "* de\tdefer action\n",
-      "* w\twait for an opening\n\n";
-  print "* sp<ST> a <who> <DX mod>\tspell which modifies <who>\'s adjDX by <DX mod>\n",
-      "\t(e.g. 'sp3 a x -6' for Clumsiness spell on x (remember to put a DX adjustment\n\t each turn on x, during action considerations)\n",
-      "* sp<ST> <name> <ST> <DX> <adjDX>\tcreate being\n", # create being
-      "* di <who>\t\t\tdisbelieve <who>\n",
-      "* sp2 r <who>\t\t\tcast Rope spell on <who>\n",
+  print "Actions:\n",
+        "-------\n", # in alphabetical order
+      "* [sp<ST>] <who>-<dam>\n  (e.g. c-4 for 4 damage to character c after armor)\n",
+      "* de\t\t\tdefer action\n",
+      "* w\t\t\twait for an opening\n";
+  print "* sp<ST> a <who> <DX mod>\n  spell which modifies <who>\'s adjDX by <DX mod>\n",
+      "  (e.g. 'sp3 a x -6' for Clumsiness spell on x (remember to put a DX\n  adjustment each turn on x, during action considerations)\n",
+      "* sp<ST> <name> <ST> <DX> <adjDX>\n  create being\n", # create being
+      "* di <who>\t\tdisbelieve <who>\n",
+      "* sp2 r <who>\t\tcast Rope spell on <who>\n",
       "* [sp<ST>] sh<dex adj>\tready or unready shield, which changes base adjDX\n",
 	  "\t\t\t(e.g. 'sh -2' to ready a tower shield)\n",
       "* ur <who>\t\tun-Rope <who>\n",
@@ -869,7 +874,8 @@ sub movement {
       my $c = $characters[$whoi];
       $c->{STrem} -= $cost;
       print "$c->{NAME} has $c->{STrem} ST remaining\n";
-      push @{$xp[$whoi]}, $cost, 'spell renewal';
+      #       push @{$xp[$whoi]}, $cost, 'spell renewal';
+      $spellRenewalxp[$whoi] += $cost;
     }
 #     next;
   }
