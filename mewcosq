@@ -356,7 +356,7 @@ sub query {
   while (1) {
     #   print "Turn $turn $phase: ", shift, ' or (q)uit> ';
 #     print "Turn $turn $phase: ", $query, ' or global option, (?) for list> ';
-    print "Turn $turn $phase: ", $query, ' or (?) for global options> ';
+    print "Turn $turn $phase: ", $query, ' or (?) for glbl opts> ';
     my $input;
     if ($restart && @log) {
       print $input = shift @log;
@@ -373,7 +373,7 @@ sub query {
       print LOG "$input\n";
       ++$ncommands;
     }
-    return $default unless $input;
+    return $default unless $input || $input eq '0';
 
     # Process global options
     if ($global_options{$cmd}) {
@@ -417,7 +417,12 @@ sub query {
 #  &query parser under 'q' (28sep021))
 sub xp {
   my $seconds = time - $startTime;
-  print "\n", $seconds<121?"$seconds seconds":int($seconds/60+.5)." minutes", " of wallclock time passed.\n"; # for now (13sep021)
+  if ($seconds<121) { print "\n$seconds seconds" }
+  elsif ($seconds < 7201) { print "\n", int($seconds/60+.5)." minutes" }
+  else { my $hrs = int($seconds/3600);
+# 	 $seconds -= $hrs*3600;
+	 print "\n$hrs hours and ", int(($seconds-$hrs*3600)/60+.5)." minutes" }
+  print " of wallclock time passed.\n";
   return unless @xp || @spellRenewalxp || $seconds>359;
   my $timexp = int($seconds/720 + .5);
   print "Each survivor earns (at least) $timexp xp for wallclock time\n";
@@ -826,7 +831,7 @@ sub shield {
 }
 
 
-# intiative, spell renewal, & movement
+# Intiative, spell renewal, & movement
 # pass me an array of alive entities
 sub movement {
   my @ent = @_;
@@ -854,7 +859,7 @@ sub movement {
   &displayCharacters;
   print "Spell phase: Renew spells or they end now\n$fmt";
   while (1) {
-    my $sccmd = query('', 'Spell cost, (F)inished');
+    my $sccmd = query('', 'Spell cost, (F)inished,');
     last unless $sccmd;
     my @sccmd = split / /, $sccmd;
     #     unless $sccmd =~ /^([^
@@ -877,20 +882,21 @@ sub movement {
       #       push @{$xp[$whoi]}, $cost, 'spell renewal';
       $spellRenewalxp[$whoi] += $cost;
     }
-#     next;
   }
   
   # Movement
   # --------
   my $i = 0;
   my $last = $#ent; # queue index of last in queue
+#   my $query_st;
   $phase = 'movement';
-  print "\nMovement phase:\n";
-  # Trim dead people from end of order
-#   --$last while $characters[$order[$last]]->{DEAD};
-
+  print "\nMovement phase: ";
+  if ($initiative eq 'c') {
+    print "Enter number of hexes moved at prompt\n";
+#     $query_st = "num hexes $ent[$order[$i]] moved, (D)efer, (f)inished"
+  } else { print "Enter '0' to move\n"; }
+  
   while (1) {
-
     # skip over people who have gone already
     $debug && print "skipping over moved characters at front of queue\n";
     while ($moved[$order[$i]]) {
@@ -907,8 +913,8 @@ sub movement {
     } else {
       $debug && print "order[$i]=$order[$i] last=$last\n";
 #       my $move = query('d', "$characters[$order[$i]]->{NAME} (m)ove, or (D)efer");
-      my $move = query('d', "$ent[$order[$i]] (m)ove, (D)efer, (f)inished");
-      if ($move eq 'm') {
+      my $move = query('d', "$ent[$order[$i]] move, (D)efer, (f)inished,");
+      if ($move =~ /^\d/) {
 	$moved[$order[$i]] = 1;
 	--$last if $i==$last;
 	$i = 0;

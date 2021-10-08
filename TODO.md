@@ -1,6 +1,4 @@
 #### Urgent:
-* keep track of number of hexes moved!
-* make move prompt smaller
 * merge shield command into adjust, with a duration, and accept inf as duration (26sep021)
 
 * turn spell is cast is turn 0 -- this strengthens Aid and weakens Rope.  Put this into
@@ -21,6 +19,8 @@
     (29aug021)
 
 #### Thoughts:
+* Save end time in log file, and only credit for time in play? (7oct021)
+* Allow any (non-reserved) string for move? (6oct021)
 * Maybe store formats, descriptions, subphase applicability, for each command? (27sep021)
 * Note time is measured from start of log file, so can't sleep on it or whatever! (28sep021)
 * Are there rolls to check before each turn? (28sep021)
@@ -121,6 +121,8 @@
   the best approach for that...) (9sep021)
 
 * I think @chars API to &act is a tad silly, in that figures never get prunned from the list.  However indexing into the list is non-trivial, so I don't know that it is worth trying to fix this. (19sep021)
+
+* make move prompt smaller? (7oct021)
 
 #### Non-urgent:
 * Check if sp2 preceeds r action? (Rope spell)? (10sep021)
@@ -298,3 +300,4 @@ Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
 * wait for an opening
 * combine spell recharges
 * make neater table of possible actions!
+* keep track of number of hexes moved!
