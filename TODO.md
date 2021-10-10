@@ -1,8 +1,13 @@
 #### Urgent:
-* merge shield command into adjust, with a duration, and accept inf as duration (26sep021)
-
 * turn spell is cast is turn 0 -- this strengthens Aid and weakens Rope.  Put this into
   the house rules, and adjust code. (26sep021)
+* make neater table of possible actions! (8oct021)
+  - name, format, description
+    nicely formatted using printf
+    maybe store all this in a data structure.  (Array?  Prob hash better: key name
+    val hash with standard keys.  Just nicer than arrays.
+    Or can do array of hashes)
+
 * Rethink HTH rules, based on item 91 in Death Test 2 (12sep021)
   - Consider FAQ at end of Codex!! (sep021)
   - Rethink House Rules presentation? (13sep021)
@@ -19,6 +24,10 @@
     (29aug021)
 
 #### Thoughts:
+* record die rolls, so can go back and fix errors? (9oct021)
+* reject actions taken in wrong sub-phase? (8oct021)
+* Remove shield command? (8oct021)
+* Store names for everything, so e.g. all dex mods can be described, including turns they happened? (8oct021)
 * Save end time in log file, and only credit for time in play? (7oct021)
 * Allow any (non-reserved) string for move? (6oct021)
 * Maybe store formats, descriptions, subphase applicability, for each command? (27sep021)
@@ -299,5 +308,6 @@ Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
 * separate time xp from rest
 * wait for an opening
 * combine spell recharges
-* make neater table of possible actions!
 * keep track of number of hexes moved!
+* merge shield command into adjust, with a duration, and accept inf as duration (26sep021)
+  - first give adjust a duration, then consider removing shield command? (8oct021)

@@ -76,9 +76,11 @@ During the action phase, it moves a *further* hex, on to the target figure, and 
 There are two obvious further variants: We could allow *both* **HTH-as-move** and **HTH-as-action**, or neither.  I tended to play with the latter in my youth, since the rules were confusing.  But maybe the former is the best option??
 <!--, e.g. because it better handles entering from a front hex.-->
 
-### Rules from *Wizard*:
+### 'Melee' rules for wizards:
 * A wizard in HTH gets -4 DX for spell casting.
 * A wizard in HTH is at -4 DX for drawing a dagger.
+* Wizard cannot cast spell with weapon besides staff ready.
+* Wizard cannot cast spell with shield ready.
 
 ### Pinning a Foe:
 The Pinning a Foe rules in Advanced Melee seem grossly unrealistic, since
@@ -92,6 +94,9 @@ Let's also add a ST difference modifier to the success roll, so the goblin's
 success roll is now 14 + 3/2 - 26/2 = 2 or less on 3 dice.  That seems much
 more reasonable.
 
+### Clarifications from *Questions* section of ** *the Fantasy Masters' Codex* 1981 **
+Any figure who falls down, for any reason, before their action for that turn, loses that action.  They have to wait until next turn to stand up.
+
 ---
 
 Wizard weapons & armor:
@@ -99,8 +104,6 @@ Wizard weapons & armor:
 Wizard says wizards get -4 DX with weapon or armor besides staff and dagger,
 unless it is silver.
 Is it cumulative?  Is a wizard with a metal weapon and shield at -8 DX?  I am going to guess not. (25aug021)
-Wizard cannot cast spell with weapon besides staff ready.
-Wizard cannot cast spell with shield ready.
 Apparently non-metal weapons and armor are okay for wizard?  The statement in
 Advanced Melee is not so clear.
 It *seems* like also all metal must be silver for wizards, so that they can cast spells?

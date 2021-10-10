@@ -65,7 +65,7 @@ $debug && print "Debug level $debug\n\n";
 # Data structures
 my @characters; # val hash with below keys
 my %charkeys; # key namekey val index into @characters
-my %hkeys = (NAME=>1, ST=>1, STrem=>1, DX=>1, adjDX=>1, PLAYER=>1, PARTY=>0, STUN=>0, FALL=>0, StunTurn=>0, DEAD=>0, NAMEKEY=>0, BAD=>1, ROPE=>0);
+my %hkeys = (NAME=>1, ST=>1, STrem=>1, DX=>1, adjDX=>1, PLAYER=>1, PARTY=>0, STUN=>0, FALL=>0, StunTurn=>0, DEAD=>0, NAMEKEY=>0, BAD=>1, ROPE=>0, ADJ=>0);
 # STUN how much damage causes stun
 # StunTurn becomes unstunned on this turn
 # FALL how much damage causes fall
@@ -216,6 +216,18 @@ while (1) {
   my @bow2;  # double bow attacks
   @dxmod = (0) x $n;
   @dxinj = (0) x $n;
+
+  # Apply ongoing dxmods
+  foreach my $ci (0..$#characters) {
+    next if $characters[$ci]->{DEAD};
+    my $mods = $characters[$ci]->{ADJ};
+    next unless $mods;
+    my $i=0;
+    my ($mod, $lastTurn) = $mods->[$i..$i+1];
+    $lastTurn = $turn if $lastTurn eq 'inf';
+    if ($lastTurn < $turn) { splice @$mods, $i, 2 }
+    else { $dxmod[$ci] += $mod }
+  }
   
   $phase = 'action consideration';
   &displayCharacters;
@@ -245,7 +257,7 @@ while (1) {
     print "$characters[$who]->{NAME}";
     foreach my $cmd (@sccmd) {
       if ($cmd =~ /^\+?-?\d+$/) { #(\+|-) ?(\d+)( ?([pm]))?/) {
-	$dxmod[$who] = $cmd;
+	$dxmod[$who] += $cmd;
 	my $plus = '+';
 	$plus = '' if $cmd =~ /^[\+-]/;
 	print " at $plus$cmd DEX = ", $characters[$who]->{adjDX}+$cmd, ' (- injury adjustments)';
@@ -629,18 +641,20 @@ sub act {
   # Actions
   &displayCharacters;
   print "Actions:\n",
-        "-------\n", # in alphabetical order
+        "-------\n", # in alphabetical order (within each sub-phase)
       "* [sp<ST>] <who>-<dam>\n  (e.g. c-4 for 4 damage to character c after armor)\n",
-      "* de\t\t\tdefer action\n",
-      "* w\t\t\twait for an opening\n";
-  print "* sp<ST> a <who> <DX mod>\n  spell which modifies <who>\'s adjDX by <DX mod>\n",
-      "  (e.g. 'sp3 a x -6' for Clumsiness spell on x (remember to put a DX\n  adjustment each turn on x, during action considerations)\n",
+      "* de\t\t\tdefer action\n";
+#   print "* sp<ST> a <who> <DX mod>\n  spell which modifies <who>\'s adjDX by <DX mod>\n",
+  print "* a <who> <DX mod> <num turns>\n  adjust <who>\'s adjDX by <DX mod>\n",
+      "  Use spell convention for num turns, so 0 for this-turn-only.\n  Use inf for 'permanent' change to adjDX, such as from readying a shield.\n",
+      "  (e.g. 'sp3 a x -6 3' for Clumsiness spell on x)\n",
       "* sp<ST> <name> <ST> <DX> <adjDX>\n  create being\n", # create being
       "* di <who>\t\tdisbelieve <who>\n",
       "* sp2 r <who>\t\tcast Rope spell on <who>\n",
       "* [sp<ST>] sh<dex adj>\tready or unready shield, which changes base adjDX\n",
 	  "\t\t\t(e.g. 'sh -2' to ready a tower shield)\n",
       "* ur <who>\t\tun-Rope <who>\n",
+      "* w\t\t\twait for an opening\n",
       "  Prefix with 'sp<ST>' if result is from spell of ST cost <ST>.\n",
       "  (Note that spell can have no result, but still cost ST.)\n" if $phase =~ /normal/;
   print '-' x 79, "\n";
@@ -672,11 +686,14 @@ sub act {
       last unless $action;
       # Result of action (in alphabetical order after Hit-for-damage)
       if (shield($ac, $action)) { last; } # must precede Hit
-      elsif ($action =~ /^a (.+) (-?\d+)$/) {  # adjust DX
+      elsif ($action =~ /^a (.+) (-?\d+) (\d+|inf)$/) {  # adjust DX
 	my $targeti = who($1);
 	next if $targeti eq 'x';
-	$dxmod[$targeti] += $2;
-	print "$characters[$targeti]->{NAME} adjDX ", $2<0?'':'+', "$2\n";
+	my $mod = $2;
+	my $dur = $3;
+	$dxmod[$targeti] += $mod;
+	$dur and push @{$characters[$targeti]->{ADJ}}, $mod, $dur eq 'inf' ? 'inf':$turn+$dur;
+	print "$characters[$targeti]->{NAME} adjDX ", $2<0?'':'+', "$2 for $3 turns\n";
 	last;
       } # DX mod for this turn only, e.g. from Clumsiness spell
       elsif ($action =~ /^(.+) (\d+) (\d+) ?(\d+)?$/) { # Create being
