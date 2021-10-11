@@ -32,8 +32,7 @@ principles to learn here.)
 
 These are the '**standard**' house rules.  It will be convenient to allow variants, to facilitate play testing them.  I will present the **named variants in boldface**, so that the choice of rules for a particular game can be easily described using these named variants.
 
-Disengagement:
--------------
+## Disengagement:
 A higher adjDX fighter can 'leave stranded' a lower adjDX fighter by
 disengaging, and thereby avoid ever being attacked by them.  Is this
 intended?  Should we allow such a 'stranded fighter' to also move one hex by
@@ -55,8 +54,7 @@ likely, however critical misses retain their usual probabilities based on the
 unadjusted die roll.  (I added an additional +1 modifier to the to-hit roll, to
 make the option slightly closer to the *standard* variant.  So the 'action initiative' roll also matters when using **weak disengagement**.)
 
-Hand-To-Hand (HTH) Combat:
--------------------------
+## Hand-To-Hand (HTH) Combat:
 I find the description of the HTH rules confusing, and the original and Advanced rules appear to differ slightly.  In short, the original rules seem to describe engaging in HTH combat as an *action*, while the Advanced rules seem to describe it as a *movement*.  <!-- Although we generally adopt the Advanced rules where they differ, in this case -->
 I think that the original rules lead to a better game: allowing engaging in HTH as a movement is simply too powerful -- it allows a higher MA character to almost completely trump any non-ranged attack, by simply engaging the attacking figure in HTH combat before they get a chance to act.  ([Musings from Myriangia](https://myriangia.wordpress.com/2020/10/07/getting-a-grip-in-hand-to-hand-combat/) has a nice page on this, which includes further rules on grappling.  For the moment I am just trying to get a handle on the 'pure' Melee/Wizard rules.)
 However, item 91 of *Death Test 2* makes it pretty clear that the intent is for HTH engagement to happen during *movement*, as it discusses differences between initiative rolls, which would make no sense if HTH engagement were an action.
@@ -76,12 +74,6 @@ During the action phase, it moves a *further* hex, on to the target figure, and 
 There are two obvious further variants: We could allow *both* **HTH-as-move** and **HTH-as-action**, or neither.  I tended to play with the latter in my youth, since the rules were confusing.  But maybe the former is the best option??
 <!--, e.g. because it better handles entering from a front hex.-->
 
-### 'Melee' rules for wizards:
-* A wizard in HTH gets -4 DX for spell casting.
-* A wizard in HTH is at -4 DX for drawing a dagger.
-* Wizard cannot cast spell with weapon besides staff ready.
-* Wizard cannot cast spell with shield ready.
-
 ### Pinning a Foe:
 The Pinning a Foe rules in Advanced Melee seem grossly unrealistic, since
 they have almost no regard for ST.  (Some other website pointed this out but I
@@ -94,8 +86,32 @@ Let's also add a ST difference modifier to the success roll, so the goblin's
 success roll is now 14 + 3/2 - 26/2 = 2 or less on 3 dice.  That seems much
 more reasonable.
 
-### Clarifications from *Questions* section of ** *the Fantasy Masters' Codex* 1981 **
+## 'Melee' rules for wizards:
+* A wizard in HTH gets -4 DX for spell casting.
+* A wizard in HTH is at -4 DX for drawing a dagger.
+* Wizard cannot cast spell with weapon besides staff ready.
+* Wizard cannot cast spell with shield ready.
+
+## Clarifications from *Questions* section of *the Fantasy Masters' Codex 1981*:
 Any figure who falls down, for any reason, before their action for that turn, loses that action.  They have to wait until next turn to stand up.
+
+## Spell turn counting
+
+Turn counting for spells is not terribly clear.  We will thus use the following convention:
+
+The turn that a spell is cast is spell turn 0, for spell effects which are
+time dependent.  Thus the strength cost for a summoning spell is
+
+base_cost + spell_turn * rate
+
+The adjDX penalty from being Roped is -min(2, 1+spell_turn).
+
+An Aid spell has no effect on spell turn 3.
+
+We may wish to allow an optional **strong Rope** rule, with an adjDX penalty of
+-(2+spell_turn).  That seems to be the original intent?
+
+All spells have no effect on spell turn 13, unless they are renewed.
 
 ---
 
@@ -123,9 +139,6 @@ must roll against adjDX to remain standing! (Wizard)
 
 Questions:
 ---------
-* How are turns counted for the Rope spell?  Is the turn the spell is cast
-  the 1st or the 0th turn?  I am presuming the former, making the spell a
-  little more powerful. (10sep021)
 * Wizard has a strange rule about attacking figures who disengaged, which
   even its own sample combat does not use!  What to make of it?  It weakens
   disengagement a bit, which may be a good thing.  Otherwise high DX figures

@@ -274,7 +274,7 @@ while (1) {
   } # special considerations
   print "\n";
 
-  # Compute dx mods due to injury
+  # Compute dx mods due to injury or Rope spell
   for my $i (0..$n-1) {
     my $chr = $characters[$i];
     
@@ -287,7 +287,7 @@ while (1) {
     # I have to keep track of the two different types of damage for wizards (7aug021)
     $dxinj[$i] -= 3 if $chr->{BAD} && $chr->{STrem} < 4;
     my $ropeTurn = $chr->{ROPE};
-    $dxinj[$i] -= 2 + $turn - $ropeTurn if $ropeTurn;
+    $dxmod[$i] -= 2 + $turn - $ropeTurn - 1 if $ropeTurn;
   }
 
   # Act
