@@ -156,6 +156,7 @@ my @dxinj; # amt to add to adjDX due to injury
 my @roll; # action initiative roll, indexed by character index
 my $maxdx; # adjDX of acting character
 my $ndefer = 0; # num deferred characters
+my $continue; # holds chari of figure which has another action, else undef
 
 print "\nCapital letter is default option for each prompt\n\n";
 
@@ -582,6 +583,7 @@ sub whosnext {
   my $next;
   $maxdx = -99; # global so it can be used in &act
 
+  return $continue if defined $continue;
   $debug && print join(':', @roll), "\n";
   foreach (@_) {
     my $c = $characters[$_];
@@ -656,7 +658,9 @@ sub act {
       "* ur <who>\t\tun-Rope <who>\n",
       "* w\t\t\twait for an opening\n",
       "  Prefix with 'sp<ST>' if result is from spell of ST cost <ST>.\n",
-      "  (Note that spell can have no result, but still cost ST.)\n" if $phase =~ /normal/;
+      "  (Note that spell can have no result, but still cost ST.)\n",
+      "  Suffix with '\' if figure has more actions for this turn.\n"
+      if $phase =~ /normal/;
   print '-' x 79, "\n";
   my $act_chari;
 #   print 0+@chars, " chars @ START\n";
@@ -677,12 +681,20 @@ sub act {
       my $action = query('', "Action result? (N)o");
       $debug && print "act_chari=$act_chari action=[$action]\n";
 #       elsif (!$action) { last; } # exits action query for this character
+
       # Spell cost
       if ($action =~ s/^sp ?(\d+)\s*//) {
 	$ac->{STrem} -= $1;
 	print "$ac->{NAME} casts spell, has $ac->{STrem} ST remaining\n";
 	push @{$xp[$act_chari]}, $1, "$1 ST spell";
       }
+
+      # Continue?
+      if ($action =~ s/\s*\\\s*$//) {
+	$continue = $act_chari;
+	print "$ac->{NAME} may have another action\n";
+      } else { undef $continue }
+      
       last unless $action;
       # Result of action (in alphabetical order after Hit-for-damage)
       if (shield($ac, $action)) { last; } # must precede Hit
@@ -841,7 +853,7 @@ sub shield {
   
   if ($input =~ /^sh ?([\d-]+)$/) { # change shield state
     my $adjDX = $c->{adjDX};
-    print $c->{NAME}, $1>0 ? ' un' : ' ', "readies shield -- adjDX $adjDX --> ", $adjDX+$1, "\n";
+    print $1>0 ? ' un' : ' ', "readies shield: adjDX $adjDX --> ", $adjDX+$1; #, "\n";
     $c->{adjDX} += $1;
     1;
   } else { 0; }

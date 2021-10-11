@@ -1,6 +1,5 @@
 #### Urgent:
-* monsters with multiple attacks! (10oct021)
-
+* fall unconscious when casting down to ST 1 (12oct021)
 * make neater table of possible actions! (8oct021)
   - name, format, description
     nicely formatted using printf
@@ -313,3 +312,4 @@ Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
   - first give adjust a duration, then consider removing shield command? (8oct021)
 * turn spell is cast is turn 0 -- this strengthens Aid and weakens Rope.  Put this into
   the house rules, and adjust code. (26sep021)
+* monsters with multiple attacks! (10oct021)
