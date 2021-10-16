@@ -248,7 +248,7 @@ while (1) {
 #     my $sccmd = query('', "Special consideration, (F)inished");
     my $sccmd = query('', "(F)inished");
     last unless $sccmd;
-    my @sccmd = split / +/, $sccmd;
+    my @sccmd = split / +/, $sccmd; # special considerations cmd
     my $who = who(shift @sccmd);
     next if $who eq 'x';
 # ) {
@@ -684,7 +684,8 @@ sub act {
 
       # Spell cost
       if ($action =~ s/^sp ?(\d+)\s*//) {
-	$ac->{STrem} -= $1;
+	next unless spendST($ac, $1);
+# 	$ac->{STrem} -= $1;
 	print "$ac->{NAME} casts spell, has $ac->{STrem} ST remaining\n";
 	push @{$xp[$act_chari]}, $1, "$1 ST spell";
       }
@@ -901,14 +902,14 @@ sub movement {
     } else {
       my $whoi = who(shift @sccmd);
       my $cost = shift @sccmd;
-      next if $whoi eq 'x'; #) { print "Error in character specification $whoi", $fmt; next; }
+      next if $whoi eq 'x';
       if ($cost !~ /^\d+$/) {
 	print "Please use positive integer for ST cost $cost\n", $fmt; next; }
-      elsif (@sccmd) { print $fmt; next; }
+      elsif (@sccmd) { print $fmt; next; } # there are further cmds remaining
       my $c = $characters[$whoi];
-      $c->{STrem} -= $cost;
+      next unless spendST($c, $cost);
+      #       $c->{STrem} -= $cost;
       print "$c->{NAME} has $c->{STrem} ST remaining\n";
-      #       push @{$xp[$whoi]}, $cost, 'spell renewal';
       $spellRenewalxp[$whoi] += $cost;
     }
   }
@@ -954,6 +955,31 @@ sub movement {
     }
     last if $last<0;
   } # movement phase
+}
+
+
+# Spend spell ST
+# args: char_handle, amt_spent
+# returns true on success
+# Outputs error message on error, but none on success
+sub spendST {
+  my $c = shift;
+  my $cost = shift;
+  my $st = $c->{STrem};
+
+  # Check if overspent
+  if ($cost > $st) {
+    print "$c->{NAME} only has $st ST remaining.  Try again.\n";
+    return 0;
+  }
+
+  $c->{STrem} -= $cost;
+  if ($c->{STrem} <= 1) {
+    print "$c->{NAME} falls unconscious\n";
+    $c->{DEAD} = 1;
+    print "$c->{NAME} dies -- Is this intentional??!\n" if $c->{STrem} < 1;
+  }
+  1;
 }
 
 

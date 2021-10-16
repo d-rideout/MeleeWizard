@@ -1,12 +1,6 @@
 #### Urgent:
-* fall unconscious when casting down to ST 1 (12oct021)
-* make neater table of possible actions! (8oct021)
-  - name, format, description
-    nicely formatted using printf
-    maybe store all this in a data structure.  (Array?  Prob hash better: key name
-    val hash with standard keys.  Just nicer than arrays.
-    Or can do array of hashes)
-* Rethink HTH rules, based on item 91 in Death Test 2 (12sep021)
+* Clean up HouseRules:
+  - xfer from wiki to doc/ (16oct021)
   - Consider FAQ at end of Codex!! (sep021)
   - Rethink House Rules presentation? (13sep021)
   - https://docs.github.com/en/communities/documenting-your-project-with-wikis/changing-access-permissions-for-wikis (14sep021)
@@ -22,6 +16,12 @@
     (29aug021)
 
 #### Thoughts:
+* make neater table of possible actions! (8oct021)
+  - name, format, description
+    nicely formatted using printf
+    maybe store all this in a data structure.  (Array?  Prob hash better: key name
+    val hash with standard keys.  Just nicer than arrays.
+    Or can do array of hashes)
 * python script which generates 'character cards' (10oct021)
 * record die rolls, so can go back and fix errors? (9oct021)
 * reject actions taken in wrong sub-phase? (8oct021)
@@ -131,6 +131,11 @@
 * I think @chars API to &act is a tad silly, in that figures never get prunned from the list.  However indexing into the list is non-trivial, so I don't know that it is worth trying to fix this. (19sep021)
 
 * make move prompt smaller? (7oct021)
+
+* could have views on battle state
+  give bounds on adjDX of enemies etc.
+  maybe ST ranges?  (14oct021)
+* publish art/urls?  On the wiki? (15oct021)
 
 #### Non-urgent:
 * Check if sp2 preceeds r action? (Rope spell)? (10sep021)
@@ -313,3 +318,4 @@ Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
 * turn spell is cast is turn 0 -- this strengthens Aid and weakens Rope.  Put this into
   the house rules, and adjust code. (26sep021)
 * monsters with multiple attacks! (10oct021)
+* fall unconscious when casting down to ST 1 (12oct021)
