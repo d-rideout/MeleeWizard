@@ -104,12 +104,13 @@ time dependent.  Thus the strength cost for a summoning spell is
 
 base_cost + spell_turn * rate
 
-The adjDX penalty from being Roped is -min(2, 1+spell_turn).
+<!-- The adjDX penalty from being Roped is -min(2, 1+spell_turn). -->
 
 An Aid spell has no effect on spell turn 3.
 
-We may wish to allow an optional **strong Rope** rule, with an adjDX penalty of
--(2+spell_turn).  That seems to be the original intent?
+<!--We may wish to allow an optional **strong Rope** rule,-->
+I believe the published rules intend an adjDX penalty of
+-(2+spell_turn) for the Rope spell, as clarified above.
 
 All spells have no effect on spell turn 13, unless they are renewed.
 
