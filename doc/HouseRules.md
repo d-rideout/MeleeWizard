@@ -12,7 +12,7 @@ Wizard).-->
 There are occasional gaps, ambiguities, and discrepancies in these published
 rules.  This document presents some discussion and 'house rules' which
 attempt to address some of these issues.  I am very interested in others'
-opinions on these issues, so please comment.  (Usually one imagines that
+opinions on these issues, so please comment, in the Discussions tab, as an Issue ticket, or otherwise).  (Usually one imagines that
 'fun', in the context of games, is a purely subjective thing, but the continuing
 popularity of this relatively ancient game suggests that there are some deep
 principles to learn here.)
@@ -55,9 +55,22 @@ unadjusted die roll.  (I added an additional +1 modifier to the to-hit roll, to
 make the option slightly closer to the *standard* variant.  So the 'action initiative' roll also matters when using **weak disengagement**.)
 
 ## Hand-To-Hand (HTH) Combat:
-I find the description of the HTH rules confusing, and the original and Advanced rules appear to differ slightly.  In short, the original rules seem to describe engaging in HTH combat as an *action*, while the Advanced rules seem to describe it as a *movement*.  <!-- Although we generally adopt the Advanced rules where they differ, in this case -->
-I think that the original rules lead to a better game: allowing engaging in HTH as a movement is simply too powerful -- it allows a higher MA character to almost completely trump any non-ranged attack, by simply engaging the attacking figure in HTH combat before they get a chance to act.  ([Musings from Myriangia](https://myriangia.wordpress.com/2020/10/07/getting-a-grip-in-hand-to-hand-combat/) has a nice page on this, which includes further rules on grappling.  For the moment I am just trying to get a handle on the 'pure' Melee/Wizard rules.)
-However, item 91 of *Death Test 2* makes it pretty clear that the intent is for HTH engagement to happen during *movement*, as it discusses differences between initiative rolls, which would make no sense if HTH engagement were an action.
+I find the description of the HTH rules confusing, and the original and
+Advanced rules appear to differ slightly.  In short, the original rules seem
+to describe engaging in HTH combat as an *action*, while the Advanced rules
+seem to describe it as a *movement*.  <!-- Although we generally adopt the
+Advanced rules where they differ, in this case --> I think that the original
+rules lead to a better game: allowing engaging in HTH as a movement is simply
+too powerful -- it allows a higher MA character to almost completely trump
+any non-ranged attack, by simply engaging the attacking figure in HTH combat
+before they get a chance to act.  ([Musings from
+Myriangia](https://myriangia.wordpress.com/2020/10/07/getting-a-grip-in-hand-to-hand-combat/)
+has a nice page on this, which includes further rules on grappling.  For the
+moment I am just trying to get a handle on the 'pure' Melee/Wizard rules.)
+However, item 91 of *Death Test 2* makes it pretty clear that the intent is
+for HTH engagement to happen during *movement*, as it discusses differences
+between initiative rolls, which would make no sense if HTH engagement were an
+action.
 
 Thus, with some trepidation, I will regard the following HTH rules as standard, which I will also call **HTH-as-move**:
 
@@ -114,6 +127,28 @@ I believe the published rules intend an adjDX penalty of
 
 All spells have no effect on spell turn 13, unless they are renewed.
 
+Questions:
+---------
+I have not decided how to handle these issues.  Please comment on them!  
+
+1. If a figure has multiple weapons ready, and another rolls a 6 when engaging
+  it in HTH combat, does the attacking figure get hit with all ready weapons,
+  or just one of the defender's choice? (18sep021)
+  
+2. Advanced Melee states that only armed opponents cause engagement, while (`plain') Melee make no such stipulation.  Surely a bear is armed with its claws.  So why is a human not armed with its fists?  Does a shield count as a weapon for this purpose?
+   * Also: A fighter with only a bow ready causes engagement, no?  Even a fighter with an unloaded heavy crossbow.  But such a fighter has no usable weapon ready.
+   * Proposal?: A 'non-armed opponent' is one with no (usable?) weapon ready, where a 'weapon' is something which can cause damage that turn.  An enemy figure which enters one of the non-armed opponent's front hexes must make a save vs. adjDX _or_ remaining ST, whichever is higher, to avoid becoming engaged.
+
+   I am leaning toward the original rules here, for simplicity.
+
+<!-- 3. See the questions about front hexes of enemy figures during an HTH attack above.  To what extent is an HTH attack allowed to pass through the front hexes of enemy figures during an HTH attack from a disengaged figure?  I suppose that only attacked figures' front hexes are 'cancelled' during this movement, so that if another enemy faces a hex then the attacking figure must end its movement there, and wait until next turn to engage in HTH combat?
+> This issue is obviated by reverting to the original rules for HTH combat.
+
+What if we do not modify the movement through front hexes rules for HTH engagement?  Then, for a disengaged figure to enter HTH combat during the movement phase, it would have to enter via a side or rear hex (depending on difference between MA's of course).  This would make the details of character placement even more high stake than usual, as you may have to keep track of all ways in which an enemy figure can enter your hex via the side or rear, if you don't want to end up disarmed and on the floor *during the movement phase*!
+
+I feel uncomfortable with rules which place so much emphasis on the completely arbitrary initiative roll.  But maybe this 'variance in outcomes' is a desirable feature?  So that the underdog can have a fighting chance?  Perhaps one wants such variability and complication for a one off battle, but not for an extended adventure? -->
+
+
 ---
 
 Wizard weapons & armor:
@@ -138,13 +173,6 @@ Forced retreats:
 If a forced retreat figure has no adjacent unoccupied hex to retreat to, it
 must roll against adjDX to remain standing! (Wizard)
 
-Questions:
----------
-* Wizard has a strange rule about attacking figures who disengaged, which
-  even its own sample combat does not use!  What to make of it?  It weakens
-  disengagement a bit, which may be a good thing.  Otherwise high DX figures
-  can just dance around lower DX figures... (10sep021)
-* If a figure has multiple weapons ready, and another rolls a 6 when engaging it in HTH combat, does the attacking figure get hit with all ready weapons, or just one of the defender's choice? (18sep021)
 
 ---
 Rules from Other Houses:

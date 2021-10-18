@@ -1,6 +1,6 @@
 #### Urgent:
 * Clean up HouseRules:
-  - xfer from wiki to doc/ (16oct021)
+  - clean up doc/HouseRules.md (17oct021)
   - Consider FAQ at end of Codex!! (sep021)
   - Rethink House Rules presentation? (13sep021)
   - https://docs.github.com/en/communities/documenting-your-project-with-wikis/changing-access-permissions-for-wikis (14sep021)
@@ -319,3 +319,4 @@ Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
   the house rules, and adjust code. (26sep021)
 * monsters with multiple attacks! (10oct021)
 * fall unconscious when casting down to ST 1 (12oct021)
+- xfer [house rules] from wiki to doc/ (16oct021)
