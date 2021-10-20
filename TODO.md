@@ -1,11 +1,13 @@
 #### Urgent:
 * Clean up HouseRules:
   - clean up doc/HouseRules.md (17oct021)
+    - fix wizard melee rules! (19oct021)
   - Consider FAQ at end of Codex!! (sep021)
   - Rethink House Rules presentation? (13sep021)
   - https://docs.github.com/en/communities/documenting-your-project-with-wikis/changing-access-permissions-for-wikis (14sep021)
   - Get xowa working? (23sep021)
   - Use wiki format on wiki?  See computer notes. (23sep021)
+  
 * This tool will be helpful in large battles.
   Note: [meleewizards.com](http://meleewizards.com)! (5aug021)
   e.g. allows use of original rules on reactions to injury (29aug021)
@@ -23,7 +25,7 @@
     val hash with standard keys.  Just nicer than arrays.
     Or can do array of hashes)
 * python script which generates 'character cards' (10oct021)
-* record die rolls, so can go back and fix errors? (9oct021)
+* record die rolls, so can go back and fix errors (9oct021)
 * reject actions taken in wrong sub-phase? (8oct021)
 * Remove shield command? (8oct021)
 * Store names for everything, so e.g. all dex mods can be described, including turns they happened? (8oct021)
@@ -174,6 +176,7 @@
 * Should I rename the file to something better, without the .pl extension?
 * Is it silly to use different vars to hold query responses? (4apr021)
   No, I think local variables are good! (2sep021)
+* Assert collective-work copyright on project (ESR) (18oct021)
 
 #### Less important:
 * use extensions for party files?

@@ -21,13 +21,17 @@ use List::Util qw/sum/;
 my %hist2;
 my %hist3;
 my %hist4;
+my %hist5;
 
 for (my $i=1; $i<7; ++$i) {
   for (my $j=1; $j<7; ++$j) {
     ++$hist2{sum($i,$j)};
     for (my $k=1; $k<7; ++$k) {
       ++$hist3{sum($i, $j, $k)};
-      for my $l (1..6) { ++$hist4{sum($i, $j, $k, $l)}; }}}}
+      for my $l (1..6) {
+	++$hist4{sum($i, $j, $k, $l)};
+	++$hist5{sum($i, $j, $k, $l, $_)} for (1..6);
+      }}}}
 
 my $sum;
 print "2d6:\n";
@@ -53,11 +57,10 @@ foreach (sort {$a <=> $b} keys %hist4) {
   printf "$_\t$hist4{$_}\t$sum\t%5.1f\n", 100*$sum/1296;
 }
 
-
-# sub tot {
-#   my @rolls = @_; #sort @_;
-# #   print "@rolls\n";
-# #   my $d1 = shift;
-# #   my $d2 = shift;
-#   return $rolls[1]+$rolls[2]+$rolls[0];
-# }
+$sum = 0;
+print "\n5d6:\n";
+print "roll\tnum\tcum\tprob\n";
+foreach (sort {$a <=> $b} keys %hist5) {
+  $sum += $hist5{$_};
+  printf "$_\t$hist5{$_}\t$sum\t%5.1f\n", 100*$sum/6**5;
+}

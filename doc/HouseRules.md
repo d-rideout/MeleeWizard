@@ -100,10 +100,37 @@ success roll is now 14 + 3/2 - 26/2 = 2 or less on 3 dice.  That seems much
 more reasonable.
 
 ## 'Melee' rules for wizards:
+
+The rules for wizards using weapons and armor are not clear.  They are
+probably intended to take into account the reality that your wizard will
+likely not have any weapon or shield talents, so will be at -4 DX when
+using such items.  <!--Below is my best guess as to the intended rules.-->
+<!-- They can almost all be regarded as questions... -->
+
+### Rules
+We play with the following house rules, though these will likely change:
+
+* Wizards get -4 DX when using weapons besides staff or dagger, and when using a shield.
 * A wizard in HTH gets -4 DX for spell casting.
 * A wizard in HTH is at -4 DX for drawing a dagger.
-* Wizard cannot cast spell with weapon besides staff ready.
-* Wizard cannot cast spell with shield ready.
+* Wizard cannot cast spell with weapon or shield besides staff ready.
+
+### Quotes & Questions
+There are many ambiguous statements in the rules.  Here we quote some rules and muse on what they might mean.
+
+Wizard says wizards get -4 DX with weapon or armor besides staff and dagger,
+unless it is silver.
+
+- Is it cumulative?  Is a wizard with a metal weapon and shield at -8 DX?  I am going to guess not. (25aug021)
+- Apparently non-metal weapons and armor are okay for wizard??  The statement in
+Advanced Melee is not so clear.
+- It *seems* like also all metal must be silver for wizards, so that they can cast spells?
+- What about armor?
+- I am guessing that they can't cast spells if they have ferrous metal on them anywhere.  And they are at -4 DX if they wield anything with ferrous metal.
+<!-- - And so yes I guess they can use non-metallic weapons, without any DX nor spell penalty.  Though no one ever does.  So maybe there is some talent issue which prevents it?  A strong wizard would rather use a club than a staff.  Oh, s/he can't cast spells when wielding such a weapon.  That is a reason.  But a wizard without manna will not be casting spells anyway. -->
+* Using non-metallic weapons contradicts the first rule from Wizard, but maybe that was just a simplified rule?  Though it seems kinda wrong somehow, since no example never appears of wizards with clubs, slings, nor bows...  Again, the talents will probably clarify this. (4sep021)
+
+
 
 ## Clarifications from *Questions* section of *the Fantasy Masters' Codex 1981*:
 Any figure who falls down, for any reason, before their action for that turn, loses that action.  They have to wait until next turn to stand up.
@@ -141,28 +168,10 @@ I have not decided how to handle these issues.  Please comment on them!
 
    I am leaning toward the original rules here, for simplicity.
 
-<!-- 3. See the questions about front hexes of enemy figures during an HTH attack above.  To what extent is an HTH attack allowed to pass through the front hexes of enemy figures during an HTH attack from a disengaged figure?  I suppose that only attacked figures' front hexes are 'cancelled' during this movement, so that if another enemy faces a hex then the attacking figure must end its movement there, and wait until next turn to engage in HTH combat?
-> This issue is obviated by reverting to the original rules for HTH combat.
-
-What if we do not modify the movement through front hexes rules for HTH engagement?  Then, for a disengaged figure to enter HTH combat during the movement phase, it would have to enter via a side or rear hex (depending on difference between MA's of course).  This would make the details of character placement even more high stake than usual, as you may have to keep track of all ways in which an enemy figure can enter your hex via the side or rear, if you don't want to end up disarmed and on the floor *during the movement phase*!
-
-I feel uncomfortable with rules which place so much emphasis on the completely arbitrary initiative roll.  But maybe this 'variance in outcomes' is a desirable feature?  So that the underdog can have a fighting chance?  Perhaps one wants such variability and complication for a one off battle, but not for an extended adventure? -->
-
+3. Are wizards at -4DX when wearing armor?  silver?  leather?
 
 ---
 
-Wizard weapons & armor:
-----------------------
-Wizard says wizards get -4 DX with weapon or armor besides staff and dagger,
-unless it is silver.
-Is it cumulative?  Is a wizard with a metal weapon and shield at -8 DX?  I am going to guess not. (25aug021)
-Apparently non-metal weapons and armor are okay for wizard?  The statement in
-Advanced Melee is not so clear.
-It *seems* like also all metal must be silver for wizards, so that they can cast spells?
-What about armor?
-I am guessing that they can't cast spells if they have ferrous metal on them anywhere.  And they are at -4 DX if they wield anything with ferrous metal.
-And so yes I guess they can use non-metallic weapons, without any DX nor spell penalty.  Though no one ever does.  So maybe there is some talent issue which prevents it?  A strong wizard would rather use a club than a staff.  Oh, s/he can't cast spells when wielding such a weapon.  That is a reason.  But a wizard without manna will not be casting spells anyway.
-Using non-metallic weapons contradicts the first rule from Wizard, but maybe that was just a simplified rule?  Though it seems kinda wrong somehow, since no example never appears of wizards with clubs, slings, nor bows...  Again, the talents will probably clarify this. (4sep021)
 
 Broken weapons:
 --------------
@@ -194,3 +203,10 @@ has some interesting suggestions re rules:
 
 <!--### Alternate HTH rules:
 It is worth play testing the Advanced rules, say with the front hexes of the attacked-enemy-figure-only option below:-->
+
+<!-- 3. See the questions about front hexes of enemy figures during an HTH attack above.  To what extent is an HTH attack allowed to pass through the front hexes of enemy figures during an HTH attack from a disengaged figure?  I suppose that only attacked figures' front hexes are 'cancelled' during this movement, so that if another enemy faces a hex then the attacking figure must end its movement there, and wait until next turn to engage in HTH combat?
+> This issue is obviated by reverting to the original rules for HTH combat.
+
+What if we do not modify the movement through front hexes rules for HTH engagement?  Then, for a disengaged figure to enter HTH combat during the movement phase, it would have to enter via a side or rear hex (depending on difference between MA's of course).  This would make the details of character placement even more high stake than usual, as you may have to keep track of all ways in which an enemy figure can enter your hex via the side or rear, if you don't want to end up disarmed and on the floor *during the movement phase*!
+
+I feel uncomfortable with rules which place so much emphasis on the completely arbitrary initiative roll.  But maybe this 'variance in outcomes' is a desirable feature?  So that the underdog can have a fighting chance?  Perhaps one wants such variability and complication for a one off battle, but not for an extended adventure? -->
