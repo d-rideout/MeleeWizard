@@ -87,6 +87,10 @@ During the action phase, it moves a *further* hex, on to the target figure, and 
 There are two obvious further variants: We could allow *both* **HTH-as-move** and **HTH-as-action**, or neither.  I tended to play with the latter in my youth, since the rules were confusing.  But maybe the former is the best option??
 <!--, e.g. because it better handles entering from a front hex.-->
 
+Additional HTH rules:
+* figure gets +4 DX on attempt to disengage! (according to Codex!)
+  (Though this seems really strange!  Why bother make it 4 dice then?  It is even easier than a 3 die save vs DX!)
+
 ### Pinning a Foe:
 The Pinning a Foe rules in Advanced Melee seem grossly unrealistic, since
 they have almost no regard for ST.  (Some other website pointed this out but I
@@ -104,19 +108,57 @@ more reasonable.
 The rules for wizards using weapons and armor are not clear.  They are
 probably intended to take into account the reality that your wizard will
 likely not have any weapon or shield talents, so will be at -4 DX when
-using such items.  <!--Below is my best guess as to the intended rules.-->
+using such items?  Below is my best guess as to the intended rules.
 <!-- They can almost all be regarded as questions... -->
 
 ### Rules
-We play with the following house rules, though these will likely change:
+<!--We play with the following house rules, though these will likely change:-->
 
 * Wizards get -4 DX when using weapons besides staff or dagger, and when using a shield.
 * A wizard in HTH gets -4 DX for spell casting.
 * A wizard in HTH is at -4 DX for drawing a dagger.
 * Wizard cannot cast spell with weapon or shield besides staff ready.
+* It seems that wizards can wear armor!  Except non-silver metal armor will prevent
+  them from casting spells?
+* lack-of-talent combines in parallel with wizard melee penalty (C)
+* anyone can use a dagger (in hand, no throwing) without non-talent or wizard penalty (C)
+* armor DX- for wizards is independent of necessity of gestures in spells
 
 ### Quotes & Questions
-There are many ambiguous statements in the rules.  Here we quote some rules and muse on what they might mean.
+There are many ambiguous statements in the rules.  Here we quote some rules
+and muse on what they might mean.
+A main source of confusion stems from the apparent conflation of iron weapons with all
+weapons, and likewise with armor.
+
+Below (and above) 'W' indicates that the quotation comes from Wizard, 'AM' from Advanced Melee, 'C' from the Fantasy Masters' Codex 1981, 'AW' Advanced Wizard.
+
+* W: "Wizard whose weapon or armor is iron or steel, instead of silver .. -4 [DX]"
+* W: "wizard ... DX is -4 with ANY weapon except his staff."
+  - The codex seems to add dagger as permissible as well.
+* W: "Wizards may wear armor and use shields, just like fighters."
+* AM: "[silver] equipment is necessary for wizards who wish to fight without an extra DX-"
+* AM&C: "If a weapon has ANY metal parts, they must be of silver for a wizard to use that weapon without injuring his magical abilities."
+* C: "Q: WIZARD states that wizards are -4DX for all weapons except staff & dagger."
+* C: "IRON/SILVER rules replace WIZARD's rules"
+* AW pg 7 has an entire section entitled "IRON, SILVER, AND MAGIC"
+  - Iron (and some other metals) prevents spells ==> -4 DX for casting
+  - Does armor give an additional DX penalty for casting spells, as it would for
+    everything else?  I am going to rule yes.
+* AW: "iron armor is no protection against hostile magic"
+  - I assume that the 'no' is a misprint?
+
+#### guess at intended meaning:
+* (ST<18) wizard in leather (cloth) armor: usual -2 (1) DX on spells and attacks
+* wizard in iron armor: -(4 + usual penalty) DX on spells and (non-staff/dagger) attacks
+* wizard in iron armor: -(usual penalty) DX on staff/dagger attacks
+* wizard in silver armor: -(usual penalty) DX on spells and attacks
+* wizard carrying iron (e.g. as weapon) -4 DX on spells
+* wizard wielding shield or weapon besides staff or dagger -4 DX
+* wizard wielding shield and non-staff/dagger -4 DX
+
+Is that a reasonable interpretation of the rules as stated?
+
+#### older musings:
 
 Wizard says wizards get -4 DX with weapon or armor besides staff and dagger,
 unless it is silver.
