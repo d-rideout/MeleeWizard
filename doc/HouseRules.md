@@ -108,33 +108,20 @@ more reasonable.
 The rules for wizards using weapons and armor are not clear.  They are
 probably intended to take into account the reality that your wizard will
 likely not have any weapon or shield talents, so will be at -4 DX when
-using such items?  Below is my best guess as to the intended rules.
+using such items?  
 <!-- They can almost all be regarded as questions... -->
-
-### Rules
-<!--We play with the following house rules, though these will likely change:-->
-
-* Wizards get -4 DX when using weapons besides staff or dagger, and when using a shield.
-* A wizard in HTH gets -4 DX for spell casting.
-* A wizard in HTH is at -4 DX for drawing a dagger.
-* Wizard cannot cast spell with weapon or shield besides staff ready.
-* It seems that wizards can wear armor!  Except non-silver metal armor will prevent
-  them from casting spells?
-* lack-of-talent combines in parallel with wizard melee penalty (C)
-* anyone can use a dagger (in hand, no throwing) without non-talent or wizard penalty (C)
-* armor DX- for wizards is independent of necessity of gestures in spells
 
 ### Quotes & Questions
 There are many ambiguous statements in the rules.  Here we quote some rules
 and muse on what they might mean.
 A main source of confusion stems from the apparent conflation of iron weapons with all
-weapons, and likewise with armor.
+weapons, and likewise with armor.  And the dagger rules for wizards are not consistent, even within the Wizard booklet itself!
 
 Below (and above) 'W' indicates that the quotation comes from Wizard, 'AM' from Advanced Melee, 'C' from the Fantasy Masters' Codex 1981, 'AW' Advanced Wizard.
 
 * W: "Wizard whose weapon or armor is iron or steel, instead of silver .. -4 [DX]"
 * W: "wizard ... DX is -4 with ANY weapon except his staff."
-  - The codex seems to add dagger as permissible as well.
+  - The codex seems to add dagger as permissible as well, as does the DX adjustments table in Wizard.
 * W: "Wizards may wear armor and use shields, just like fighters."
 * AM: "[silver] equipment is necessary for wizards who wish to fight without an extra DX-"
 * AM&C: "If a weapon has ANY metal parts, they must be of silver for a wizard to use that weapon without injuring his magical abilities."
@@ -147,31 +134,31 @@ Below (and above) 'W' indicates that the quotation comes from Wizard, 'AM' from 
 * AW: "iron armor is no protection against hostile magic"
   - I assume that the 'no' is a misprint?
 
-#### guess at intended meaning:
+### Rules
+<!--We play with the following house rules, though these will likely change:-->
+Below is my best guess as to the intended rules.
+
+* Wizards get -4 DX when using weapons besides staff or dagger, and when using a shield.
+* A wizard in HTH gets -4 DX for spell casting, and can only cast spells on figures in the wizard's hex.
+* A wizard in HTH is at -4 DX for drawing a dagger.
+* A wizard wielding a dagger in HTH is presumably at +4 DX, because s/he is attacking a rear hex.
+* Wizard cannot cast spell with weapon or shield besides staff ready.
+<!-- * lack-of-talent combines in parallel with wizard melee penalty (C) -->
+* Anyone can use a dagger (in hand, no throwing) without non-talent or wizard penalty (C)
+* The armor DX penalty for wizards is independent of necessity of using gestures in spells. (C)
+
 * (ST<18) wizard in leather (cloth) armor: usual -2 (1) DX on spells and attacks
 * wizard in iron armor: -(4 + usual penalty) DX on spells and (non-staff/dagger) attacks
 * wizard in iron armor: -(usual penalty) DX on staff/dagger attacks
-* wizard in silver armor: -(usual penalty) DX on spells and attacks
+* wizard in silver armor: -(usual penalty) DX on spells and (non-staff/dagger) attacks
 * wizard carrying iron (e.g. as weapon) -4 DX on spells
-* wizard wielding shield or weapon besides staff or dagger -4 DX
-* wizard wielding shield and non-staff/dagger -4 DX
+* wizard wielding shield or weapon besides staff or non-silver dagger -4 DX
+* wizard wielding shield and non-(staff/silver dagger) -4 DX (i.e. the penalty is not doubled)
 
 Is that a reasonable interpretation of the rules as stated?
 
-#### older musings:
-
-Wizard says wizards get -4 DX with weapon or armor besides staff and dagger,
-unless it is silver.
-
-- Is it cumulative?  Is a wizard with a metal weapon and shield at -8 DX?  I am going to guess not. (25aug021)
-- Apparently non-metal weapons and armor are okay for wizard??  The statement in
-Advanced Melee is not so clear.
-- It *seems* like also all metal must be silver for wizards, so that they can cast spells?
-- What about armor?
-- I am guessing that they can't cast spells if they have ferrous metal on them anywhere.  And they are at -4 DX if they wield anything with ferrous metal.
-<!-- - And so yes I guess they can use non-metallic weapons, without any DX nor spell penalty.  Though no one ever does.  So maybe there is some talent issue which prevents it?  A strong wizard would rather use a club than a staff.  Oh, s/he can't cast spells when wielding such a weapon.  That is a reason.  But a wizard without manna will not be casting spells anyway. -->
-* Using non-metallic weapons contradicts the first rule from Wizard, but maybe that was just a simplified rule?  Though it seems kinda wrong somehow, since no example never appears of wizards with clubs, slings, nor bows...  Again, the talents will probably clarify this. (4sep021)
-
+<!-- #### Questions:
+* Is a wizard at +4 DX when wielding a dagger in HTH?  Presumably so. -->
 
 
 ## Clarifications from *Questions* section of *the Fantasy Masters' Codex 1981*:
@@ -210,7 +197,11 @@ I have not decided how to handle these issues.  Please comment on them!
 
    I am leaning toward the original rules here, for simplicity.
 
-3. Are wizards at -4DX when wearing armor?  silver?  leather?
+3. If a figure falls due to becomming under a larger figure during the
+movement phase, then the trampling rules seem to indicate that it can stand
+during its action phase, in contradiction to the falling rule as stated in
+the Codex.  What is the resolution to this?
+  * I am going to side with the trampling rules in this case.
 
 ---
 

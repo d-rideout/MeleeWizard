@@ -1,4 +1,12 @@
 #### Urgent:
+* xp of creations!!
+
+* Remind how far moved when deciding action?
+* allow party in party file
+* allow name not first in party file
+* Aid spell!
+* Question C falling rule, e.g. when stumble over body
+
 * Clean up HouseRules:
   - clean up doc/HouseRules.md (17oct021)
     - fix wizard melee rules! (19oct021)
@@ -6,8 +14,13 @@
   - Rethink House Rules presentation? (13sep021)
   - https://docs.github.com/en/communities/documenting-your-project-with-wikis/changing-access-permissions-for-wikis (14sep021)
   - Get xowa working? (23sep021)
+    https://www.unixmen.com/xowa-offline-wikipedia-reader-editor/
   - Use wiki format on wiki?  See computer notes. (23sep021)
-  
+
+* Blur spell would be nice?
+* reminder how many hexes moved for action?
+* allow changing adjustments as part of action?
+
 * This tool will be helpful in large battles.
   Note: [meleewizards.com](http://meleewizards.com)! (5aug021)
   e.g. allows use of original rules on reactions to injury (29aug021)

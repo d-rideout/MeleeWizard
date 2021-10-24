@@ -21,7 +21,7 @@ use List::Util qw/max/;
 
 # Setting flags
 my $debug = 0; # 1 ==> max debug output
-my $initiative = 'c'; # c ==> character-based; p ==> party-based
+my $initiative = 'p'; # c ==> character-based; p ==> party-based
                       # l ==> pLayer-based; s ==> 'side-based
 
 # Catch signals
@@ -581,9 +581,9 @@ sub extend_namekey {
 sub whosnext {
   my $maxroll;
   my $next;
-  $maxdx = -99; # global so it can be used in &act
 
   return $continue if defined $continue;
+  $maxdx = -99; # global so it can be used in &act
   $debug && print join(':', @roll), "\n";
   foreach (@_) {
     my $c = $characters[$_];
@@ -650,7 +650,7 @@ sub act {
   print "* a <who> <DX mod> <num turns>\n  adjust <who>\'s adjDX by <DX mod>\n",
       "  Use spell convention for num turns, so 0 for this-turn-only.\n  Use inf for 'permanent' change to adjDX, such as from readying a shield.\n",
       "  (e.g. 'sp3 a x -6 3' for Clumsiness spell on x)\n",
-      "* sp<ST> <name> <ST> <DX> <adjDX>\n  create being\n", # create being
+      "* sp<ST> <name> <ST> <DX> [adjDX]\n  create being\n", # create being
       "* di <who>\t\tdisbelieve <who>\n",
       "* sp2 r <who>\t\tcast Rope spell on <who>\n",
       "* [sp<ST>] sh<dex adj>\tready or unready shield, which changes base adjDX\n",
@@ -709,16 +709,19 @@ sub act {
 	print "$characters[$targeti]->{NAME} adjDX ", $2<0?'':'+', "$2 for $3 turns\n";
 	last;
       } # DX mod for this turn only, e.g. from Clumsiness spell
-      elsif ($action =~ /^(.+) (\d+) (\d+) ?(\d+)?$/) { # Create being
-	my $adjdx = $4;
-	$adjdx = $3 unless defined $adjdx;
-	print "$1 created with ST $2 DX $3 ($adjdx)\n";
+      elsif ($action =~ /^([^ ]+) (\d+) (\d+) ?(\d+)?$/) { # Create being
+# 	print join(':', $1, $2, $3, $4), "\n";
+	my ($name, $st, $dx, $adjdx) = ($1, $2, $3, $4);
+# 	my $adjdx = $4;
+	$adjdx = $dx unless defined $adjdx;
+# 	print "$1 created with ST $2 DX $3 ($adjdx)\n";
+	print "$name created with ST $st DX $dx ($adjdx)\n";
 	print "Animals get automatic disbelieve roll\n";
 	# Not too sure how to handle this.  Will write explicit code for now, but should put into function which is shared with 'Read parties' code above. (29jul021)
-	$characters[$n]->{NAME} = $1;
-	$characters[$n]->{ST} = $2;
-	$characters[$n]->{STrem} = $2;
-	$characters[$n]->{DX} = $3;
+	$characters[$n]->{NAME} = $name;
+	$characters[$n]->{ST} = $st;
+	$characters[$n]->{STrem} = $st;
+	$characters[$n]->{DX} = $dx;
 	$characters[$n]->{adjDX} = $adjdx;
 	$characters[$n]->{PLAYER} = $characters[$act_chari]->{NAME};
 	$characters[$n]->{PARTY} = $characters[$act_chari]->{PARTY};
