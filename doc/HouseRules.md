@@ -161,9 +161,6 @@ Is that a reasonable interpretation of the rules as stated?
 * Is a wizard at +4 DX when wielding a dagger in HTH?  Presumably so. -->
 
 
-## Clarifications from *Questions* section of *the Fantasy Masters' Codex 1981*:
-Any figure who falls down, for any reason, before their action for that turn, loses that action.  They have to wait until next turn to stand up.
-
 ## Spell turn counting
 
 Turn counting for spells is not terribly clear.  We will thus use the following convention:
@@ -182,6 +179,18 @@ I believe the published rules intend an adjDX penalty of
 -(2+spell_turn) for the Rope spell, as clarified above.
 
 All spells have no effect on spell turn 13, unless they are renewed.
+
+
+## Clarifications from *Questions* section of *the Fantasy Masters' Codex 1981*:
+Any figure who falls down, for any reason, before their action for that turn, loses
+that action.  They have to wait until next turn to stand up.
+
+This rule seems to be contradicted by the trampling rules in Advanced Melee,
+which makes me strongly question its validity.  I may rule that only a fall
+due to injury has this property.  Or perhaps 'complete' falls, while
+trampling woes by huge figure is not quite a proper fall?  While stumbling on
+loose ground is a complete fall?
+
 
 Questions:
 ---------
@@ -202,6 +211,26 @@ movement phase, then the trampling rules seem to indicate that it can stand
 during its action phase, in contradiction to the falling rule as stated in
 the Codex.  What is the resolution to this?
   * I am going to side with the trampling rules in this case.
+
+
+## Deviations from Official Rules:
+For the most part I want to stick as close as possible to the published
+rules, at least in the beginning.  Later we can discuss deviations from these
+rules.
+
+Besides some minor tweaks mentioned above, the only deviation from the
+official rules will be in the xp value of wallclock time.  The official TFT
+rules grant 1 xp per 12 minutes of wallclock time.  It also grants xp for
+'making n die rolls', with n>3 (does hitting a dodging foe count for extra xp??), and also for playing in character.  When one
+is not playing with the full TFT rules (e.g. with talents), there are very
+few n die rolls, with n>3.  Also in certain situations it can be difficult to
+'play in character', e.g. in a pure combat scenario.
+
+I thus offer two alternate rates of xp accrual: 1 xp / 10 min, and 1 xp / 6
+min.  The `mewcosq` tool will use the latter of these for the moment.  (In a
+real extended campaign, which has play time outside of battles, you should
+not use the 'time xp' awarded by `mewcosq` anyway -- keep track of the
+wallclock time separately.)
 
 ---
 

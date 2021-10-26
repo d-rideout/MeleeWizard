@@ -1,6 +1,16 @@
 #### Urgent:
 * xp of creations!!
 
+* Proposed rule to handle ambiguity of action sequence:
+  Figure declares a DX adjustment during the declaration phase.
+  If figure chooses alternate action which should happen sooner, it looses out.
+  If figure chooses action which happens later, it must wait until the end of that adjDX action period.  This latter aspect will need coding.
+  Since I am coding anyway, perhaps a figure can change its mind at any time, as a global action.  But once things happen in real life they happen in the game too.  Like in other games when you can shout something at any time. (25oct021)
+
+  Even better: allow changing mind at any time:
+  as figure action
+  as global option (e.g. during other figure's action)
+
 * Remind how far moved when deciding action?
 * allow party in party file
 * allow name not first in party file
@@ -336,3 +346,4 @@ Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
 * monsters with multiple attacks! (10oct021)
 * fall unconscious when casting down to ST 1 (12oct021)
 - xfer [house rules] from wiki to doc/ (16oct021)
+* double time rate of xp without talents (1 per 6 min of playtime)
