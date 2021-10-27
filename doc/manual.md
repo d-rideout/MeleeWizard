@@ -42,7 +42,7 @@ ud <n> | undo <n> previous entries
 `PARTY` | In which party is this character?
 `STUN` | How must ST damage in one turn will stun this character?
 `FALL` | How must ST damage in one turn will cause this character to fall?
-`StunTurn` | character is stunned until this turn
+`StunTurn` | character is stunned *until* this turn
 `DEAD` | true ==> character is dead or unconscious
 `NAMEKEY` | Any extension of this string will refer to this character.
 `BAD` | STrem has been brought to <=3 by injuries

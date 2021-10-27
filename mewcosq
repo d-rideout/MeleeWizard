@@ -787,10 +787,10 @@ sub act {
 	$turn_damage[$injuredi] += $damage;
 	print "$dc->{NAME} has taken $turn_damage[$injuredi] damage so far this turn, has $dc->{STrem} ST remaining\n";
 	my $turn_damage = $turn_damage[$injuredi];
-	if ($turn_damage >= $dc->{STUN} && $dc->{StunTurn} <= $turn) {
+	if ($turn_damage >= $dc->{STUN}) { # && $dc->{StunTurn} <= $turn) {
 	  print "$dc->{NAME} is stunned\n";
+	  $dxinj[$injuredi] -= 2 if $dc->{StunTurn} <= $turn;
 	  $dc->{StunTurn} = $turn+2;
-	  $dxinj[$injuredi] -= 2;
 	}
 	$debug && print "turn_damage=$turn_damage  FALL=$dc->{FALL}  old_turn_damage=$old_turn_damage\n";
 	if ($turn_damage >= $dc->{FALL} && $old_turn_damage < $dc->{FALL}) {
