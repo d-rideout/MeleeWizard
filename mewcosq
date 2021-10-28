@@ -292,6 +292,7 @@ while (1) {
 #     $dex[$i] -= 3 if $chr->{STrem} < 4;
     # I have to keep track of the two different types of damage for wizards (7aug021)
     $dxinj[$i] -= 3 if $chr->{BAD} && $chr->{STrem} < 4;
+#     print "$chr->{NAME} dxinj = $dxinj[$i]\n";
     my $ropeTurn = $chr->{ROPE};
     $dxspl[$i] -= 2 + $turn - $ropeTurn if $ropeTurn;
   }
@@ -610,7 +611,7 @@ sub whosnext {
 
 
 # Signed modifier
-sub smod { $_[0]<0 ? $_ : "+$_[0]" }
+sub smod { $_[0]<0 ? $_[0] : "+$_[0]" }
 
 # Act in order of dex
 # Pass array of characters who will act

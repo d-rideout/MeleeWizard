@@ -10,8 +10,8 @@ Ctrl-C (or however you abort the program on your system).
 The code defaults to character-based initiative, rather than player-based or
 side-based, as it suggests in the rules.  This will be substantially more
 complicated, but also substantially more realistic?
-Try to err on the side of hitting 'm' unless there is some substantial reason not to, to make the movement phase a little less complicated.
-If it is too complicated for you, change the `$initiative` setting at the top of `mewcosq` to `p` for party-based or `l` for pLayer-based initiative.
+Try to err on the side of hitting '0' unless there is some substantial reason not to, to make the movement phase a little less complicated.
+If it is too complicated, change the `$initiative` setting at the top of `mewcosq` to `p` for party-based or `l` for pLayer-based initiative.
 
 ## Commands
 Command|Description
