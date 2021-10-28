@@ -347,3 +347,4 @@ Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
 - xfer [house rules] from wiki to doc/ (16oct021)
 * double time rate of xp without talents (1 per 6 min of playtime)
 * xp of creations!!
+* wait for an opening needs to end on a miss!

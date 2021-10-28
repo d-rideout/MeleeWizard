@@ -149,12 +149,12 @@ print LOG "$startTime\n";
 # ======================
 my $turn = 0;
 my $phase = ''; # Combat sequence phase
-# my @dex; # adjDX for each character for this turn
 my @turn_damage; # amt damage sustained this turn for each character
 my @acted; # who acted so far this turn, -1 ==> deferred action
-# my @damaged; # who has taken damage this turn [why not just use @turn_damage??]
 my %retreats; # possible forced retreats  key forcer val hash key forced val num
-my @dxmod; # amt to add to adjDX for this turn
+my @dxact; # amt to add to adjDX for this turn due to chosen action
+my @dxspl; # amt to add to adjDX for this turn due to others' actions
+# Blur spell would go into @dxact -- it is my choice to attack the blurred figure.
 my @dxinj; # amt to add to adjDX due to injury
 my @roll; # action initiative roll, indexed by character index
 my $maxdx; # adjDX of acting character
@@ -218,19 +218,26 @@ while (1) {
   # Declare expected dex adjustments and other special considerations
   my @poles; # pole weapon charges
   my @bow2;  # double bow attacks
-  @dxmod = (0) x $n;
+  @dxact = (0) x $n;
+  @dxspl = (0) x $n;
   @dxinj = (0) x $n;
 
   # Apply ongoing dxmods
   foreach my $ci (0..$#characters) {
-    next if $characters[$ci]->{DEAD};
+    my $c = $characters[$ci];
+    next if $c->{DEAD};
+
+    # waiting for an opening
+    $dxspl[$_] += $c->{WAIT} if $c->{WAIT};
+
+    # other mods
     my $mods = $characters[$ci]->{ADJ};
     next unless $mods;
     my $i=0;
     my ($mod, $lastTurn) = $mods->[$i..$i+1];
     $lastTurn = $turn if $lastTurn eq 'inf';
     if ($lastTurn < $turn) { splice @$mods, $i, 2 }
-    else { $dxmod[$ci] += $mod }
+    else { $dxspl[$ci] += $mod }
   }
   
   $phase = 'action consideration';
@@ -248,20 +255,15 @@ while (1) {
     \'Permanently\' ready or unready a shield
 ';
   while (1) {
-#     my $sccmd = query('', "Special consideration, (F)inished");
     my $sccmd = query('', "(F)inished");
     last unless $sccmd;
     my @sccmd = split / +/, $sccmd; # special considerations cmd
     my $who = who(shift @sccmd);
     next if $who eq 'x';
-# ) {
-# #       print "Invalid character specification $who\n";
-#       next;
-#     }
     print "$characters[$who]->{NAME}";
     foreach my $cmd (@sccmd) {
       if ($cmd =~ /^\+?-?\d+$/) { #(\+|-) ?(\d+)( ?([pm]))?/) {
-	$dxmod[$who] += $cmd;
+	$dxact[$who] += $cmd;
 	my $plus = '+';
 	$plus = '' if $cmd =~ /^[\+-]/;
 	print " at $plus$cmd DEX = ", $characters[$who]->{adjDX}+$cmd, ' (- injury adjustments)';
@@ -291,7 +293,7 @@ while (1) {
     # I have to keep track of the two different types of damage for wizards (7aug021)
     $dxinj[$i] -= 3 if $chr->{BAD} && $chr->{STrem} < 4;
     my $ropeTurn = $chr->{ROPE};
-    $dxmod[$i] -= 2 + $turn - $ropeTurn if $ropeTurn;
+    $dxspl[$i] -= 2 + $turn - $ropeTurn if $ropeTurn;
   }
 
   # Act
@@ -592,11 +594,7 @@ sub whosnext {
     my $c = $characters[$_];
     next if $acted[$_] || $c->{DEAD};
     $debug && print "maxdx = $maxdx maxroll=$maxroll\n";
-    if ($c->{WAIT}) {
-      $dxmod[$_] += $c->{WAIT};
-#       $c->{WAIT} = 0;
-    }
-    my $dx = $characters[$_]->{adjDX} + $dxmod[$_] + $dxinj[$_];
+    my $dx = $characters[$_]->{adjDX} + $dxact[$_] + $dxspl[$_] + $dxinj[$_];
     if ($dx > $maxdx) {
       $next = $_;
       $maxdx = $dx;
@@ -648,7 +646,8 @@ sub act {
   print "Actions:\n",
         "-------\n", # in alphabetical order (within each sub-phase)
       "* [sp<ST>] <who>-<dam>\n  (e.g. c-4 for 4 damage to character c after armor)\n",
-      "* de\t\t\tdefer action\n";
+      "* de\t\t\tdefer action\n",
+      "* m\t\t\tmiss (to end wait-for-an-opening)\n";
 #   print "* sp<ST> a <who> <DX mod>\n  spell which modifies <who>\'s adjDX by <DX mod>\n",
   print "* a <who> <DX mod> <num turns>\n  adjust <who>\'s adjDX by <DX mod>\n",
       "  Use spell convention for num turns, so 0 for this-turn-only.\n  Use inf for 'permanent' change to adjDX, such as from readying a shield.\n",
@@ -683,7 +682,6 @@ sub act {
     while (1) {
       my $action = query('', "Action result? (N)o");
       $debug && print "act_chari=$act_chari action=[$action]\n";
-#       elsif (!$action) { last; } # exits action query for this character
 
       # Spell cost
       if ($action =~ s/^sp ?(\d+)\s*//) {
@@ -699,25 +697,22 @@ sub act {
 	print "$ac->{NAME} may have another action\n";
       } else { undef $continue }
       
-      last unless $action;
       # Result of action (in alphabetical order after Hit-for-damage)
+      last unless $action;
       if (shield($ac, $action)) { last; } # must precede Hit
       elsif ($action =~ /^a (.+) (-?\d+) (\d+|inf)$/) {  # adjust DX
 	my $targeti = who($1);
 	next if $targeti eq 'x';
 	my $mod = $2;
 	my $dur = $3;
-	$dxmod[$targeti] += $mod;
+	$dxspl[$targeti] += $mod;
 	$dur and push @{$characters[$targeti]->{ADJ}}, $mod, $dur eq 'inf' ? 'inf':$turn+$dur;
 	print "$characters[$targeti]->{NAME} adjDX ", $2<0?'':'+', "$2 for $3 turns\n";
 	last;
-      } # DX mod for this turn only, e.g. from Clumsiness spell
+      } # DX mod, e.g. from Clumsiness spell
       elsif ($action =~ /^([^ ]+) (\d+) (\d+) ?(\d+)?$/) { # Create being
-# 	print join(':', $1, $2, $3, $4), "\n";
 	my ($name, $st, $dx, $adjdx) = ($1, $2, $3, $4);
-# 	my $adjdx = $4;
 	$adjdx = $dx unless defined $adjdx;
-# 	print "$1 created with ST $2 DX $3 ($adjdx)\n";
 	print "$name created with ST $st DX $dx ($adjdx)\n";
 	print "Animals get automatic disbelieve roll\n";
 	# Not too sure how to handle this.  Will write explicit code for now, but should put into function which is shared with 'Read parties' code above. (29jul021)
@@ -729,10 +724,12 @@ sub act {
 	$characters[$n]->{PLAYER} = $characters[$act_chari]->{NAME};
 	$characters[$n]->{PARTY} = $characters[$act_chari]->{PARTY};
 	$characters[$n]->{CREATOR} = $act_chari;
-	push @dxmod, 0;
+	push @dxact, 0;
+	push @dxspl, 0;
 	push @dxinj, 0;
 	character_prep($n++);
 	&displayCharacters;
+	delete $ac->{WAIT};
 	last; # always last after successful action result
       } # create being
       elsif ($action eq 'de') { # Defer action
@@ -749,6 +746,11 @@ sub act {
 	my $who_xp = $act_chari;
 	$who_xp = $ac->{CREATOR} if defined $ac->{CREATOR};
 	push @{$xp[$who_xp]}, 10, "disbelieve $characters[$who]->{NAME}";
+	delete $ac->{WAIT};
+	last;
+      }
+      elsif ($action eq 'm') { # Miss (to end wait-for-an-opening)
+	delete $ac->{WAIT};
 	last;
       }
       elsif ($action =~ /^r (.+)$/) { # Rope spell
@@ -757,6 +759,7 @@ sub act {
 	$characters[$whoi]->{ROPE} = $turn;
 	$dxinj[$whoi] -= 2;
 	print "Cast Rope on $characters[$whoi]->{NAME}\n";
+	delete $ac->{WAIT};
 	last;
       }
       elsif ($action =~ /^ur (.+)$/) { # un-Rope
@@ -764,6 +767,7 @@ sub act {
 	next if $whoi eq 'x';
 	delete $characters[$whoi]->{ROPE};
 	print "un-Rope $characters[$whoi]->{NAME}\n";
+	delete $ac->{WAIT};
 	last;
       }
       elsif ($action eq 'w') { # wait for an opening
@@ -773,6 +777,7 @@ sub act {
 	last;
       }
       elsif ($action =~ /(.+) ?- ?(\d+)/) { # Hit!
+	delete $ac->{WAIT}; # miss also deletes wait for an opening!!
 	$debug && print "Hit!\n";
 	my $injuredi = who($1);
 	next if $injuredi eq 'x';
@@ -845,7 +850,6 @@ sub act {
 	$ndefer = 0; # maybe i should use different logic above (28sep021)
       } # \exists deferred queue
       $acted[$act_chari] = 1;
-      delete $ac->{WAIT};
     } # acted
     $debug && print 'after @acted: ', join(':', @acted), "\n";
 
