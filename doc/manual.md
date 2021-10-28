@@ -1,6 +1,4 @@
-# Melee/Wizard Turn Sequence Tool - User & Maintenance Manual
-
-## User Manual
+# Melee/Wizard Turn Sequence Tool - User Manual
 
 Party file arguments are described in the [README.md](../README.md) file.
 
@@ -15,8 +13,8 @@ complicated, but also substantially more realistic?
 Try to err on the side of hitting 'm' unless there is some substantial reason not to, to make the movement phase a little less complicated.
 If it is too complicated for you, change the `$initiative` setting at the top of `mewcosq` to `p` for party-based or `l` for pLayer-based initiative.
 
-### Commands
-command|description
+## Commands
+Command|Description
 -------|-----------
 ud <n> | undo <n> previous entries
 ? | list 'global' commands (valid at every prompt\*)
@@ -24,10 +22,29 @@ ud <n> | undo <n> previous entries
 
 \* except the first 'Overwrite log file?' prompt.
 
+## Actions
 
-## Maintenance Manual
+prefix & suffix
 
-### Data Structures
+Command format|Action|Meaning
+--------------|------|-------
+de | defer action | wait for outcome of other actions before acting
+
+
+
+## Abbreviations
+The screen output is terse to preserve space, so that you do not have to keep scrolling backwards.  To maintain this we define some abbreviations:
+
+Abbreviation | Meaning
+------------ | -------
+inj | DX adjustments due to injury
+act | DX adjustments due to chosen action for this turn
+spl | DX adjustments due to other figures' actions (such as spells)
+
+---
+# Melee/Wizard Turn Sequence Tool - Maintenance Manual
+
+## Data Structures
 
 `@characters` array of hashes:
 
@@ -53,7 +70,7 @@ ud <n> | undo <n> previous entries
 
 `%hkeys` 'header keys':  The above keys, with value 1 if they can appear in a party file.
 
-### Query User
+## Query User
 
 To query the user, use the following code template:
 
@@ -68,10 +85,21 @@ while (my $response = query(<default>, <query string>)) {
   catch leak in logic above?;
 }
 ```
-
 Is this too complicated?  It allows great flexibility in the interpretation of the response.  e.g. ignoring spaces and the like.
 
-### adjDX Order
+## adjDX Order
+* `@dxact` modifiers to DX due to choice of action *this turn*
+* `@dxspl` modifiers to DX due to others' actions
+* `@dxinj` DX modifiers due to injury.  Compute at beginning of &act.
+* All must be maintained.
+
+DX = adjDX + @dxact + @dxspl + @dxinj
+
+
+<!--
+I think it also makes sense to change the &act API to take an array which is true if that char is acting.  So the array index is the char index.
+No, I decided to do it the old way.  Note that it is often called with a single character, for pole and second bow attacks. (6sep021) -->
+
 
 <!-- #### old scheme:
 `@dex` is adjDX of each character, computed after Considerations
@@ -93,12 +121,3 @@ takes into account reactions to injury
 `$newdex` is new dex after new injuries
 
 #### new scheme: -->
-* `@dxmod` misc modifiers to DX
-* `@dxinj` DX modifiers due to injury.  Compute at beginning of &act.
-* Both must be maintained.
-
-DX = adjDX + @dxmod + @dxinj
-
-<!--
-I think it also makes sense to change the &act API to take an array which is true if that char is acting.  So the array index is the char index.
-No, I decided to do it the old way.  Note that it is often called with a single character, for pole and second bow attacks. (6sep021) -->

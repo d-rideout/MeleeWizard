@@ -609,6 +609,9 @@ sub whosnext {
 }
 
 
+# Signed modifier
+sub smod { $_[0]<0 ? $_ : "+$_[0]" }
+
 # Act in order of dex
 # Pass array of characters who will act
 sub act {
@@ -671,8 +674,8 @@ sub act {
     my $ac = $characters[$act_chari]; # acting character
     die if $ac->{DEAD}; # &whosnext should not return dead figures
     print "$ac->{NAME}: ST $ac->{ST} ($ac->{STrem})  adjDX $ac->{adjDX} ",
-	$dxinj[$act_chari], $dxmod[$act_chari]<0?' ':' +',
-	"$dxmod[$act_chari] = $maxdx";
+	smod($dxinj[$act_chari]), 'inj ', smod($dxact[$act_chari]), 'act ',
+	smod($dxspl[$act_chari]), "spl = $maxdx";
     print " (stunned until turn $ac->{StunTurn})" if $turn < $ac->{StunTurn};
     # Stunned 'through this turn' or '... next turn'? (12aug021)
     print "\n";
@@ -703,11 +706,15 @@ sub act {
       elsif ($action =~ /^a (.+) (-?\d+) (\d+|inf)$/) {  # adjust DX
 	my $targeti = who($1);
 	next if $targeti eq 'x';
+	if ($targeti == $act_chari) {
+	  print "Are you really trying to change your adjDX as your own action?  Please use de?\n";
+	  next;
+	}
 	my $mod = $2;
 	my $dur = $3;
 	$dxspl[$targeti] += $mod;
 	$dur and push @{$characters[$targeti]->{ADJ}}, $mod, $dur eq 'inf' ? 'inf':$turn+$dur;
-	print "$characters[$targeti]->{NAME} adjDX ", $2<0?'':'+', "$2 for $3 turns\n";
+	print "$characters[$targeti]->{NAME} adjDX ", smod($2), " for $3 turns\n";
 	last;
       } # DX mod, e.g. from Clumsiness spell
       elsif ($action =~ /^([^ ]+) (\d+) (\d+) ?(\d+)?$/) { # Create being
