@@ -1,6 +1,4 @@
 #### Urgent:
-* xp of creations!!
-
 * Proposed rule to handle ambiguity of action sequence:
   Figure declares a DX adjustment during the declaration phase.
   If figure chooses alternate action which should happen sooner, it looses out.
@@ -90,6 +88,7 @@
   Or do I want something which generalizes to other maps more easily?  Maybe better to start with this?
   Facing could be 0-5 counting from +x-axis and rotating counter-clockwise.
   (Or can use this facing to describe a hex -- locate hex on x-axis, face in direction, march number of hexes, then rotate facing again.  This is kinda what I mean by an origin-based approach.  It has the advantage of being more generalizable to other maps: All you have to do is select an origin hex and a facing-orientation.) (7sep021)
+  https://math.stackexchange.com/questions/171299/calculating-distance-in-a-hexagonal-grid-map (27oct021)
 
 * worry about character and command namespace collisions? (30aug021)
 * expand &query to contain loop which handles errors in syntax and char
@@ -347,3 +346,4 @@ Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
 * fall unconscious when casting down to ST 1 (12oct021)
 - xfer [house rules] from wiki to doc/ (16oct021)
 * double time rate of xp without talents (1 per 6 min of playtime)
+* xp of creations!!

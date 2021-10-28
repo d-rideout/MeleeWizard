@@ -48,6 +48,7 @@ ud <n> | undo <n> previous entries
 `BAD` | STrem has been brought to <=3 by injuries
 `ROPE` | turn Rope spell cast on character (assuming noone will have multiple Ropes!)
 `ADJ` | array of pairs DXmod, last turn of mod
+`CREATOR` | character index of creator
 
 `%hkeys` 'header keys':  The above keys, with value 1 if they can appear in a party file.
 

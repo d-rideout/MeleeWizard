@@ -67,11 +67,12 @@ $debug && print "Debug level $debug\n\n";
 # Data structures
 my @characters; # val hash with below keys
 my %charkeys; # key namekey val index into @characters
-my %hkeys = (NAME=>1, ST=>1, STrem=>1, DX=>1, adjDX=>1, PLAYER=>1, PARTY=>0, STUN=>0, FALL=>0, StunTurn=>0, DEAD=>0, NAMEKEY=>0, BAD=>1, ROPE=>0, ADJ=>0);
+my %hkeys = (NAME=>1, ST=>1, STrem=>1, DX=>1, adjDX=>1, PLAYER=>1, PARTY=>0, STUN=>0, FALL=>0, StunTurn=>0, DEAD=>0, NAMEKEY=>0, BAD=>1, ROPE=>0, ADJ=>0, CREATOR=>1);
 # STUN how much damage causes stun
 # StunTurn becomes unstunned on this turn
 # FALL how much damage causes fall
 # 1 ==> can appear in party file
+# I almost never use %hkeys.  Is it worth maintaining? (27oct021)
 my $n = 0; # total number of characters
 my $ncommands=0; # number of user entered commands
 my @xp; # indexed by char, value array of pairs num, description
@@ -689,7 +690,7 @@ sub act {
 	next unless spendST($ac, $1);
 # 	$ac->{STrem} -= $1;
 	print "$ac->{NAME} casts spell, has $ac->{STrem} ST remaining\n";
-	push @{$xp[$act_chari]}, $1, "$1 ST spell";
+	push @{$xp[$act_chari]}, $1, "$1 ST spell" unless defined $ac->{CREATOR};
       }
 
       # Continue?
@@ -727,6 +728,7 @@ sub act {
 	$characters[$n]->{adjDX} = $adjdx;
 	$characters[$n]->{PLAYER} = $characters[$act_chari]->{NAME};
 	$characters[$n]->{PARTY} = $characters[$act_chari]->{PARTY};
+	$characters[$n]->{CREATOR} = $act_chari;
 	push @dxmod, 0;
 	push @dxinj, 0;
 	character_prep($n++);
@@ -744,7 +746,9 @@ sub act {
 	$characters[$who]->{DEAD} = 1;
 	$acted[$who] = 1;
 	print "Disbelieve $characters[$who]->{NAME}\n";
-	push @{$xp[$act_chari]}, 10, "disbelieve $characters[$who]->{NAME}";
+	my $who_xp = $act_chari;
+	$who_xp = $ac->{CREATOR} if defined $ac->{CREATOR};
+	push @{$xp[$who_xp]}, 10, "disbelieve $characters[$who]->{NAME}";
 	last;
       }
       elsif ($action =~ /^r (.+)$/) { # Rope spell
@@ -809,11 +813,13 @@ sub act {
 	  $acted[$injuredi] = 1;
 	}
 	# XP value
+	my $who_xp = $act_chari;
+	$who_xp = $ac->{CREATOR} if defined $ac->{CREATOR};
 	if ($died) {
-	  push @{$xp[$act_chari]}, $dc->{STrem}+$damage+$dc->{DX}, "killed $dc->{NAME}";
+	  push @{$xp[$who_xp]}, $dc->{STrem}+$damage+$dc->{DX}, "killed $dc->{NAME}";
 	  # damage added because it has been subtracted from STrem already (19sep021)
 	} else {
-	  push @{$xp[$act_chari]}, $damage, "$damage hits on $dc->{NAME}";
+	  push @{$xp[$who_xp]}, $damage, "$damage hits on $dc->{NAME}";
 	}
 
 	last; # exit from while (1) action query loop
@@ -892,7 +898,7 @@ sub movement {
   $phase = 'renew spells';
   my $fmt = "format: <who> <cost>\n    or: di <who>  to discontinue created figure\n";
   &displayCharacters;
-  print "Spell phase: Renew spells or they end now\n$fmt";
+  print "Spell renewal phase: Renew spells or they end now\n$fmt";
   while (1) {
     my $sccmd = query('', 'Spell cost, (F)inished,');
     last unless $sccmd;
@@ -915,7 +921,7 @@ sub movement {
       next unless spendST($c, $cost);
       #       $c->{STrem} -= $cost;
       print "$c->{NAME} has $c->{STrem} ST remaining\n";
-      $spellRenewalxp[$whoi] += $cost;
+      $spellRenewalxp[$whoi] += $cost unless defined $c->{CREATOR};
     }
   }
   
