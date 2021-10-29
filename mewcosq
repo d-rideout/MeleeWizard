@@ -650,7 +650,7 @@ sub act {
   print "Actions:\n",
         "-------\n", # in alphabetical order (within each sub-phase)
       "* [sp<ST>] <who>-<dam>\n  (e.g. c-4 for 4 damage to character c after armor)\n",
-      "* de\t\t\tdefer action\n",
+      "* de [DX mod]\t\t\tdefer action\n",
       "* m\t\t\tmiss (to end wait-for-an-opening)\n";
 #   print "* sp<ST> a <who> <DX mod>\n  spell which modifies <who>\'s adjDX by <DX mod>\n",
   print "* a <who> <DX mod> <num turns>\n  adjust <who>\'s adjDX by <DX mod>\n",
@@ -740,7 +740,8 @@ sub act {
 	delete $ac->{WAIT};
 	last; # always last after successful action result
       } # create being
-      elsif ($action eq 'de') { # Defer action
+      elsif ($action =~ /^de ?([\d+-]*)/) { # Defer action
+	$dxact[$act_chari] = $1 if defined $1;
 	$defer = -1;
 	++$ndefer;
 	last;

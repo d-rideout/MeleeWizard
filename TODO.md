@@ -1,7 +1,4 @@
 #### Urgent:
-* wait for x as move?
-  or all defer until x
-
 * Proposed rule to handle ambiguity of action sequence:
   Figure declares a DX adjustment during the declaration phase.
   If figure chooses alternate action which should happen sooner, it looses out.
@@ -11,6 +8,9 @@
   Even better: allow changing mind at any time:
   as figure action
   as global option (e.g. during other figure's action)
+
+* wait for x as move?
+  or all defer until x
 
 * Remind how far moved when deciding action?
 * allow party in party file

@@ -16,19 +16,22 @@ If it is too complicated, change the `$initiative` setting at the top of `mewcos
 ## Commands
 Command|Description
 -------|-----------
-ud <n> | undo <n> previous entries
-? | list 'global' commands (valid at every prompt\*)
+`ud <n>` | undo <n> previous entries
+`?` | list 'global' commands (valid at every prompt\*)
 ... | all are documented briefly in the program output
 
 \* except the first 'Overwrite log file?' prompt.
 
 ## Actions
 
-prefix & suffix
+Prefix any action with `sp<ST>` to spend <ST> ST on casting a spell.
+
+suffix
 
 Command format|Action|Meaning
 --------------|------|-------
-de | defer action | wait for outcome of other actions before acting
+`de [DX mod]` | defer action | wait for outcome of other actions before acting
+|| optionally change DX modifier for choice of action
 
 
 
