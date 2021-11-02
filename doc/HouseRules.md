@@ -12,10 +12,10 @@ Wizard).-->
 There are occasional gaps, ambiguities, and discrepancies in these published
 rules.  This document presents some discussion and 'house rules' which
 attempt to address some of these issues.  I am very interested in others'
-opinions on these issues, so please comment, in the Discussions tab, as an Issue ticket, or otherwise).  (Usually one imagines that
-'fun', in the context of games, is a purely subjective thing, but the continuing
+opinions on these issues, so please comment, in the Discussions tab, as an Issue ticket, or otherwise.  Usually one imagines that
+'fun', in the context of games, is a purely subjective thing which cannot be understood, but the continuing
 popularity of this relatively ancient game suggests that there are some deep
-principles to learn here.)
+principles to learn here.
 
 * Minimum attack damage is zero.
 * Advanced rules generally take precedence over the original when they differ.
@@ -90,6 +90,7 @@ There are two obvious further variants: We could allow *both* **HTH-as-move** an
 Additional HTH rules:
 * figure gets +4 DX on attempt to disengage! (according to Codex!)
   (Though this seems really strange!  Why bother make it 4 dice then?  It is even easier than a 3 die save vs DX!)
+  I am going to ignore this at the moment.  Disengaging from HTH should be difficult.
 
 ### Pinning a Foe:
 The Pinning a Foe rules in Advanced Melee seem grossly unrealistic, since
@@ -143,11 +144,9 @@ Below is my best guess as to the intended rules.
 * A wizard in HTH is at -4 DX for drawing a dagger.
 * A wizard wielding a dagger in HTH is presumably at +4 DX, because s/he is attacking a rear hex.
 * Wizard cannot cast spell with weapon or shield besides staff ready.
-<!-- * lack-of-talent combines in parallel with wizard melee penalty (C) -->
 * Anyone can use a dagger (in hand, no throwing) without non-talent or wizard penalty (C)
 * The armor DX penalty for wizards is independent of necessity of using gestures in spells. (C)
-
-* (ST<18) wizard in leather (cloth) armor: usual -2 (1) DX on spells and attacks
+* (ST<18) wizard in leather (cloth) armor: usual -2 (-1) DX on spells and attacks
 * wizard in iron armor: -(4 + usual penalty) DX on spells and (non-staff/dagger) attacks
 * wizard in iron armor: -(usual penalty) DX on staff/dagger attacks
 * wizard in silver armor: -(usual penalty) DX on spells and (non-staff/dagger) attacks
@@ -188,8 +187,10 @@ that action.  They have to wait until next turn to stand up.
 This rule seems to be contradicted by the trampling rules in Advanced Melee,
 which makes me strongly question its validity.  I may rule that only a fall
 due to injury has this property.  Or perhaps 'complete' falls, while
-trampling woes by huge figure is not quite a proper fall?  While stumbling on
+trampling foes by huge figure is not quite a proper fall?  While stumbling on
 loose ground is a complete fall?
+
+In fact I am starting to question the Codex in general.  It make a number of strange proclamations.
 
 
 Questions:
@@ -210,7 +211,13 @@ I have not decided how to handle these issues.  Please comment on them!
 movement phase, then the trampling rules seem to indicate that it can stand
 during its action phase, in contradiction to the falling rule as stated in
 the Codex.  What is the resolution to this?
-  * I am going to side with the trampling rules in this case.
+   * I am going to side with the trampling rules in this case.
+
+4. Should figures get +4 DX on attempts to disengage from HTH??
+
+5. To what extent should one follow the falling rules in the Codex?  Perhaps
+unless the rules suggest otherwise?  What about when tripping over a fallen
+figure?
 
 
 ## Deviations from Official Rules:
@@ -218,8 +225,10 @@ For the most part I want to stick as close as possible to the published
 rules, at least in the beginning.  Later we can discuss deviations from these
 rules.
 
-Besides some minor tweaks mentioned above, the only deviation from the
-official rules will be in the xp value of wallclock time.  The official TFT
+### Time rate of XP accrual
+<!--Besides some minor tweaks mentioned above, the only deviation from the
+official rules will be in the xp value of wallclock time.-->
+The official TFT
 rules grant 1 xp per 12 minutes of wallclock time.  It also grants xp for
 'making n die rolls', with n>3 (does hitting a dodging foe count for extra xp??), and also for playing in character.  When one
 is not playing with the full TFT rules (e.g. with talents), there are very
@@ -231,6 +240,9 @@ min.  The `mewcosq` tool will use the latter of these for the moment.  (In a
 real extended campaign, which has play time outside of battles, you should
 not use the 'time xp' awarded by `mewcosq` anyway -- keep track of the
 wallclock time separately.)
+
+### Sprinting
+Turning around is expensive, and not recommended when fleeing a deadly foe.  I am going to rule that any figure can eek out an additional hex of MA in exchange for facing in the direction of the last hex of movement at the end of its movement.  (Do other games have something like this, for running figures?)
 
 ---
 
