@@ -369,8 +369,9 @@ sub displayCharacters {
 sub query {
 #   my $default = shift;
 #   my $query = shift;
-  my ($default, $query) = (@_);
-  my %global_options = (q=>'n', '?'=>'n', ud=>'n'); #, d=>l); # l ==> log; n ==> no log
+#   my ($default, $query) = (@_);
+  my ($default, $query) = @_;
+  my %global_options = ('?'=>'n', c=>'l', q=>'n', ud=>'n'); #, d=>l); # l ==> log; n ==> no log
 
   while (1) {
     #   print "Turn $turn $phase: ", shift, ' or (q)uit> ';
@@ -401,17 +402,22 @@ sub query {
 	&xp; # if @xp;
 	exit;
       }
-      if ($input eq '?') { print '(ud <n>) to undo n previous entries;
-' .
-#(d <who> <DX mod>) to adjust <who>\'s DX by <DX mod>;
-'or (q) to quit
-'; }
-#       elsif ($input =~ /^d (.+) ([-\d]+)$/) {
-# 	my $who = who($1);
-# 	my $c = $characters[$who];
-# 	$c- ... This is really complicated.  I wonder if I should recompute the entire ordering for each character, since anything might change at any moment...
-# 	print "$c->{NAME} adjDX ", $2>=0 ? '+':'', "$2 --> $c->{adjDX}
-# 	print "DX modifications during another characters action (e.g. due to a Rope, Blur, Clumsiness spell) is not implemented yet.\n"; }
+      if ($input eq '?') {
+	print "(c <who> <DXmod>) to change <who>'s action to new <DXmod>\n", 
+	    #(d <who> <DX mod>) to adjust <who>\'s DX by <DX mod>;
+	    "(ud <n>) to undo n previous entries\n",
+	    "or (q) to quit\n";
+      }
+      elsif ($input =~ /^c (.+) +?([-\d]+)$/) {
+	my $whoi = who($1);
+	next if $whoi eq 'x';
+# 	my $c = $characters[$whoi];
+	print "$characters[$whoi]->{NAME} changes action from DX mod ", smod($dxact[$whoi]), " to ",
+	    smod($2), "\n";
+	$dxact[$whoi] = $2;
+	# I hope this is not the acting character.  If it is, just do the adjustment in your head!
+	return 'de' if $2>0; # someone else's DX has increased -- it may not be my turn anymore
+      }
       elsif ($input =~ /^ud (\d+)$/) {
 	print "undoing previous $1 commands and restarting...\n\n";
 	if ($1>$ncommands) {

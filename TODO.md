@@ -1,14 +1,4 @@
 #### Urgent:
-* Proposed rule to handle ambiguity of action sequence:
-  Figure declares a DX adjustment during the declaration phase.
-  If figure chooses alternate action which should happen sooner, it looses out.
-  If figure chooses action which happens later, it must wait until the end of that adjDX action period.  This latter aspect will need coding.
-  Since I am coding anyway, perhaps a figure can change its mind at any time, as a global action.  But once things happen in real life they happen in the game too.  Like in other games when you can shout something at any time. (25oct021)
-
-  Even better: allow changing mind at any time:
-  as figure action
-  as global option (e.g. during other figure's action)
-
 * wait for x as move?
   or all defer until x
 
@@ -351,3 +341,11 @@ Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
 * double time rate of xp without talents (1 per 6 min of playtime)
 * xp of creations!!
 * wait for an opening needs to end on a miss!
+* Proposed rule to handle ambiguity of action sequence:
+  Figure declares a DX adjustment during the declaration phase.
+  If figure chooses alternate action which should happen sooner, it looses out.
+  If figure chooses action which happens later, it must wait until the end of that adjDX action period.  This latter aspect will need coding.
+  Since I am coding anyway, perhaps a figure can change its mind at any time, as a global action.  But once things happen in real life they happen in the game too.  Like in other games when you can shout something at any time. (25oct021)
+  Even better: allow changing mind at any time:
+  as figure action
+  as global option (e.g. during other figure's action)

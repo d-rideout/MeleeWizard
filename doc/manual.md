@@ -13,26 +13,31 @@ complicated, but also substantially more realistic?
 Try to err on the side of hitting '0' unless there is some substantial reason not to, to make the movement phase a little less complicated.
 If it is too complicated, change the `$initiative` setting at the top of `mewcosq` to `p` for party-based or `l` for pLayer-based initiative.
 
-## Commands
+## Global commands
+These commands can be used at any prompt (besides the initial 'Overwrite log.bak file?').
+
 Command|Description
 -------|-----------
-`ud <n>` | undo <n> previous entries
-`?` | list 'global' commands (valid at every prompt\*)
-... | all are documented briefly in the program output
+`?` | list 'global' commands
+`c <who> <DXmod>` | change `<who>`'s DX modifier due to new choice of action for this turn
+`q` | quit game
+`ud <n>` | undo `<n>` previous entries
 
-\* except the first 'Overwrite log file?' prompt.
+The `c` command will presumably have no effect outside of the action sub-phase.
 
 ## Actions
 
 Prefix any action with `sp<ST>` to spend <ST> ST on casting a spell.
 
-suffix
+Suffix any action with `\` to allow for a subsequent action for the same figure.
 
 Command format|Action|Meaning
 --------------|------|-------
 `de [DX mod]` | defer action | wait for outcome of other actions before acting
-|| optionally change DX modifier for choice of action
-
+`m` | miss | cancel wait-for-an-opening DX bonus
+`a <who> <DXmod> <duration>` | adjust DX | modify `<who>`'s DX by `<DXmod>` through spell turn `<duration>`
+|| use `inf` duration for a permanent change
+... | ... | ...
 
 
 ## Abbreviations
