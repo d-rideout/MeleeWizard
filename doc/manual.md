@@ -25,7 +25,10 @@ Command|Description
 
 The `c` command will presumably have no effect outside of the action sub-phase.
 
-## Actions
+## Movement
+Be sure you have everyone's permission in between if you defer movement until some entity!
+
+## Action
 
 Prefix any action with `sp<ST>` to spend <ST> ST on casting a spell.
 

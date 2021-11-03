@@ -1,7 +1,4 @@
 #### Urgent:
-* wait for x as move?
-  or all defer until x
-
 * Remind how far moved when deciding action?
 * allow party in party file
 * allow name not first in party file
@@ -153,6 +150,8 @@
   give bounds on adjDX of enemies etc.
   maybe ST ranges?  (14oct021)
 * publish art/urls?  On the wiki? (15oct021)
+
+* To what extent are commands case insensitive? (2nov021)
 
 #### Non-urgent:
 * Check if sp2 preceeds r action? (Rope spell)? (10sep021)
@@ -349,3 +348,5 @@ Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
   Even better: allow changing mind at any time:
   as figure action
   as global option (e.g. during other figure's action)
+* wait for x as move?
+  or all defer until x
