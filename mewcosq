@@ -746,7 +746,7 @@ sub act {
 	delete $ac->{WAIT};
 	last; # always last after successful action result
       } # create being
-      elsif ($action =~ /^de ?([\d+-]*)/) { # Defer action
+      elsif ($action =~ /^de ?([\d+-]+)?/) { # Defer action
 	$dxact[$act_chari] = $1 if defined $1;
 	$defer = -1;
 	++$ndefer;
@@ -947,35 +947,43 @@ sub movement {
   # --------
   my $i = 0;
   my $last = $#ent; # queue index of last in queue
-#   my $w = '';
+  my $defer; # who to defer to
+  my $q = 1; # query user?
+
   $phase = 'movement';
   print "\nMovement phase: ";
   if ($initiative eq 'c') {
 #     &displayCharacters;
     print "Enter number of hexes moved at prompt\n",
-	"d <who> to defer until <who> (just match leading symbols)\n";
+	"d <who>  ALL defer until <who> (just match leading symbols)\n";
 #     $w = ' <who>';
   } else { print "Enter '0' to move\n"; }
   
   while (1) {
-    my $defer; # who to defer to
-    
     # skip over people who have gone already
-    $debug && print "skipping over moved characters at front of queue\n";
-    while ($moved[$order[$i]]) { ++$i }
+    while ($moved[$order[$i]]) {
+      $debug && print "skipping over moved character $order[$i]\n";
+      ++$i
+    }
 
     if ($i == $last) {
-      print "$ent[$order[$i]] moves\n";
+#       print "$ent[$order[$i]] moves\n";
+      query(0, "$ent[$order[$i]] moves,"); # to get num hexes
       $moved[$order[$i]] = 1;
+      $defer = undef; # Right?  Can't defer past end of queue? (3nov021)
+      $q = 1;
       $i = 0;
       while ($last>=0 && $moved[$order[--$last]]) {}
     } else {
       my $move = 'd';
       my $who = $ent[$order[$i]];
-      my $q = 1;
-      $debug && print "order[$i]=$order[$i] last=$last\n";
+      $debug && print "order[$i]=$order[$i] last=$last defer=", defined($defer)?$defer:'', "\n";
       if (defined $defer) {
-	if ($who =~ /^$defer/) { $defer = undef } else { $q = 0 }
+	if ($who =~ /^$defer/) {
+	  $defer = undef;
+	  print "who matches!\n";
+# 	  $i = 0;
+	} else { $q = 0 }
       }
 #       $move = query('d', "$who move, (D$w)efer, (f)inished,") if $q;
       $move = query('d', "$who move, (D)efer, (f)inished,") if $q;
@@ -986,8 +994,11 @@ sub movement {
 	--$last if $i==$last;
 	$i = 0;
       }
-      elsif ($move =~ /^d ?(.*)$/) { # defer (till <who>)
-	$defer = $1 if defined $1;
+      elsif ($move =~ /^d ?(.+)?$/) { # defer (till <who>)
+	if (defined $1) {
+	  $defer = $1;
+	  print "All defer until $1\n";
+	}
 	++$i;
       }
       elsif ($move eq 'f') { last; } # finished

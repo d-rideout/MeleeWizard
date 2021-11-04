@@ -1,23 +1,26 @@
 #### Urgent:
-* Remind how far moved when deciding action?
+* Remind how far moved when deciding action
+
+* list characters in initiative order?
+  are the two lists compatible? (3nov021)
+
 * allow party in party file
 * allow name not first in party file
+* NAME =
+* PARTY =
+
 * Aid spell!
-* Question C falling rule, e.g. when stumble over body
+* Blur spell would be nice?
 
 * Clean up HouseRules:
   - clean up doc/HouseRules.md (17oct021)
-    - fix wizard melee rules! (19oct021)
+  * Question C falling rule, e.g. when stumble over body
   - Consider FAQ at end of Codex!! (sep021)
   - Rethink House Rules presentation? (13sep021)
   - https://docs.github.com/en/communities/documenting-your-project-with-wikis/changing-access-permissions-for-wikis (14sep021)
   - Get xowa working? (23sep021)
     https://www.unixmen.com/xowa-offline-wikipedia-reader-editor/
   - Use wiki format on wiki?  See computer notes. (23sep021)
-
-* Blur spell would be nice?
-* reminder how many hexes moved for action?
-* allow changing adjustments as part of action?
 
 * This tool will be helpful in large battles.
   Note: [meleewizards.com](http://meleewizards.com)! (5aug021)
@@ -350,3 +353,4 @@ Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
   as global option (e.g. during other figure's action)
 * wait for x as move?
   or all defer until x
+- fix wizard melee rules! (19oct021)

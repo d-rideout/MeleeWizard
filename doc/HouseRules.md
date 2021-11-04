@@ -29,6 +29,8 @@ principles to learn here.
 * An Aid spell can temporarily remove the -3 DX penalty due to ST <= 3, but the penalty returns when the Aid spell wears off.
 * Dead figures cannot be forced to retreat.
 * Rope spell causes -2 DX on the turn it is cast, and -3 DX on the next turn.
+* Wait-for-an-opening only affects first of double bow shot.
+<!-- * Note: An engaged figure cannot reload a missle weapon.  Thus an engaged figure cannot get a second bow attack. -->
 
 These are the '**standard**' house rules.  It will be convenient to allow variants, to facilitate play testing them.  I will present the **named variants in boldface**, so that the choice of rules for a particular game can be easily described using these named variants.
 
@@ -214,10 +216,14 @@ the Codex.  What is the resolution to this?
    * I am going to side with the trampling rules in this case.
 
 4. Should figures get +4 DX on attempts to disengage from HTH??
+   * I am thinking no.  In fact that the Codex decrees are suspect.  It is as if very little thought went into the responses.
 
 5. To what extent should one follow the falling rules in the Codex?  Perhaps
 unless the rules suggest otherwise?  What about when tripping over a fallen
 figure?
+
+6. Does a double-bow-shot figure get two shots off in the turn it becomes engaged?  Like Legolas?  It should depend on how much movement led up to the engagement...
+   * Maybe Legolas-like bowmen is more fun?
 
 
 ## Deviations from Official Rules:
