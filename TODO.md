@@ -1,8 +1,7 @@
 #### Urgent:
-* Remind how far moved when deciding action
-
 * list characters in initiative order?
   are the two lists compatible? (3nov021)
+  Could just allow optional 'permutation' argument to &displayCharacters! (6nov021)
 
 * allow party in party file
 * allow name not first in party file
@@ -10,7 +9,8 @@
 * PARTY =
 
 * Aid spell!
-* Blur spell would be nice?
+
+* Sort out licensing of documentation
 
 * Clean up HouseRules:
   - clean up doc/HouseRules.md (17oct021)
@@ -32,6 +32,9 @@
     (29aug021)
 
 #### Thoughts:
+* Blur spell would be nice?  Though may be too difficult to be worthwhile, as
+  it seems to require that figures declare whom they intend to attack.  This
+  could be a bit ridiculous in a huge battle with no wizards! (6nov021)
 * make neater table of possible actions! (8oct021)
   - name, format, description
     nicely formatted using printf
@@ -354,3 +357,4 @@ Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
 * wait for x as move?
   or all defer until x
 - fix wizard melee rules! (19oct021)
+* Remind how far moved when deciding action

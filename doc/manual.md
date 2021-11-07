@@ -81,6 +81,30 @@ spl | DX adjustments due to other figures' actions (such as spells)
 
 `%hkeys` 'header keys':  The above keys, with value 1 if they can appear in a party file.
 
+Store information which persists across turns in the characters' hash, and
+information which is relevant for this turn only in an array (or hash).
+(Information in the character hash will take longer to access.)
+All arrays below are indexed by character index.
+
+<u>array</u> | <u>values</u>
+----- | ------
+`@turn_damage` | amt damage sustained this turn for each character
+`@acted` | who acted so far this turn, -1 ==> deferred action
+`%retreats` | possible forced retreats:  key forcer val hash key forced (value not used)
+`@dxact` |  amt to add to adjDX for this turn due to chosen action
+`@dxspl` | amt to add to adjDX for this turn due to others' actions
+`@dxinj` | amt to add to adjDX due to injury
+`@roll` | action initiative roll
+`@distMoved` | how far each character moved during the movement phase
+
+### adjDX Order
+* `@dxact` modifiers to DX due to choice of action *this turn*
+* `@dxspl` modifiers to DX due to others' actions
+* `@dxinj` DX modifiers due to injury.  Compute at beginning of &act.
+* All must be maintained.
+
+DX = adjDX + @dxact + @dxspl + @dxinj
+
 ## Query User
 
 To query the user, use the following code template:
@@ -97,14 +121,6 @@ while (my $response = query(<default>, <query string>)) {
 }
 ```
 Is this too complicated?  It allows great flexibility in the interpretation of the response.  e.g. ignoring spaces and the like.
-
-## adjDX Order
-* `@dxact` modifiers to DX due to choice of action *this turn*
-* `@dxspl` modifiers to DX due to others' actions
-* `@dxinj` DX modifiers due to injury.  Compute at beginning of &act.
-* All must be maintained.
-
-DX = adjDX + @dxact + @dxspl + @dxinj
 
 
 <!--

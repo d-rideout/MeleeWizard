@@ -151,12 +151,13 @@ my $turn = 0;
 my $phase = ''; # Combat sequence phase
 my @turn_damage; # amt damage sustained this turn for each character
 my @acted; # who acted so far this turn, -1 ==> deferred action
-my %retreats; # possible forced retreats  key forcer val hash key forced val num
+my %retreats; # possible forced retreats  key forcer val hash key forced
 my @dxact; # amt to add to adjDX for this turn due to chosen action
 my @dxspl; # amt to add to adjDX for this turn due to others' actions
 # Blur spell would go into @dxact -- it is my choice to attack the blurred figure.
 my @dxinj; # amt to add to adjDX due to injury
 my @roll; # action initiative roll, indexed by character index
+my @distMoved; # how far each character moved during the movement phase
 my $maxdx; # adjDX of acting character
 my $ndefer = 0; # num deferred characters
 my $continue; # holds chari of figure which has another action, else undef
@@ -191,6 +192,7 @@ while (1) {
   # Movement
   # --------
   my @entities;
+  @distMoved = ();
   if ($initiative eq 'c') {
     foreach my $c (@characters) {
       next unless $turn || !$surprise_parties{$c->{PARTY}};
@@ -686,6 +688,7 @@ sub act {
     print " (stunned until turn $ac->{StunTurn})" if $turn < $ac->{StunTurn};
     # Stunned 'through this turn' or '... next turn'? (12aug021)
     print "\n";
+    print "Moved $distMoved[$act_chari] hexes\n" if defined $distMoved[$act_chari];
 
     # Action query loop for character with index $act_chari
     my $defer;
@@ -966,10 +969,12 @@ sub movement {
       ++$i
     }
 
+    my $moveri = $order[$i];    
     if ($i == $last) {
 #       print "$ent[$order[$i]] moves\n";
-      query(0, "$ent[$order[$i]] moves,"); # to get num hexes
+      my $nhexes = query(0, "$ent[$order[$i]] moves,"); # to get num hexes
       $moved[$order[$i]] = 1;
+      $distMoved[$moveri] = $nhexes if $initiative eq 'c';
       $defer = undef; # Right?  Can't defer past end of queue? (3nov021)
       $q = 1;
       $i = 0;
@@ -993,6 +998,7 @@ sub movement {
 	$moved[$order[$i]] = 1;
 	--$last if $i==$last;
 	$i = 0;
+	$distMoved[$moveri] = $move if $initiative eq 'c';
       }
       elsif ($move =~ /^d ?(.+)?$/) { # defer (till <who>)
 	if (defined $1) {
@@ -1006,6 +1012,7 @@ sub movement {
     }
     last if $last<0;
   } # movement phase
+  $debug && print "[$initiative] distMoved: ", join('|', @distMoved), "\n";
 }
 
 
