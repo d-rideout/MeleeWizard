@@ -18,6 +18,7 @@
 
 # First step is to prepare the input files and command line for mewcosq:
 # ---------------------------------------------------------------------
+# Following https://www.pythontutorial.net/tkinter :
 import tkinter as tk
 from tkinter import ttk
 root = tk.Tk()

@@ -37,8 +37,10 @@ properly.  The ubiquitous undo command `ud` can be helpful in this regard...
 
 A battle involves two or more *sides*.  Each side is composed of *parties*,
 which are groups of related *characters*.  Usually a side, especially that of
-the players, has only a single party, but not always.  Each *player* controls
-a number of characters, usually all within a single party.
+the players, has only a single party, but not always.  Two characters on
+different sides are assumed to be in an antagonistic relationship with each
+other.  Each *player* controls a number of characters, usually all within a
+single party.
 
 Before starting the battle, create a file for each party, which details all
 characters in the party, including who is playing them, their current ST, and

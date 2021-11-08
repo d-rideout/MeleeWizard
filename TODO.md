@@ -1,12 +1,17 @@
 #### Urgent:
+* implement side-based initiative:
+  declare side in party file
+  SIDE = 
+  store hash party -> side to determine side of each character (9aug021)
+  I guess can just use values of above hash to populate list of sides
+* XP for unconscious figures?
+  - needs sides
+
 * list characters in initiative order?
   are the two lists compatible? (3nov021)
   Could just allow optional 'permutation' argument to &displayCharacters! (6nov021)
 
-* allow party in party file
-* allow name not first in party file
-* NAME =
-* PARTY =
+* I think weak disengage may be better! (7nov021)
 
 * Aid spell!
 
@@ -32,6 +37,7 @@
     (29aug021)
 
 #### Thoughts:
+* Worry about parsing forced move entry?  Currently it accepts any input. (7nov021)
 * Blur spell would be nice?  Though may be too difficult to be worthwhile, as
   it seems to require that figures declare whom they intend to attack.  This
   could be a bit ridiculous in a huge battle with no wizards! (6nov021)
@@ -171,9 +177,7 @@
   I think it can happen if someone gets stunned before acting, so they get
   pushed back in dex order, and then they fall.
   Is it a problem? (9aug021)
-* implement side-based initiative:
-  declare side in party file
-  store hash party -> side to determine side of each character (9aug021)
+
 * name key will choke if run over end of name!  Put monsters first... (27jul021)
 * Allow creating characters with spaces in name? (action commands are split on
   spaces) (1aug021)
@@ -358,3 +362,7 @@ Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
   or all defer until x
 - fix wizard melee rules! (19oct021)
 * Remind how far moved when deciding action
+* allow party in party file
+* allow name not first in party file
+* NAME =
+* PARTY =

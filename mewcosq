@@ -83,41 +83,54 @@ foreach my $partyfile (@ARGV) {
   unless (open FP, '<', $partyfile) {
     open FP, '<', "parties/$partyfile" or die "Error opening $partyfile: $!\n";
   }
-  $partyfile =~ s/^parties\///; # strip parties/ off party names
+#   $partyfile =~ s/^parties\///; # strip parties/ off party names
+  $partyfile =~ s/^.*\/([^\/]+)$/$1/; # strip directories/ off party names
   print "Reading party $partyfile:\n";
-  my $tmp;
-  # ignore leading comments
-  do { chomp($tmp = <FP>); } while $tmp =~ /^#/;
-  # read header of key names
-  my @hkeys = split /\t/, $tmp;
-  # Check that all headers are valid
-  foreach (@hkeys) { die "Unrecognized field: $_\n" unless $hkeys{$_}; }
+  my %globals; # key global variable val value
+  my @hkeys; # header keys
   while (<FP>) {
     next if /^#/;
     next unless /[^\s]/; # ignore pure-whitespace lines
     chomp;
-#     next unless $_; should not be needed anymore (5sep021)
-    my @l = split /\t/;
-    print $n+1, "\t$l[0]\n"; # I hope they put name first! (5sep021)
-    foreach my $i (0..$#hkeys) {
-      $characters[$n]->{$hkeys[$i]} = $l[$i];
+    
+    # parse valid line
+    if (/^(\w+)\s*=\s*(.*)$/) { # global variable
+      die "invalid line: $_" unless defined $hkeys{$1};
+      $globals{$1} = $2;
+      next;
     }
+
+    # read header of key names
+    unless (@hkeys) {
+      @hkeys = split /\t/;
+      # Check that all headers are valid
+      foreach (@hkeys) { die "Unrecognized field: $_\n" unless $hkeys{$_} }
+      die "Unique NAME required for each character" unless defined $hkeys{NAME};
+      next;
+    }
+
+    # read character lines
+    my @l = split /\t/;
+    foreach my $i (0..$#hkeys) { $characters[$n]->{$hkeys[$i]} = $l[$i] }
+    print $n+1, "\t$characters[$n]->{NAME}\n";
+    foreach my $g (keys %globals) { $characters[$n]->{$g} = $globals{$g} }
 
     # Check some field values
     my $chr = $characters[$n];
-    print "Warning: adjacent spaces is name '$chr->{NAME}'. Tab rendered as spaces?\n"
+    print "Warning: adjacent spaces in name '$chr->{NAME}'. Tab rendered as spaces?\n"
 	if $chr->{NAME} =~ /  /;
     die "Please provide adjDX for $chr->{NAME}.\n" unless $chr->{adjDX};
     die "Please provide ST for each character.\n" unless $chr->{ST};
     die "Please provide DX for each character.\n" unless $chr->{DX};
-#     my $nhex = $characters[$n]->{NHEX};
-#     die "Can only handle 1 or 3 hex characters currently\n"
+    #     my $nhex = $characters[$n]->{NHEX};
+    #     die "Can only handle 1 or 3 hex characters currently\n"
     # 	unless $nhex==1 || $nhex==3;
-    $characters[$n++]->{PARTY} = $partyfile;
+    $characters[$n]->{PARTY} = $partyfile unless defined $characters[$n]->{PARTY};
+    ++$n;
   }
   close FP;
 }
-print "$n characters\n\n"; # with ", 0+@hkeys, " fields\n";
+print "$n characters\n\n";
 
 # Preparations
 # ------------
@@ -687,8 +700,8 @@ sub act {
 	smod($dxspl[$act_chari]), "spl = $maxdx";
     print " (stunned until turn $ac->{StunTurn})" if $turn < $ac->{StunTurn};
     # Stunned 'through this turn' or '... next turn'? (12aug021)
+    print "  Moved $distMoved[$act_chari] hexes" if defined $distMoved[$act_chari];
     print "\n";
-    print "Moved $distMoved[$act_chari] hexes\n" if defined $distMoved[$act_chari];
 
     # Action query loop for character with index $act_chari
     my $defer;
