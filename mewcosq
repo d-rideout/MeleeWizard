@@ -21,8 +21,8 @@ use List::Util qw/max/;
 
 # Setting flags
 my $debug = 0; # 1 ==> max debug output
-my $initiative = 'c'; # c ==> character-based; p ==> party-based
-                      # l ==> pLayer-based; s ==> 'side-based
+my $initiative = 'c'; # c ==> character-based; PARTY ==> party-based
+                      # PLAYER ==> player-based; SIDE ==> 'side-based
 my $xpRate = 6; # minutes per wallclock time xp (12 is standard)
 
 
@@ -30,10 +30,12 @@ my $xpRate = 6; # minutes per wallclock time xp (12 is standard)
 $SIG{INT} = sub { print "\nINT signal received, exiting.\nCheck your log files to ensure you do not lose your history.\n"; close LOG; exit; };
 
 # Check settings
-die "Side-based initiative is not implemented yet\n" unless $initiative =~ /^[cpl]$/;
+die "Invalid initiative setting" unless $initiative =~ /^(c|PARTY|PLAYER|SIDE)$/;
+# die "Side-based initiative is not implemented yet\n" unless $initiative =~ /^[cpl]$/;
 # die "Only character- party-based initiative is currently implemented\n" unless $initiative =~ /^[cpl]$/;
 # die "Only character-based initiative is currently implemented\n" unless $initiative =~ /^[c]$/;
 # Side-based initiative is problematic -- I need to add it to the UI somehow.  Should be a property of parties.  Could group the input parties somehow on the command line?  Or maybe better -- have each party file declare a side name at the top! (2AUG021)
+
 
 # Banner
 print 'MElee/Wizard COmbat SeQuence tool  Copyright (C) 2021  David P. Rideout
@@ -67,7 +69,7 @@ $debug && print "Debug level $debug\n\n";
 # Data structures
 my @characters; # val hash with below keys
 my %charkeys; # key namekey val index into @characters
-my %hkeys = (NAME=>1, ST=>1, STrem=>1, DX=>1, adjDX=>1, PLAYER=>1, PARTY=>0, STUN=>0, FALL=>0, StunTurn=>0, DEAD=>0, NAMEKEY=>0, BAD=>1, ROPE=>0, ADJ=>0, CREATOR=>1);
+my %hkeys = (NAME=>1, ST=>1, STrem=>1, DX=>1, adjDX=>1, PLAYER=>1, PARTY=>0, STUN=>0, FALL=>0, StunTurn=>0, DEAD=>0, NAMEKEY=>0, BAD=>1, ROPE=>0, ADJ=>0, CREATOR=>1, SIDE=>1);
 # STUN how much damage causes stun
 # StunTurn becomes unstunned on this turn
 # FALL how much damage causes fall
@@ -77,6 +79,7 @@ my $n = 0; # total number of characters
 my $ncommands=0; # number of user entered commands
 my @xp; # indexed by char, value array of pairs num, description
 my @spellRenewalxp; # add it all up for each character
+my %sides; # key SIDE val num characters (only used for display at the beginning (8nov021))
 
 # Read parties
 foreach my $partyfile (@ARGV) {
@@ -93,6 +96,9 @@ foreach my $partyfile (@ARGV) {
     next unless /[^\s]/; # ignore pure-whitespace lines
     chomp;
     
+    # check for double spaces
+    print "Warning: adjacent spaces. Tab rendered as spaces?\n" if /  /;
+
     # parse valid line
     if (/^(\w+)\s*=\s*(.*)$/) { # global variable
       die "invalid line: $_" unless defined $hkeys{$1};
@@ -111,26 +117,31 @@ foreach my $partyfile (@ARGV) {
 
     # read character lines
     my @l = split /\t/;
-    foreach my $i (0..$#hkeys) { $characters[$n]->{$hkeys[$i]} = $l[$i] }
-    print $n+1, "\t$characters[$n]->{NAME}\n";
-    foreach my $g (keys %globals) { $characters[$n]->{$g} = $globals{$g} }
-
+    my $c = {};
+    foreach my $i (0..$#hkeys) { $c->{$hkeys[$i]} = $l[$i] }
+    print $n+1, "\t$c->{NAME}\n";
+    foreach my $g (keys %globals) { $c->{$g} = $globals{$g} }
+    if (defined $c->{SIDE}) { ++$sides{$c->{SIDE}} }
+    elsif ($initiative eq 'SIDE') { die "Please provide SIDE for each party when using side-based-initiative\n" }
+    
     # Check some field values
-    my $chr = $characters[$n];
-    print "Warning: adjacent spaces in name '$chr->{NAME}'. Tab rendered as spaces?\n"
-	if $chr->{NAME} =~ /  /;
-    die "Please provide adjDX for $chr->{NAME}.\n" unless $chr->{adjDX};
-    die "Please provide ST for each character.\n" unless $chr->{ST};
-    die "Please provide DX for each character.\n" unless $chr->{DX};
-    #     my $nhex = $characters[$n]->{NHEX};
+    die "Please provide adjDX for $c->{NAME}.\n" unless $c->{adjDX};
+    die "Please provide ST for each character.\n" unless $c->{ST};
+    die "Please provide DX for each character.\n" unless $c->{DX};
+    #     my $nhex = $c->{NHEX};
     #     die "Can only handle 1 or 3 hex characters currently\n"
     # 	unless $nhex==1 || $nhex==3;
-    $characters[$n]->{PARTY} = $partyfile unless defined $characters[$n]->{PARTY};
-    ++$n;
+    $c->{PARTY} = $partyfile unless defined $c->{PARTY};
+    $characters[$n++] = $c;
   }
   close FP;
 }
-print "$n characters\n\n";
+print "$n characters:\n";
+foreach my $side (sort {$sides{$b} <=> $sides{$a}} keys %sides) {
+  print "$sides{$side}\t$side\n";
+}
+print "\n";
+
 
 # Preparations
 # ------------
@@ -213,13 +224,13 @@ while (1) {
     }
   }
   else {
-    my $type = 'PARTY';
-    $type = 'PLAYER' if $initiative eq 'l';
+#     my $type = 'PARTY';
+#     $type = 'PLAYER' if $initiative eq 'l';
     my %entities;
     foreach my $c (@characters) {
       next unless $turn || !$surprise_parties{$c->{PARTY}};
       next if $c->{DEAD};
-      my $ent = $c->{$type};
+      my $ent = $c->{$initiative};
       push @entities, $ent unless $entities{$ent}++;
     }
   }
@@ -1000,6 +1011,7 @@ sub movement {
 	if ($who =~ /^$defer/) {
 	  $defer = undef;
 	  print "who matches!\n";
+	  $q = 1;
 # 	  $i = 0;
 	} else { $q = 0 }
       }

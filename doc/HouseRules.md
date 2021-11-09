@@ -31,6 +31,14 @@ principles to learn here.
 * Rope spell causes -2 DX on the turn it is cast, and -3 DX on the next turn.
 * Wait-for-an-opening only affects first of double bow shot.
 <!-- * Note: An engaged figure cannot reload a missle weapon.  Thus an engaged figure cannot get a second bow attack. -->
+<!-- * If a character is rendered unconscious, and there are no conscious
+  characters remaining on the same side, then that character's remaining xp
+  value is distributed evenly among the survivors from the other sides.  Note
+  that unconscious characters are regarded as survivors.  This obviates a
+  throat slitting ritual at the end of battles.  (GMs: If characters keep
+  unconscious enemies alive after the battle just to kill them later to get
+  more xp out of them, then disallow all such throat-slitting-or-not xp.) -->
+  
 
 These are the '**standard**' house rules.  It will be convenient to allow variants, to facilitate play testing them.  I will present the **named variants in boldface**, so that the choice of rules for a particular game can be easily described using these named variants.
 

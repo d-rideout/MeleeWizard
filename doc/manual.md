@@ -13,6 +13,7 @@ complicated, but also substantially more realistic?
 Try to err on the side of hitting '0' unless there is some substantial reason not to, to make the movement phase a little less complicated.
 If it is too complicated, change the `$initiative` setting at the top of `mewcosq` to `p` for party-based or `l` for pLayer-based initiative.
 
+
 ## Global commands
 These commands can be used at any prompt (besides the initial 'Overwrite log.bak file?').
 
@@ -25,8 +26,10 @@ Command|Description
 
 The `c` command will presumably have no effect outside of the action sub-phase.
 
+
 ## Movement
 Be sure you have everyone's permission in between if you defer movement until some entity!
+
 
 ## Action
 
@@ -51,6 +54,18 @@ Abbreviation | Meaning
 inj | DX adjustments due to injury
 act | DX adjustments due to chosen action for this turn
 spl | DX adjustments due to other figures' actions (such as spells)
+
+
+## Experience Points
+`mewcosq` keeps track of experience points during combat, using the TFT rules, with the following modifications:
+
+* Each surviving character earns 1 pt per 6 minutes of wallclock time.  This is double the rate in the official TFT rules, to account for the lack of xp from nd rolls with n>3.
+* We assume hitting a dogding or defending character does not earn any extra experience points.
+<!-- * If a character is rendered unconscious, and there are no conscious
+  characters remaining on the same side, that character's remaining xp value
+  is distributed evenly among the survivors from the other sides.  Note that
+  unconscious characters are regarded as survivors.
+  This obviates a potential morose slitting throats ritual at the end of every battle.  Is it really worth xp to slit a throat?  I think not.  -->
 
 ---
 # Melee/Wizard Turn Sequence Tool - Maintenance Manual
