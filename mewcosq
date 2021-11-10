@@ -932,7 +932,7 @@ sub shield {
   
   if ($input =~ /^sh ?([\d-]+)$/) { # change shield state
     my $adjDX = $c->{adjDX};
-    print $1>0 ? ' un' : ' ', "readies shield: adjDX $adjDX --> ", $adjDX+$1; #, "\n";
+    print $1>0 ? ' un' : ' ', "readies shield: adjDX $adjDX --> ", $adjDX+$1, "\n";
     $c->{adjDX} += $1;
     1;
   } else { 0; }

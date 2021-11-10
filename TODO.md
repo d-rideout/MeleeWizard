@@ -1,4 +1,6 @@
 #### Urgent:
+* Report everyone's damage at the end of the battle. (10nov021)
+
 * list characters in initiative order?
   are the two lists compatible? (3nov021)
   Could just allow optional 'permutation' argument to &displayCharacters! (6nov021)
