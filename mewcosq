@@ -467,6 +467,25 @@ sub query {
 # (separate function simply because I don't want to put this code into the
 #  &query parser under 'q' (28sep021))
 sub xp {
+  # Which sides won?
+#   for my $i (0..$n-1) {
+#     my $c = $characters[$i];
+#     my $st = $c->{STrem};
+#     $sides{$c->{SIDE}} = 'w' if $st>1;
+#   }
+  foreach my $c (@characters) { $sides{$c->{SIDE}} = 'w' if $c->{STrem} > 1 }
+  my $unconsciousXP = 0;
+  my ($nwinners, $nunconscious) = (0)x2;
+  foreach my $c (@characters) {
+    if ($sides{$c->{SIDE}} eq 'w' && $c->{STrem} > 0) { ++$nwinners }
+    elsif ($sides{$c->{SIDE}} ne 'w' && $c->{STrem} == 1) {
+      $unconsciousXP += $c->{DX}+1; ++$nunconscious
+    }
+  }
+  my $uxp = int($unconsciousXP/$nwinners+.5);
+  print "$unconsciousXP xp from $nunconscious figures distributed evenly among $nwinners victors: $uxp xp each\n";
+  
+  # Wallclock xp
   my $seconds = time - $startTime;
   if ($seconds<121) { print "\n$seconds seconds" }
   elsif ($seconds < 7201) { print "\n", int($seconds/60+.5)." minutes" }
@@ -477,23 +496,25 @@ sub xp {
   return unless @xp || @spellRenewalxp || $seconds>359;
   my $timexp = int($seconds/($xpRate*60) + .5);
   print "Each survivor earns (at least) $timexp xp for wallclock time\n";
-  
+
+  # Print final results
   print "\nExperience points earned:\n",
         "------------------------\n";
   foreach my $ci (0..$n-1) {
     my $srxp = $spellRenewalxp[$ci];
-    $debug && print "$characters[$ci]->{NAME}\tsrxp=$srxp timexp=$timexp\n";
-    next unless $timexp || $xp[$ci] || $srxp;
     my $c = $characters[$ci];
+    my $wuxp = $sides{$c->{SIDE}} eq 'w' ? $uxp : 0;
+    $debug && print "$characters[$ci]->{NAME}\tsrxp=$srxp timexp=$timexp\n";
+    next unless $timexp || $xp[$ci] || $srxp || $wuxp;
     next if $c->{DEAD} && $c->{STrem} != 1;
     push @{$xp[$ci]}, $srxp, 'spell renewal' if $srxp;
+    push @{$xp[$ci]}, $wuxp, 'winner bonus' if $wuxp;
     print "$c->{NAME}:\n";
     my $tot = 0;
     while (my ($amt, $desc) = splice @{$xp[$ci]}, 0, 2) {
       print "$amt\t$desc\n";
       $tot += $amt;
     }
-#     print "$timexp\t$seconds seconds (", int($seconds/60+.5), " minutes) of wallclock time (at least)\n";
     print "$tot\tTotal\n";
     $tot += $timexp;
     print "$tot\tTotal (with time xp included)\n\n";

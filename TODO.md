@@ -1,6 +1,4 @@
 #### Urgent:
-* XP for unconscious figures?
-
 * list characters in initiative order?
   are the two lists compatible? (3nov021)
   Could just allow optional 'permutation' argument to &displayCharacters! (6nov021)
@@ -362,3 +360,4 @@ Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
 * PARTY =
 * implement side-based initiative: declare side in party file
   SIDE = 
+* XP for unconscious figures?
