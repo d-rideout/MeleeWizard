@@ -1,6 +1,4 @@
 #### Urgent:
-* Report everyone's damage at the end of the battle. (10nov021)
-
 * list characters in initiative order?
   are the two lists compatible? (3nov021)
   Could just allow optional 'permutation' argument to &displayCharacters! (6nov021)
@@ -363,3 +361,4 @@ Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
 * implement side-based initiative: declare side in party file
   SIDE = 
 * XP for unconscious figures?
+* Report everyone's damage at the end of the battle. (10nov021)

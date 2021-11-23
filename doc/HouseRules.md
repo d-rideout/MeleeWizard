@@ -114,6 +114,32 @@ Let's also add a ST difference modifier to the success roll, so the goblin's
 success roll is now 14 + 3/2 - 26/2 = 2 or less on 3 dice.  That seems much
 more reasonable.
 
+### Further clarifications on HTH combat:
+
+The Codex decrees that figures get +4 DX on attempts to disengage from HTH.
+This seems pretty excessive -- surely it should be difficult!  But I am going
+to allow it anyway.  Note that such an attempt is with 4 dice, so it is only
+*slightly* easier than a plain 3-dice roll against adjDX.  More importantly,
+it allows attempts to disengage happen 'at the same time' as attacks (which
+are also at +4 DX).
+
+Note that, when HTH is initiated, it causes two figures to fall.  If one of
+them disengages, then the other is no longer in HTH combat, and must wait
+until the next turn to stand up.  This is hard on the attacker, but I think
+balances against so much that they have done this turn already.  Imagine that
+the disengaging figure pushes the attacker while disengaging, thus delaying
+its standing.
+
+It would be cool to allow grabbing a fallen weapon or shield on the way up,
+maybe as a 5-die DX maneuver?
+
+Getting shoved underfoot by a huge creature is a little different than the
+above -- if the defender manages to roll out (and therefore stand!) in the
+same turn, then it can keep hold of its weapon and shield.  This is how I
+read the rules.  Though this should probably require a die roll of some sort.
+3-dice against DX?
+
+
 ## 'Melee' rules for wizards:
 
 The rules for wizards using weapons and armor are not clear.  They are
@@ -223,15 +249,14 @@ during its action phase, in contradiction to the falling rule as stated in
 the Codex.  What is the resolution to this?
    * I am going to side with the trampling rules in this case.
 
-4. Should figures get +4 DX on attempts to disengage from HTH??
-   * I am thinking no.  In fact that the Codex decrees are suspect.  It is as if very little thought went into the responses.
-
 5. To what extent should one follow the falling rules in the Codex?  Perhaps
 unless the rules suggest otherwise?  What about when tripping over a fallen
 figure?
 
 6. Does a double-bow-shot figure get two shots off in the turn it becomes engaged?  Like Legolas?  It should depend on how much movement led up to the engagement...
    * Maybe Legolas-like bowmen is more fun?
+
+
 
 
 ## Deviations from Official Rules:
@@ -242,6 +267,7 @@ rules.
 ### Time rate of XP accrual
 <!--Besides some minor tweaks mentioned above, the only deviation from the
 official rules will be in the xp value of wallclock time.-->
+
 The official TFT
 rules grant 1 xp per 12 minutes of wallclock time.  It also grants xp for
 'making n die rolls', with n>3 (does hitting a dodging foe count for extra xp??), and also for playing in character.  When one
@@ -250,7 +276,7 @@ few n die rolls, with n>3.  Also in certain situations it can be difficult to
 'play in character', e.g. in a pure combat scenario.
 
 I thus offer two alternate rates of xp accrual: 1 xp / 10 min, and 1 xp / 6
-min.  The `mewcosq` tool will use the latter of these for the moment.  (In a
+min.  The `mewcosq` tool will use the former of these for the moment.  (In a
 real extended campaign, which has play time outside of battles, you should
 not use the 'time xp' awarded by `mewcosq` anyway -- keep track of the
 wallclock time separately.)

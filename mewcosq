@@ -23,9 +23,8 @@ use List::Util qw/max/;
 my $debug = 0; # 1 ==> max debug output
 my $initiative = 'c'; # c ==> character-based; PARTY ==> party-based
                       # PLAYER ==> player-based; SIDE ==> 'side-based
-my $xpRate = 6; # minutes per wallclock time xp (12 is standard)
-
-
+my $xpRate = 10; # minutes per wallclock time xp (12 is standard)
+                # prime factors of 60: 2 2 3 5
 # Catch signals
 $SIG{INT} = sub { print "\nINT signal received, exiting.\nCheck your log files to ensure you do not lose your history.\n"; close LOG; exit; };
 
@@ -426,6 +425,7 @@ sub query {
       if ($input eq 'q') {
 	print "Battle finished.\n";
 	&xp; # if @xp;
+	&finalST;
 	exit;
       }
       if ($input eq '?') {
@@ -463,6 +463,18 @@ sub query {
 }
 
 
+# Output final ST (for ongoing campaign)
+sub finalST {
+  print "ST remaining:\n";
+  print "------------\n";
+  # Lot's of questions about how to handle this, including what to do about wizards. (22nov021)
+  foreach my $c (@characters) {
+    next if $c->{STrem} < 1;
+    print "$c->{ST} ($c->{STrem})\t$c->{NAME}\n";
+  }
+}
+
+
 # Output experience points
 # (separate function simply because I don't want to put this code into the
 #  &query parser under 'q' (28sep021))
@@ -483,7 +495,7 @@ sub xp {
     }
   }
   my $uxp = int($unconsciousXP/$nwinners+.5);
-  print "$unconsciousXP xp from $nunconscious figures distributed evenly among $nwinners victors: $uxp xp each\n";
+  print "$unconsciousXP xp from $nunconscious figures distributed evenly among $nwinners victors: $uxp xp each\n" if $nunconscious;
   
   # Wallclock xp
   my $seconds = time - $startTime;
