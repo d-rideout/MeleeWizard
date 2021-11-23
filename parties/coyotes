@@ -1,3 +1,4 @@
+SIDE = monsters
 NAME	PLAYER	ST	DX	adjDX
 D	Dad	9	12	12
 BlackC	Dad	9	12	12

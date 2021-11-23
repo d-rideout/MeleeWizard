@@ -1,8 +1,4 @@
 #### Urgent:
-* list characters in initiative order?
-  are the two lists compatible? (3nov021)
-  Could just allow optional 'permutation' argument to &displayCharacters! (6nov021)
-
 * I think weak disengage may be better! (7nov021)
 
 * Aid spell!
@@ -362,3 +358,6 @@ Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
   SIDE = 
 * XP for unconscious figures?
 * Report everyone's damage at the end of the battle. (10nov021)
+* list characters in initiative order?
+  are the two lists compatible? (3nov021)
+  Could just allow optional 'permutation' argument to &displayCharacters! (6nov021)

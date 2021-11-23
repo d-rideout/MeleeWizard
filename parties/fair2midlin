@@ -1,3 +1,4 @@
+SIDE = PCs
 NAME	PLAYER	ST	DX	adjDX
 Fairto	Ellie	10	14	14
 Midlin	Ellie	10	14	14

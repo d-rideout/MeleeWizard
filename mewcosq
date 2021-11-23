@@ -135,7 +135,7 @@ foreach my $partyfile (@ARGV) {
   }
   close FP;
 }
-print "$n characters:\n";
+print "\n$n characters on ", 0+(keys %sides), " sides:\n";
 foreach my $side (sort {$sides{$b} <=> $sides{$a}} keys %sides) {
   print "$sides{$side}\t$side\n";
 }
@@ -380,10 +380,18 @@ while (1) {
 
 # Display characters
 sub displayCharacters {
-  print '-'x26, "\nCharacters:\n";
-  for my $i (0..$#characters) {
+  my @roll = @_;
+  my $msg = 'Initiative order';
+  unless (@roll) {
+    $msg = 'Characters';
+    @roll = 0..$n;
+  }
+
+#   print "roll: @roll\n";
+  print '-'x26, "\n$msg:\n";
+  for my $i (sort {$roll[$a]<=>$roll[$b]} 0..$#characters) {
     my $c = $characters[$i];
-    print $i, "\t$c->{NAMEKEY}\t$c->{NAME}\n" unless $c->{DEAD};
+    print "$c->{NAMEKEY}\t$c->{NAME}\n" unless $c->{DEAD};
   }
   print '-'x26, "\n";
 }
@@ -485,7 +493,10 @@ sub xp {
 #     my $st = $c->{STrem};
 #     $sides{$c->{SIDE}} = 'w' if $st>1;
 #   }
-  foreach my $c (@characters) { $sides{$c->{SIDE}} = 'w' if $c->{STrem} > 1 }
+  foreach my $c (@characters) {
+    $c->{SIDE} = '' unless $c->{SIDE};
+    $sides{$c->{SIDE}} = 'w' if $c->{STrem} > 1;
+  }
   my $unconsciousXP = 0;
   my ($nwinners, $nunconscious) = (0)x2;
   foreach my $c (@characters) {
@@ -959,9 +970,11 @@ sub movement {
   # Initiative
   # ----------
   my @roll;
-  for (my $i=0; $i<@ent; ++$i) { $roll[$i] = rand; }
+#   for (my $i=0; $i<@ent; ++$i) { $roll[$i] = rand; }
+  for (my $i=0; $i<$n; ++$i) { $roll[$i] = rand }
+  # &displayCharacters needs roll for each character.  Maybe displaying initiative via &displayCharacters is a mistake... (22nov021)
 
-  print "\nInitiative order:\n";
+#   print "\nInitiative order:\n";
   my @order;
   my $prev_roll;
   my @moved; # who has moved so far
@@ -969,14 +982,14 @@ sub movement {
     my $roll = $roll[$i];
     if (defined $prev_roll && $prev_roll == $roll) { die "Roll collision!\n"; }
     else { $prev_roll = $roll; }
-    print " $ent[$i]\n";
+#     print " $ent[$i]\n";
     push @order, $i;
   }
-  print "\n";
+#   print "\n";
 
   $phase = 'renew spells';
   my $fmt = "format: <who> <cost>\n    or: di <who>  to discontinue created figure\n";
-  &displayCharacters;
+  displayCharacters(@roll);
   print "Spell renewal phase: Renew spells or they end now\n$fmt";
   while (1) {
     my $sccmd = query('', 'Spell cost, (F)inished,');
