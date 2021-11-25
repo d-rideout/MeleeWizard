@@ -361,3 +361,8 @@ Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
 * list characters in initiative order?
   are the two lists compatible? (3nov021)
   Could just allow optional 'permutation' argument to &displayCharacters! (6nov021)
+* My last commit broke non-character-based initiative:
+  - Maybe write smarter sort routine which handles non-character-based initiative, dead characters, etc.  Or write some code to manuipulate @roll first.
+  Could maybe do both -- allow initiative method to determine which sort routine is selected.
+  Or maybe better still: prepare 'sorted' list before for loop.
+  Probably returning 0 in the comparison function acts as an identity?  Though maybe not.

@@ -140,7 +140,8 @@ foreach my $side (sort {$sides{$b} <=> $sides{$a}} keys %sides) {
   print "$sides{$side}\t$side\n";
 }
 print "\n";
-
+print 'Using ', $initiative eq 'c' ? 'CHARACTER':$initiative,
+    "-based movement initiative.\n";
 
 # Preparations
 # ------------
@@ -381,15 +382,17 @@ while (1) {
 # Display characters
 sub displayCharacters {
   my @roll = @_;
-  my $msg = 'Initiative order';
-  unless (@roll) {
-    $msg = 'Characters';
-    @roll = 0..$n;
+  my $msg = 'Characters';
+  my @order = 0..$n-1;
+  if ($initiative eq 'c' && @roll) {
+    $msg = 'Initiative order';
+    @order = sort {return 0 unless $roll[$a] && $roll[$b];
+		   $roll[$a]<=>$roll[$b]} 0..$n-1;
   }
 
 #   print "roll: @roll\n";
   print '-'x26, "\n$msg:\n";
-  for my $i (sort {$roll[$a]<=>$roll[$b]} 0..$#characters) {
+  for my $i (@order) {
     my $c = $characters[$i];
     print "$c->{NAMEKEY}\t$c->{NAME}\n" unless $c->{DEAD};
   }
@@ -476,10 +479,13 @@ sub finalST {
   print "ST remaining:\n";
   print "------------\n";
   # Lot's of questions about how to handle this, including what to do about wizards. (22nov021)
+  my $nwounded;
   foreach my $c (@characters) {
-    next if $c->{STrem} < 1;
+    next if $c->{STrem} < 1 || $c->{STrem} == $c->{ST};
     print "$c->{ST} ($c->{STrem})\t$c->{NAME}\n";
+    ++$nwounded;
   }
+  print "All survivors unharmed.\n" unless $nwounded;
 }
 
 
@@ -518,7 +524,7 @@ sub xp {
   print " of wallclock time passed.\n";
   return unless @xp || @spellRenewalxp || $seconds>359;
   my $timexp = int($seconds/($xpRate*60) + .5);
-  print "Each survivor earns (at least) $timexp xp for wallclock time\n";
+  print "Each survivor earns (at least) $timexp xp for wallclock time.\n";
 
   # Print final results
   print "\nExperience points earned:\n",
@@ -969,12 +975,12 @@ sub movement {
   
   # Initiative
   # ----------
-  my @roll;
-#   for (my $i=0; $i<@ent; ++$i) { $roll[$i] = rand; }
-  for (my $i=0; $i<$n; ++$i) { $roll[$i] = rand }
+  my @roll; # movement initiative roll, indexed by entity
+  for (my $i=0; $i<@ent; ++$i) { $roll[$i] = rand; }
+#   for (my $i=0; $i<$n; ++$i) { $roll[$i] = rand }
   # &displayCharacters needs roll for each character.  Maybe displaying initiative via &displayCharacters is a mistake... (22nov021)
 
-#   print "\nInitiative order:\n";
+  print "\nInitiative order:\n" unless $initiative eq 'c';
   my @order;
   my $prev_roll;
   my @moved; # who has moved so far
@@ -982,7 +988,7 @@ sub movement {
     my $roll = $roll[$i];
     if (defined $prev_roll && $prev_roll == $roll) { die "Roll collision!\n"; }
     else { $prev_roll = $roll; }
-#     print " $ent[$i]\n";
+    print " $ent[$i]\n" unless $initiative eq 'c';
     push @order, $i;
   }
 #   print "\n";
