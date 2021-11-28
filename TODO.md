@@ -1,4 +1,7 @@
 #### Urgent:
+* put all logs into log/ (27nov021)
+* ud does not work on Mac!! (24nov021)
+
 * I think weak disengage may be better! (7nov021)
 
 * Aid spell!
@@ -366,3 +369,7 @@ Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
   Could maybe do both -- allow initiative method to determine which sort routine is selected.
   Or maybe better still: prepare 'sorted' list before for loop.
   Probably returning 0 in the comparison function acts as an identity?  Though maybe not.
+* Turn 1 normal actions: Action result? (N)o or (?) for glbl opts> n
+  Unrecognized action n
+* who matches!
+* Suffix with '' if figure has more actions for this turn.

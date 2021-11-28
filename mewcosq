@@ -116,6 +116,8 @@ foreach my $partyfile (@ARGV) {
 
     # read character lines
     my @l = split /\t/;
+    die "Can't have multiple headers in party file: $_" if $l[0] eq $hkeys[0];
+    # Is this a good enough check? (27nov021)
     my $c = {};
     foreach my $i (0..$#hkeys) { $c->{$hkeys[$i]} = $l[$i] }
     print $n+1, "\t$c->{NAME}\n";
@@ -747,7 +749,7 @@ sub act {
       "* w\t\t\twait for an opening\n",
       "  Prefix with 'sp<ST>' if result is from spell of ST cost <ST>.\n",
       "  (Note that spell can have no result, but still cost ST.)\n",
-      "  Suffix with '\' if figure has more actions for this turn.\n"
+      "  Suffix with '\\' if figure has more actions for this turn.\n"
       if $phase =~ /normal/;
   print '-' x 79, "\n";
   my $act_chari;
@@ -785,7 +787,7 @@ sub act {
       } else { undef $continue }
       
       # Result of action (in alphabetical order after Hit-for-damage)
-      last unless $action;
+      last unless $action && lc $action ne 'n';
       if (shield($ac, $action)) { last; } # must precede Hit
       elsif ($action =~ /^a (.+) (-?\d+) (\d+|inf)$/) {  # adjust DX
 	my $targeti = who($1);
@@ -1062,7 +1064,7 @@ sub movement {
       if (defined $defer) {
 	if ($who =~ /^$defer/) {
 	  $defer = undef;
-	  print "who matches!\n";
+# 	  print "who matches!\n";
 	  $q = 1;
 # 	  $i = 0;
 	} else { $q = 0 }
