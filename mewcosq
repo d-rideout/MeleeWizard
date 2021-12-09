@@ -164,10 +164,21 @@ if ($restart) {
 } else {
   $startTime = time;
   $seed = srand;
-  print "\nOverwrite log.bak file? (interrupt (Ctrl-C) if not!)"; <STDIN>;
+#   print "\nOverwrite log.bak file? (interrupt (Ctrl-C) if not!)"; <STDIN>;
 }
-system 'mv log log.bak'; # mv is faster that cp on same filesystem (12sep021)
-open LOG, '>log' or die "problem creating log file";
+if (-f 'log') {
+  print "log file exists -- moving to new log file directory\n";
+  `mv -f log junk`;
+  `mkdir log`;
+  `mv junk log/log`;
+  `mv -n log* log`;
+} elsif (not -d 'log') { `mkdir log` }
+# print "log dir\n" if -d 'log';
+my $bn = 0;
+++$bn while -e "log/log$bn";
+system "mv log/log log/log$bn"; # mv is faster that cp on same filesystem (12sep021)
+
+open LOG, '>log/log' or die "problem creating log file";
 print LOG "$seed\n";
 print LOG "$startTime\n";
 
