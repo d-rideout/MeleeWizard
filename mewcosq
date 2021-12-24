@@ -75,12 +75,14 @@ my %hkeys = (NAME=>1, ST=>1, STrem=>1, DX=>1, adjDX=>1, PLAYER=>1, PARTY=>0, STU
 # 1 ==> can appear in party file
 # I almost never use %hkeys.  Is it worth maintaining? (27oct021)
 my $n = 0; # total number of characters
-my $ncommands=0; # number of user entered commands
 my @xp; # indexed by char, value array of pairs num, description
 my @spellRenewalxp; # add it all up for each character
 my %sides; # key SIDE val num characters (only used for display at the beginning (8nov021))
+# my $ncommands=0; # number of user entered commands
+my @history; # save history for ud
 
 # Read parties
+# ------------
 foreach my $partyfile (@ARGV) {
   unless (open FP, '<', $partyfile) {
     open FP, '<', "parties/$partyfile" or die "Error opening $partyfile: $!\n";
@@ -94,6 +96,7 @@ foreach my $partyfile (@ARGV) {
     next if /^#/;
     next unless /[^\s]/; # ignore pure-whitespace lines
     chomp;
+    s/\r//; # get rid of dos line endings
     
     # check for double spaces
     print "Warning: adjacent spaces. Tab rendered as spaces?\n" if /  /;
@@ -174,9 +177,9 @@ if (-f 'log') {
   `mv -n log* log`;
 } elsif (not -d 'log') { `mkdir log` }
 # print "log dir\n" if -d 'log';
-my $bn = 0;
-++$bn while -e "log/log$bn";
-system "mv log/log log/log$bn"; # mv is faster that cp on same filesystem (12sep021)
+my $bakn = 0; # backup number
+++$bakn while -e "log/log$bakn";
+system "mv log/log log/log$bakn"; # mv is faster that cp on same filesystem (12sep021)
 
 open LOG, '>log/log' or die "problem creating log file";
 print LOG "$seed\n";
@@ -440,7 +443,8 @@ sub query {
     my $cmd = $cmd[0];
     unless ($cmd && $global_options{$cmd} && $global_options{$cmd} eq 'n') {
       print LOG "$input\n";
-      ++$ncommands;
+      push @history, $input;
+#       ++$ncommands;
     }
     return $default unless $input || $input eq '0';
 
@@ -470,13 +474,19 @@ sub query {
       }
       elsif ($input =~ /^ud (\d+)$/) {
 	print "undoing previous $1 commands and restarting...\n\n";
-	if ($1>$ncommands) {
-	  print "There have only been $ncommands commands so far!\n";
+	if ($1>@history) {
+	  print "There have only been ", 0+@history, " commands so far!\n";
 	  next;
 	}
 	close LOG;
-	system "head -n -$1 log > .junk";
-	system 'mv .junk log';
+# 	++$bakn;
+	system 'mv log/log log/log' . ++$bakn;
+	open LOG, '>log/log' or die "problem creating log file";
+	splice @history, -$1;
+	print "$_\n" for @history;
+	close LOG;
+# 	system "head -n -$1 log/log > log/log$bakn";
+# 	system 'mv .junk log';
 	exec "./mewcosq -l @ARGV";
       } else { print "error in global option [$input]\n"; }
     } else { return $input; }

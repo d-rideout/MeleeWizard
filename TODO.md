@@ -1,9 +1,20 @@
 #### Urgent:
-* Windows is confusing the line endings somehow.  Need a windows file or
-  machine.  Debug this during the next Jimmy session. (6dec021)
+* Bugs:
+Reading party wiz:
+1       Lona
+2       twelve
 
-* ud does not work on Mac!! (24nov021)
-  head there is broken -- need to implement my own (8dec021)
+2 characters on 1 sides:
+1       monsters
+
+from wiz file:
+NAME	PLAYER	ST	DX	adjDX	STrem
+Lona	Dad	11	14	14
+
+PARTY = monsters
+SIDE = monsters
+
+twelve	DM	9	11	11
 
 * I think weak disengage may be better! (7nov021)
 
@@ -377,3 +388,7 @@ Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
 * who matches!
 * Suffix with '' if figure has more actions for this turn.
 * put all logs into log/ (27nov021)
+* Windows is confusing the line endings somehow.  Need a windows file or
+  machine. (6dec021)
+* ud does not work on Mac!! (24nov021)
+  head there is broken -- need to implement my own (8dec021)

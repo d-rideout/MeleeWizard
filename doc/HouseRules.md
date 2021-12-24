@@ -38,6 +38,12 @@ principles to learn here.
   throat slitting ritual at the end of battles.  (GMs: If characters keep
   unconscious enemies alive after the battle just to kill them later to get
   more xp out of them, then disallow all such throat-slitting-or-not xp.) -->
+* Any character wishing to use talent rules some day (including wizards) must choose three talents or languages to be studying using the following schedule:
+  - One during character generation (i.e. before playing with character)
+  - One after first gaming session (i.e. before start of second session)
+  - One after second session (i.e. before third)
+  This allows the character to choose talents and languages which may be relevant to the campaign, which is reasonable knowledge which the character will probably have from its experience before character generation.
+* A character who must forget talents or languages due to a permanent loss of IQ may bump a talent or language from one of its three 'learning slots', and replace it with the forgotten talent or language.
   
 
 These are the '**standard**' house rules.  It will be convenient to allow variants, to facilitate play testing them.  I will present the **named variants in boldface**, so that the choice of rules for a particular game can be easily described using these named variants.
@@ -176,6 +182,7 @@ Below (and above) 'W' indicates that the quotation comes from Wizard, 'AM' from 
 Below is my best guess as to the intended rules.
 
 * Wizards get -4 DX when using weapons besides staff or dagger, and when using a shield.
+* What about a club or torch??  Can wizards use clubs without penalty?  Presumably yes??
 * A wizard in HTH gets -4 DX for spell casting, and can only cast spells on figures in the wizard's hex.
 * A wizard in HTH is at -4 DX for drawing a dagger.
 * A wizard wielding a dagger in HTH is presumably at +4 DX, because s/he is attacking a rear hex.
@@ -187,10 +194,17 @@ Below is my best guess as to the intended rules.
 * wizard in iron armor: -(usual penalty) DX on staff/dagger attacks
 * wizard in silver armor: -(usual penalty) DX on spells and (non-staff/dagger) attacks
 * wizard carrying iron (e.g. as weapon) -4 DX on spells
-* wizard wielding shield or weapon besides staff or non-silver dagger -4 DX
-* wizard wielding shield and non-(staff/silver dagger) -4 DX (i.e. the penalty is not doubled)
+* wizard wielding shield -4 DX
+* wizard wielding weapon besides staff or non-silver dagger -4 DX
+(so -8 DX for weapon and shield -- that seems to be what ITL pg 12 says)
+<!-- * wizard wielding shield and non-(staff/silver dagger) -4 DX (i.e. the penalty is not doubled) -->
 
 Is that a reasonable interpretation of the rules as stated?
+
+#### How to handle heros casting spells??
+* Can they cast when wielding a weapon or shield?  I assume not?
+* Do heros get the additional -4 DX penalty for casting spells in iron armor?  I assume yes.
+* Do heros get -4 DX on spells when carrying iron?  I assume yes.
 
 <!-- #### Questions:
 * Is a wizard at +4 DX when wielding a dagger in HTH?  Presumably so. -->
@@ -256,8 +270,9 @@ figure?
 6. Does a double-bow-shot figure get two shots off in the turn it becomes engaged?  Like Legolas?  It should depend on how much movement led up to the engagement...
    * Maybe Legolas-like bowmen is more fun?
 
+7. Do most all wizards have to spend one spell slot to learn literacy talent?
 
-
+8. Surely it makes no sense for characters to gain xp from 4-die rolls during combat.
 
 ## Deviations from Official Rules:
 For the most part I want to stick as close as possible to the published
@@ -270,10 +285,12 @@ official rules will be in the xp value of wallclock time.-->
 
 The official TFT
 rules grant 1 xp per 12 minutes of wallclock time.  It also grants xp for
-'making n die rolls', with n>3 (does hitting a dodging foe count for extra xp??), and also for playing in character.  When one
+'making n die rolls', with n>3, and also for playing in character.  When one
 is not playing with the full TFT rules (e.g. with talents), there are very
 few n die rolls, with n>3.  Also in certain situations it can be difficult to
 'play in character', e.g. in a pure combat scenario.
+(Does hitting a dodging foe count for extra xp??  The rules do say *any* roll,
+so I suppose so!  10 bonus xp per such successful roll!)
 
 I thus offer two alternate rates of xp accrual: 1 xp / 10 min, and 1 xp / 6
 min.  The `mewcosq` tool will use the former of these for the moment.  (In a
