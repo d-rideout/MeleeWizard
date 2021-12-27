@@ -1,4 +1,14 @@
 #### Urgent:
+* 15 xp from 1 figures distributed evenly among 5 victors: 3 xp each
+  accounting wrong -- I think summoned wolf is included as victor
+  oh i forgot to declare it gone...
+
+* 455730 hours and 32 minutes of wallclock time passed.
+Each survivor earns (at least) 2734383 xp for wallclock time.
+Something is wrong with reading the start time from log file??
+
+* Argument "" isn't numeric in subtraction (-) at ./mewcosq line 543, <STDIN> line 99.
+
 * Bugs:
 Reading party wiz:
 1       Lona
@@ -15,6 +25,10 @@ PARTY = monsters
 SIDE = monsters
 
 twelve	DM	9	11	11
+
+* damage during movement from HTH fail! (27dec021)
+
+* allow multiple headers? (27dec021)
 
 * I think weak disengage may be better! (7nov021)
 

@@ -158,7 +158,7 @@ my @log;
 my $seed;
 my $startTime;
 if ($restart) {
-  open LOG, '<log' or die "problem reading log file";
+  open LOG, '<log/log' or die "problem reading log file";
   chomp($seed = <LOG>);
   chomp($startTime = <LOG>);
   srand $seed;
@@ -276,6 +276,7 @@ while (1) {
     my $mods = $characters[$ci]->{ADJ};
     next unless $mods;
     my $i=0;
+    print "i=$i mods=[@{$mods}]\n";
     my ($mod, $lastTurn) = $mods->[$i..$i+1];
     $lastTurn = $turn if $lastTurn eq 'inf';
     if ($lastTurn < $turn) { splice @$mods, $i, 2 }
@@ -442,6 +443,7 @@ sub query {
     my @cmd = split / /, $input;
     my $cmd = $cmd[0];
     unless ($cmd && $global_options{$cmd} && $global_options{$cmd} eq 'n') {
+      $debug && print "logging [$cmd]\n";
       print LOG "$input\n";
       push @history, $input;
 #       ++$ncommands;
@@ -479,11 +481,13 @@ sub query {
 	  next;
 	}
 	close LOG;
-# 	++$bakn;
-	system 'mv log/log log/log' . ++$bakn;
+	# 	++$bakn;
+	my $cmd = 'mv log/log log/log' . ++$bakn;
+	$debug && print "$cmd\n";
+	system $cmd;
 	open LOG, '>log/log' or die "problem creating log file";
 	splice @history, -$1;
-	print "$_\n" for @history;
+	print LOG "$_\n" for @history;
 	close LOG;
 # 	system "head -n -$1 log/log > log/log$bakn";
 # 	system 'mv .junk log';
@@ -820,7 +824,11 @@ sub act {
 	my $mod = $2;
 	my $dur = $3;
 	$dxspl[$targeti] += $mod;
-	$dur and push @{$characters[$targeti]->{ADJ}}, $mod, $dur eq 'inf' ? 'inf':$turn+$dur;
+	if ($dur) {
+	  my @mod_entry = $mod, $dur eq 'inf' ? 'inf':$turn+$dur;
+	  print "pushing [@mod_entry] to adj array\n";
+	  push @{$characters[$targeti]->{ADJ}}, $mod, $dur eq 'inf' ? 'inf':$turn+$dur;
+	}
 	print "$characters[$targeti]->{NAME} adjDX ", smod($2), " for $3 turns\n";
 	last;
       } # DX mod, e.g. from Clumsiness spell

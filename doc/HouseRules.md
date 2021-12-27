@@ -107,6 +107,7 @@ Additional HTH rules:
 * figure gets +4 DX on attempt to disengage! (according to Codex!)
   (Though this seems really strange!  Why bother make it 4 dice then?  It is even easier than a 3 die save vs DX!)
   I am going to ignore this at the moment.  Disengaging from HTH should be difficult.
+* Do figures attempting to draw a dagger in HTH get +4 DX?  I am going to assume no.
 
 ### Pinning a Foe:
 The Pinning a Foe rules in Advanced Melee seem grossly unrealistic, since
@@ -273,6 +274,8 @@ figure?
 7. Do most all wizards have to spend one spell slot to learn literacy talent?
 
 8. Surely it makes no sense for characters to gain xp from 4-die rolls during combat.
+
+9. TFT seems to neglect the weight of coins.  A coin is about 25g.  So 100 weigh 2.5 kg.  Not negligible!
 
 ## Deviations from Official Rules:
 For the most part I want to stick as close as possible to the published
