@@ -1,14 +1,4 @@
 #### Urgent:
-* 15 xp from 1 figures distributed evenly among 5 victors: 3 xp each
-  accounting wrong -- I think summoned wolf is included as victor
-  oh i forgot to declare it gone...
-
-* 455730 hours and 32 minutes of wallclock time passed.
-Each survivor earns (at least) 2734383 xp for wallclock time.
-Something is wrong with reading the start time from log file??
-
-* Argument "" isn't numeric in subtraction (-) at ./mewcosq line 543, <STDIN> line 99.
-
 * Bugs:
 Reading party wiz:
 1       Lona
@@ -406,3 +396,6 @@ Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
   machine. (6dec021)
 * ud does not work on Mac!! (24nov021)
   head there is broken -- need to implement my own (8dec021)
+* 455730 hours and 32 minutes of wallclock time passed.
+Each survivor earns (at least) 2734383 xp for wallclock time.
+Something is wrong with reading the start time from log file??

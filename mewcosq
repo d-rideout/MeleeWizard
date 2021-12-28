@@ -184,6 +184,7 @@ system "mv log/log log/log$bakn"; # mv is faster that cp on same filesystem (12s
 open LOG, '>log/log' or die "problem creating log file";
 print LOG "$seed\n";
 print LOG "$startTime\n";
+push @history, $seed, $startTime;
 
 # Manage combat sequence
 # ======================
@@ -1027,7 +1028,7 @@ sub movement {
   $phase = 'renew spells';
   my $fmt = "format: <who> <cost>\n    or: di <who>  to discontinue created figure\n";
   displayCharacters(@roll);
-  print "Spell renewal phase: Renew spells or they end now\n$fmt";
+  print "Spell renewal phase: Renew spells and discontinue creations\n$fmt";
   while (1) {
     my $sccmd = query('', 'Spell cost, (F)inished,');
     last unless $sccmd;
