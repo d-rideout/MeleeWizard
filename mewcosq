@@ -826,9 +826,11 @@ sub act {
 	my $dur = $3;
 	$dxspl[$targeti] += $mod;
 	if ($dur) {
-	  my @mod_entry = $mod, $dur eq 'inf' ? 'inf':$turn+$dur;
-	  print "pushing [@mod_entry] to adj array\n";
-	  push @{$characters[$targeti]->{ADJ}}, $mod, $dur eq 'inf' ? 'inf':$turn+$dur;
+	  $dur = $turn+$dur unless $dur eq 'inf';
+# 	  my @mod_entry = $mod, $dur;
+# 	  print "pushing [@mod_entry] to adj array\n";
+	  push @{$characters[$targeti]->{ADJ}}, $mod, $dur;
+	      #$mod, $dur eq 'inf' ? 'inf':$turn+$dur;
 	}
 	print "$characters[$targeti]->{NAME} adjDX ", smod($2), " for $3 turns\n";
 	last;

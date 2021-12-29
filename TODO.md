@@ -16,6 +16,8 @@ SIDE = monsters
 
 twelve	DM	9	11	11
 
+* Note that 'reading party x' message is not repeated when party name changes (29dec021)
+
 * damage during movement from HTH fail! (27dec021)
 
 * allow multiple headers? (27dec021)
