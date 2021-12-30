@@ -1,21 +1,4 @@
 #### Urgent:
-* Bugs:
-Reading party wiz:
-1       Lona
-2       twelve
-
-2 characters on 1 sides:
-1       monsters
-
-from wiz file:
-NAME	PLAYER	ST	DX	adjDX	STrem
-Lona	Dad	11	14	14
-
-PARTY = monsters
-SIDE = monsters
-
-twelve	DM	9	11	11
-
 * Tool to throw multiple dice (30dec021)
 
 * damage during movement from HTH fail! (27dec021)
@@ -178,6 +161,7 @@ twelve	DM	9	11	11
 * To what extent are commands case insensitive? (2nov021)
 
 #### Non-urgent:
+* two+ digit log file names (30dec021)
 * Check if sp2 preceeds r action? (Rope spell)? (10sep021)
 * All these spells will be confusing to keep track of.  Need a more generic spell action. (10sep021)
 * Global commands will trump local ones.  So far this is not a problem, but

@@ -142,7 +142,8 @@ foreach my $partyfile (@ARGV) {
   }
   close FP;
 }
-print "\n$n characters on ", 0+(keys %sides), " sides:\n";
+my $nsides = keys %sides;
+print "\n$n characters and $nsides side", &s($nsides), ":\n";
 foreach my $side (sort {$sides{$b} <=> $sides{$a}} keys %sides) {
   print "$sides{$side}\t$side\n";
 }
@@ -1174,3 +1175,7 @@ sub who {
   print "Invalid character specification '$s'\n";
   'x'; # should be an invalid array index
 }
+
+
+# s to pluralize word?
+sub s { shift > 1 ? 's' : '' }
