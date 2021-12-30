@@ -44,7 +44,8 @@ principles to learn here.
   - One after second session (i.e. before third)
   This allows the character to choose talents and languages which may be relevant to the campaign, which is reasonable knowledge which the character will probably have from its experience before character generation.
 * A character who must forget talents or languages due to a permanent loss of IQ may bump a talent or language from one of its three 'learning slots', and replace it with the forgotten talent or language.
-  
+* Turn is 5 seconds.  (This is stated in AM pg 2.  ITL implies 10 seconds on pg 66.  (5 seconds is already a ridiculously long time to run 10 hexes = 13 meters))
+
 
 These are the '**standard**' house rules.  It will be convenient to allow variants, to facilitate play testing them.  I will present the **named variants in boldface**, so that the choice of rules for a particular game can be easily described using these named variants.
 

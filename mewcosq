@@ -66,6 +66,7 @@ die "Usage: mewcosq [-ld] <party 1> [party 2] [party 3] ...\n" .
 $debug && print "Debug level $debug\n\n";
 
 # Data structures
+# ---------------
 my @characters; # val hash with below keys
 my %charkeys; # key namekey val index into @characters
 my %hkeys = (NAME=>1, ST=>1, STrem=>1, DX=>1, adjDX=>1, PLAYER=>1, PARTY=>0, STUN=>0, FALL=>0, StunTurn=>0, DEAD=>0, NAMEKEY=>0, BAD=>1, ROPE=>0, ADJ=>0, CREATOR=>1, SIDE=>1);
@@ -87,23 +88,24 @@ foreach my $partyfile (@ARGV) {
   unless (open FP, '<', $partyfile) {
     open FP, '<', "parties/$partyfile" or die "Error opening $partyfile: $!\n";
   }
-#   $partyfile =~ s/^parties\///; # strip parties/ off party names
   $partyfile =~ s/^.*\/([^\/]+)$/$1/; # strip directories/ off party names
-  print "Reading party $partyfile:\n";
+  print "Reading party file $partyfile:\n";
   my %globals; # key global variable val value
   my @hkeys; # header keys
   while (<FP>) {
+    # clean line
     next if /^#/;
     next unless /[^\s]/; # ignore pure-whitespace lines
     chomp;
     s/\r//; # get rid of dos line endings
-    
     # check for double spaces
     print "Warning: adjacent spaces. Tab rendered as spaces?\n" if /  /;
 
     # parse valid line
     if (/^(\w+)\s*=\s*(.*)$/) { # global variable
       die "invalid line: $_" unless defined $hkeys{$1};
+      if ($1 eq 'SIDE') { print "reading side $2...\n"; }
+      elsif ($1 eq 'PARTY') { print "reading party $2...\n"; }
       $globals{$1} = $2;
       next;
     }

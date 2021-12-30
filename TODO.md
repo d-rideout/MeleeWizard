@@ -16,15 +16,13 @@ SIDE = monsters
 
 twelve	DM	9	11	11
 
-* Note that 'reading party x' message is not repeated when party name changes (29dec021)
+* Tool to throw multiple dice (30dec021)
 
 * damage during movement from HTH fail! (27dec021)
 
 * allow multiple headers? (27dec021)
 
 * I think weak disengage may be better! (7nov021)
-
-* Aid spell!
 
 * Clean up HouseRules:
   - clean up doc/HouseRules.md (17oct021)
@@ -48,6 +46,9 @@ twelve	DM	9	11	11
     (29aug021)
 
 #### Thoughts:
+* logging should happen after command succeeds! (30dec021)
+* How to handle un-sided characters? (29dec021)
+* reading from party on side x... (29dec021)
 * Worry about parsing forced move entry?  Currently it accepts any input. (7nov021)
 * Blur spell would be nice?  Though may be too difficult to be worthwhile, as
   it seems to require that figures declare whom they intend to attack.  This
