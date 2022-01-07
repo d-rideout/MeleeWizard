@@ -1,4 +1,37 @@
 #### Urgent:
+* bUG: Lona cast sp2 spell
+ona:
+7       7 hits on 2_cat
+7       Total
+15      Total (with time xp included)
+(oh it went to Ludwig!  How did that happen??  error in parsing in spell section.  Probably expands incorrectly.)
+
+maybe from restart??
+ran out of history
+maybe keep track separately?
+
+Yes something is wrong with logging and recovery.  Putting actors into log file will help with diagnosis.
+say strip ' # comment' from end of query responses  <------------------
+
+* Qiangli_Dianchi:
+2       spell renewal
+2       Total
+10      Total (with time xp included)
+this is wrong too!  2 for casting, plus more than 2 turns renewed!?
+
+runs out of shell history.  Can feed log to recover history and diagnose.
+
+run through above and figure out what happened.  Weirdness with bear.  Loss of xp.  xp allocated to wrong people?  AT least for spells.  I think aragorn had the high damage lgt xbow shot, so that was correct.
+
+could also have a verbose logging mode which generates a blow by blow of the battle.  Might this be helpful for diagnosis?  Hex coordinates would fill in a large missing hole in the history.
+
+* keep track of hexes moved to?
+  distance function on roll20 coordinates?
+
+
+
+
+
 * Tool to throw multiple dice (30dec021)
 
 * damage during movement from HTH fail! (27dec021)
@@ -6,6 +39,13 @@
 * allow multiple headers? (27dec021)
 
 * I think weak disengage may be better! (7nov021)
+
+* Store actor in log file?  It is mismatching for some reason.  At least it can catch this error. (7jan022)
+
+* might be nice to indent stuff under each Actor
+  Make a print function which adds indent? (7jan022)
+
+* Get rid of defaults, and use empty string instead?  May simplify some things and free up name space? (6jan022)
 
 * Clean up HouseRules:
   - clean up doc/HouseRules.md (17oct021)
@@ -29,6 +69,8 @@
     (29aug021)
 
 #### Thoughts:
+* Everyone shows on initiative display for surprise turn (6jan022)
+* allow choice of log file from the command line (6jan022)
 * logging should happen after command succeeds! (30dec021)
 * How to handle un-sided characters? (29dec021)
 * reading from party on side x... (29dec021)

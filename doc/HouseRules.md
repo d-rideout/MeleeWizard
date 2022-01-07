@@ -276,7 +276,8 @@ figure?
 
 8. Surely it makes no sense for characters to gain xp from 4-die rolls during combat.
 
-9. TFT seems to neglect the weight of coins.  A coin is about 25g.  So 100 weigh 2.5 kg.  Not negligible!
+9. TFT seems to neglect the weight of coins.  A coin is about 25g.  I may use 20g since it is more composite so arithmetic is easier?
+So 100 weigh 2.0 kg.  Not negligible!
 
 ## Deviations from Official Rules:
 For the most part I want to stick as close as possible to the published

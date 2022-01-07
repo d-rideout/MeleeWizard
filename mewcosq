@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 use strict;
-use warnings;
+use warnings; # It is not easy to turn off only uninitialized value in join or string warnings (7jan022)
 use List::Util qw/max/;
 # use List::MoreUtils qw/firstidx any/;
 
@@ -81,6 +81,7 @@ my @spellRenewalxp; # add it all up for each character
 my %sides; # key SIDE val num characters (only used for display at the beginning (8nov021))
 # my $ncommands=0; # number of user entered commands
 my @history; # save history for ud
+my @ent2chr; # character index for each entity index, used only for displaying characters in initiative order for character-based initiative (7jan022)
 
 # Read parties
 # ------------
@@ -124,11 +125,16 @@ foreach my $partyfile (@ARGV) {
     die "Can't have multiple headers in party file: $_" if $l[0] eq $hkeys[0];
     # Is this a good enough check? (27nov021)
     my $c = {};
-    foreach my $i (0..$#hkeys) { $c->{$hkeys[$i]} = $l[$i] }
+    foreach my $i (0..$#hkeys) {
+      $debug && print "$hkeys[$i] = $l[$i]\n";
+      $c->{$hkeys[$i]} = $l[$i] }
     print $n+1, "\t$c->{NAME}\n";
     foreach my $g (keys %globals) { $c->{$g} = $globals{$g} }
     if (defined $c->{SIDE}) { ++$sides{$c->{SIDE}} }
     elsif ($initiative eq 'SIDE') { die "Please provide SIDE for each party when using side-based-initiative\n" }
+    # Will anyone ever have adjDX = 0??
+    die if $c->{adjDX} eq 0;
+    $c->{adjDX} = $c->{DX} unless $c->{adjDX};
     
     # Check some field values
     die "Please provide adjDX for $c->{NAME}.\n" unless $c->{adjDX};
@@ -235,12 +241,18 @@ while (1) {
 
   # Movement
   # --------
-  my @entities;
+  my @entities; # = (); I think this is not needed? (7jan022)
   @distMoved = ();
+  @ent2chr = ();
   if ($initiative eq 'c') {
-    foreach my $c (@characters) {
+#     foreach my $c (@characters) {
+    foreach my $ci (0..$n-1) {
+      my $c = $characters[$ci];
       next unless $turn || !$surprise_parties{$c->{PARTY}};
-      push @entities, $c->{NAME} unless $c->{DEAD};
+      unless ($c->{DEAD}) {
+	push @entities, $c->{NAME};
+	push @ent2chr, $ci;
+      }
     }
   }
   else {
@@ -288,7 +300,7 @@ while (1) {
   }
   
   $phase = 'action consideration';
-  &displayCharacters;
+  &displayCharacters();
   print 'Special considerations: <who> <consideration1> [consideration2]
   Considerations are
   * <adj>
@@ -402,19 +414,29 @@ while (1) {
 
 # Display characters
 sub displayCharacters {
-  my @roll = @_;
+  my @roll = @_; # map {defined $_ ? $_ : 0} @_; map should not be needed
+  # pad @roll above to fill in gaps for dead characters?
   my $msg = 'Characters';
-  my @order = 0..$n-1;
+#   my @order = 0..$n-1;
+  my @order = 0..$#roll;
   if ($initiative eq 'c' && @roll) {
+
+#     This is confused.  @roll uses *entity* indices, not *character* indices!  I am conflating the two.  This needs to be clearer.
+# 
+# 	&movement is pased only a list of entities.
+# 	the mapping of these to characters has to also be passed in!
+    
+    $debug && print "roll: @roll\n";
     $msg = 'Initiative order';
     @order = sort {return 0 unless $roll[$a] && $roll[$b];
-		   $roll[$a]<=>$roll[$b]} 0..$n-1;
+		   $roll[$a]<=>$roll[$b]} 0..$#roll;
   }
 
 #   print "roll: @roll\n";
   print '-'x26, "\n$msg:\n";
   for my $i (@order) {
-    my $c = $characters[$i];
+    my $c = $characters[$ent2chr[$i]]; # $i];
+    $debug && print "$i\t$ent2chr[$i]\t";
     print "$c->{NAMEKEY}\t$c->{NAME}\n" unless $c->{DEAD};
   }
   print '-'x26, "\n";
@@ -759,7 +781,7 @@ sub act {
   }
   
   # Actions
-  &displayCharacters;
+  &displayCharacters();
   print "Actions:\n",
         "-------\n", # in alphabetical order (within each sub-phase)
       "* [sp<ST>] <who>-<dam>\n  (e.g. c-4 for 4 damage to character c after armor)\n",
@@ -856,7 +878,7 @@ sub act {
 	push @dxspl, 0;
 	push @dxinj, 0;
 	character_prep($n++);
-	&displayCharacters;
+	&displayCharacters();
 	delete $ac->{WAIT};
 	last; # always last after successful action result
       } # create being
@@ -1010,14 +1032,18 @@ sub shield {
 sub movement {
   my @ent = @_;
   
-  # Initiative
-  # ----------
-  my @roll; # movement initiative roll, indexed by entity
-  for (my $i=0; $i<@ent; ++$i) { $roll[$i] = rand; }
-#   for (my $i=0; $i<$n; ++$i) { $roll[$i] = rand }
-  # &displayCharacters needs roll for each character.  Maybe displaying initiative via &displayCharacters is a mistake... (22nov021)
+  # Roll Initiative
+  # ---------------
+  my @roll; # = ..$n; # movement initiative roll, indexed by entity
+  # Padding @roll causes lots of problems.
+#   if ($initiative eq 'c') {
+#     for (my $i=0; $i<$n; ++$i) { $roll[$i] = rand }
+    # &displayCharacters needs roll for each character.  Maybe displaying initiative via &displayCharacters is a mistake... (22nov021)
+#   } else {
+  for (my $i=0; $i<@ent; ++$i) { $roll[$i] = rand; } #}
 
-  print "\nInitiative order:\n" unless $initiative eq 'c';
+  my $displayInitiative = ($initiative ne 'c' or !$turn);
+  print "\nInitiative order:\n" if $displayInitiative; #unless $initiative eq 'c';
   my @order;
   my $prev_roll;
   my @moved; # who has moved so far
@@ -1025,13 +1051,14 @@ sub movement {
     my $roll = $roll[$i];
     if (defined $prev_roll && $prev_roll == $roll) { die "Roll collision!\n"; }
     else { $prev_roll = $roll; }
-    print " $ent[$i]\n" unless $initiative eq 'c';
+    print " $ent[$i]\n" if $displayInitiative; #unless $initiative eq 'c';
     push @order, $i;
   }
 #   print "\n";
 
   $phase = 'renew spells';
   my $fmt = "format: <who> <cost>\n    or: di <who>  to discontinue created figure\n";
+  @roll = () unless $turn;
   displayCharacters(@roll);
   print "Spell renewal phase: Renew spells and discontinue creations\n$fmt";
   while (1) {
@@ -1074,6 +1101,8 @@ sub movement {
 	"d <who>  ALL defer until <who> (just match leading symbols)\n";
 #     $w = ' <who>';
   } else { print "Enter '0' to move\n"; }
+
+  $debug && print "\@order: @order\n";
   
   while (1) {
     # skip over people who have gone already
