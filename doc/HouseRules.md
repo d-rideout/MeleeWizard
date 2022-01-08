@@ -274,7 +274,7 @@ figure?
 
 7. Do most all wizards have to spend one spell slot to learn literacy talent?
 
-8. Surely it makes no sense for characters to gain xp from 4-die rolls during combat.
+8. Surely it makes no sense for characters to gain xp from 4-die rolls during combat.  I am excluding these.  Too much trouble to keep track.
 
 9. TFT seems to neglect the weight of coins.  A coin is about 25g.  I may use 20g since it is more composite so arithmetic is easier?
 So 100 weigh 2.0 kg.  Not negligible!

@@ -82,6 +82,7 @@ my %sides; # key SIDE val num characters (only used for display at the beginning
 # my $ncommands=0; # number of user entered commands
 my @history; # save history for ud
 my @ent2chr; # character index for each entity index, used only for displaying characters in initiative order for character-based initiative (7jan022)
+my $act_chari; # so &query can get access to it
 
 # Read parties
 # ------------
@@ -131,7 +132,10 @@ foreach my $partyfile (@ARGV) {
     print $n+1, "\t$c->{NAME}\n";
     foreach my $g (keys %globals) { $c->{$g} = $globals{$g} }
     if (defined $c->{SIDE}) { ++$sides{$c->{SIDE}} }
-    elsif ($initiative eq 'SIDE') { die "Please provide SIDE for each party when using side-based-initiative\n" }
+    else {
+      if ($initiative eq 'SIDE') { die "Please provide SIDE for each party when using side-based-initiative\n" }
+      ++$sides{''}; # undef is not valid key later on
+    }
     # Will anyone ever have adjDX = 0??
     die if $c->{adjDX} eq 0;
     $c->{adjDX} = $c->{DX} unless $c->{adjDX};
@@ -292,8 +296,8 @@ while (1) {
     my $mods = $characters[$ci]->{ADJ};
     next unless $mods;
     my $i=0;
-    print "i=$i mods=[@{$mods}]\n";
-    my ($mod, $lastTurn) = $mods->[$i..$i+1];
+#     print "i=$i mods=[@{$mods}] ", 0+@{$mods}, "\n";
+    my ($mod, $lastTurn) = @$mods[$i, $i+1];
     $lastTurn = $turn if $lastTurn eq 'inf';
     if ($lastTurn < $turn) { splice @$mods, $i, 2 }
     else { $dxspl[$ci] += $mod }
@@ -498,7 +502,9 @@ sub query {
 	    smod($2), "\n";
 	$dxact[$whoi] = $2;
 	# I hope this is not the acting character.  If it is, just do the adjustment in your head!
-	return 'de' if $2>0; # someone else's DX has increased -- it may not be my turn anymore
+	return 'de' if $2>0 or $whoi==$act_chari; # && $2<0;
+	# someone else's DX has increased -- it may not be my turn anymore
+	# Or my DX has changed and it may not be my turn anymore
       }
       elsif ($input =~ /^ud (\d+)$/) {
 	print "undoing previous $1 commands and restarting...\n\n";
@@ -559,6 +565,8 @@ sub xp {
   my $unconsciousXP = 0;
   my ($nwinners, $nunconscious) = (0)x2;
   foreach my $c (@characters) {
+    next if defined $c->{CREATOR}; # ignore creations
+#     print "side: [$c->{SIDE}]\n";
     if ($sides{$c->{SIDE}} eq 'w' && $c->{STrem} > 0) { ++$nwinners }
     elsif ($sides{$c->{SIDE}} ne 'w' && $c->{STrem} == 1) {
       $unconsciousXP += $c->{DX}+1; ++$nunconscious
@@ -585,6 +593,7 @@ sub xp {
   foreach my $ci (0..$n-1) {
     my $srxp = $spellRenewalxp[$ci];
     my $c = $characters[$ci];
+    next if defined $c->{CREATOR}; # creations don't earn xp
     my $wuxp = $sides{$c->{SIDE}} eq 'w' ? $uxp : 0;
     $debug && print "$characters[$ci]->{NAME}\tsrxp=$srxp timexp=$timexp\n";
     next unless $timexp || $xp[$ci] || $srxp || $wuxp;
@@ -803,7 +812,6 @@ sub act {
       "  Suffix with '\\' if figure has more actions for this turn.\n"
       if $phase =~ /normal/;
   print '-' x 79, "\n";
-  my $act_chari;
 #   print 0+@chars, " chars @ START\n";
   while (defined ($act_chari = whosnext(@chars))) {
 #     print 0+@chars, " chars\n";

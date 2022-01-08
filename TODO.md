@@ -25,16 +25,17 @@ run through above and figure out what happened.  Weirdness with bear.  Loss of x
 
 could also have a verbose logging mode which generates a blow by blow of the battle.  Might this be helpful for diagnosis?  Hex coordinates would fill in a large missing hole in the history.
 
+* Q keeps winning initiative!  What is happening?? (7jan022)
+
 * keep track of hexes moved to?
   distance function on roll20 coordinates?
-
-
-
-
 
 * Tool to throw multiple dice (30dec021)
 
 * damage during movement from HTH fail! (27dec021)
+
+* I think changing one's own DX mod during an action may cause actor to defer
+  unnecessarily. (7jan022)
 
 * allow multiple headers? (27dec021)
 
