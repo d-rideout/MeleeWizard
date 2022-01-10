@@ -1,31 +1,5 @@
 #### Urgent:
-* bUG: Lona cast sp2 spell
-ona:
-7       7 hits on 2_cat
-7       Total
-15      Total (with time xp included)
-(oh it went to Ludwig!  How did that happen??  error in parsing in spell section.  Probably expands incorrectly.)
-
-maybe from restart??
-ran out of history
-maybe keep track separately?
-
-Yes something is wrong with logging and recovery.  Putting actors into log file will help with diagnosis.
-say strip ' # comment' from end of query responses  <------------------
-
-* Qiangli_Dianchi:
-2       spell renewal
-2       Total
-10      Total (with time xp included)
-this is wrong too!  2 for casting, plus more than 2 turns renewed!?
-
-runs out of shell history.  Can feed log to recover history and diagnose.
-
-run through above and figure out what happened.  Weirdness with bear.  Loss of xp.  xp allocated to wrong people?  AT least for spells.  I think aragorn had the high damage lgt xbow shot, so that was correct.
-
-could also have a verbose logging mode which generates a blow by blow of the battle.  Might this be helpful for diagnosis?  Hex coordinates would fill in a large missing hole in the history.
-
-* Q keeps winning initiative!  What is happening?? (7jan022)
+* Need some fleed action or move! (9jan022)
 
 * keep track of hexes moved to?
   distance function on roll20 coordinates?
@@ -70,6 +44,7 @@ could also have a verbose logging mode which generates a blow by blow of the bat
     (29aug021)
 
 #### Thoughts:
+* Allow comments in query responses, preceded by #?  Could somehow put names of actors into log file this way? (8jan022)
 * Everyone shows on initiative display for surprise turn (6jan022)
 * allow choice of log file from the command line (6jan022)
 * logging should happen after command succeeds! (30dec021)
