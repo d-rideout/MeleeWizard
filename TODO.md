@@ -1,4 +1,10 @@
 #### Urgent:
+* f as special consideration fails? (16jan022)
+
+* xp accrual on manual.md is out of date (16jan022)
+
+* some warning when no log present or log file present (9jan022)
+
 * Need some fleed action or move! (9jan022)
 
 * keep track of hexes moved to?

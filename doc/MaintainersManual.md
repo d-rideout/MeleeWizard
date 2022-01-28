@@ -102,8 +102,8 @@ In (case-insensitive) alphabetical order.
 List all living characters along with their `NAMEKEY`.  The display is
 sometimes in initiative order, see **Movement** above.
 
-`@order` *character* indices, sorted by `@roll`.  Note that this is different
-from `&movement`'s `@order`, which contains indices into `@ent`!
+<!-- `@order` *character* indices, sorted by `@roll`.  Note that this is different
+from `&movement`'s `@order`, which contains indices into `@ent`! -->
 
 ### Query User
 

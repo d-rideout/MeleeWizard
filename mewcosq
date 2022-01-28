@@ -421,8 +421,8 @@ sub displayCharacters {
   my @roll = @_; # map {defined $_ ? $_ : 0} @_; map should not be needed
   # pad @roll above to fill in gaps for dead characters?
   my $msg = 'Characters';
-#   my @order = 0..$n-1;
-  my @order = 0..$#roll;
+  my @order = 0..$n-1;
+#   my @order = 0..$#roll;
   if ($initiative eq 'c' && @roll) {
 
 #     This is confused.  @roll uses *entity* indices, not *character* indices!  I am conflating the two.  This needs to be clearer.
@@ -436,9 +436,11 @@ sub displayCharacters {
 		   $roll[$a]<=>$roll[$b]} 0..$#roll;
   }
 
-#   print "roll: @roll\n";
+  #   print "roll: @roll\n";
+#   return unless @roll;
   print '-'x26, "\n$msg:\n";
   for my $i (@order) {
+    next unless defined $ent2chr[$i];
     my $c = $characters[$ent2chr[$i]]; # $i];
     $debug && print "$i\t$ent2chr[$i]\t";
     print "$c->{NAMEKEY}\t$c->{NAME}\n" unless $c->{DEAD};
@@ -473,7 +475,7 @@ sub query {
     my @cmd = split / /, $input;
     my $cmd = $cmd[0];
     unless ($cmd && $global_options{$cmd} && $global_options{$cmd} eq 'n') {
-      $debug && print "logging [$cmd]\n";
+      $debug && print "logging [", defined($cmd)?$cmd:'', "]\n";
       print LOG "$input\n";
       push @history, $input;
 #       ++$ncommands;
@@ -738,7 +740,7 @@ sub whosnext {
   foreach (@_) {
     my $c = $characters[$_];
     next if $acted[$_] || $c->{DEAD};
-    $debug && print "maxdx = $maxdx maxroll=$maxroll\n";
+    $debug && print "maxdx = $maxdx maxroll=", defined($maxroll)?$maxroll:'', "\n";
     my $dx = $characters[$_]->{adjDX} + $dxact[$_] + $dxspl[$_] + $dxinj[$_];
     if ($dx > $maxdx) {
       $next = $_;
@@ -749,7 +751,7 @@ sub whosnext {
       $maxroll = $roll[$_];
     }
   }
-  $debug && print "$next is next\n";
+  $debug && print defined $next ? $next : '[undefined!]', " is next\n";
   $next;
 }
 
@@ -990,6 +992,7 @@ sub act {
       } # did damage
       else { print "Unrecognized action $action\n"; }
     } # what happened during $act_chari's action
+    $debug and @acted = map defined?$_:'', @acted;
     $debug && print "ndefer=$ndefer  before \@acted: ", join(':', @acted), "\n";
     if ($defer) { $acted[$act_chari] = -1; }
     else {
@@ -1010,6 +1013,7 @@ sub act {
       } # \exists deferred queue
       $acted[$act_chari] = 1;
     } # acted
+    $debug and @acted = map defined?$_:'', @acted;
     $debug && print 'after @acted: ', join(':', @acted), "\n";
 
   } # loop over actors
@@ -1050,7 +1054,7 @@ sub movement {
 #   } else {
   for (my $i=0; $i<@ent; ++$i) { $roll[$i] = rand; } #}
 
-  my $displayInitiative = ($initiative ne 'c' or !$turn);
+  my $displayInitiative = ($initiative ne 'c'); # or !$turn);
   print "\nInitiative order:\n" if $displayInitiative; #unless $initiative eq 'c';
   my @order;
   my $prev_roll;
@@ -1066,8 +1070,8 @@ sub movement {
 
   $phase = 'renew spells';
   my $fmt = "format: <who> <cost>\n    or: di <who>  to discontinue created figure\n";
-  @roll = () unless $turn;
-  displayCharacters(@roll);
+#   @roll = () unless $turn;
+  displayCharacters(@roll); # needed for renew spells below
   print "Spell renewal phase: Renew spells and discontinue creations\n$fmt";
   while (1) {
     my $sccmd = query('', 'Spell cost, (F)inished,');
@@ -1163,6 +1167,7 @@ sub movement {
     }
     last if $last<0;
   } # movement phase
+  $debug and map defined ? $_:'[undef]', @distMoved;
   $debug && print "[$initiative] distMoved: ", join('|', @distMoved), "\n";
 }
 
