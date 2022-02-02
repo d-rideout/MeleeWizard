@@ -1,11 +1,33 @@
 #### Urgent:
+* lack of clarity about who is an enemy vs friend (1feb022)
+
+* Turn 4 action consideration: (F)inished or (?) for glbl opts> c -3
+error in global option [c -3]
+
+* Turn 4 movement: Holbein move, (D)efer, (f)inished, or (?) for glbl opts> 8
+Turn 4 movement: Gusty moves, or (?) for glbl opts> 1
+...
+Holbein: ST 9 (7)  adjDX 11 +0inj +0act +0spl = 11  Moved 0 hexes
+Turn 4 normal actions: Action result? (N)o or (?) for glbl opts>
+...
+Gusty: ST 10 (7)  adjDX 11 +0inj +0act +0spl = 11  Moved 0 hexes
+Turn 4 normal actions: Action result? (N)o or (?) for glbl opts>
+...
+Ehege_Scoch: ST 15 (8)  adjDX 9 +0inj +0act +0spl = 9  Moved 8 hexes
+Turn 4 normal actions: Action result? (N)o or (?) for glbl opts>
+etc (28jan022)
+
 * f as special consideration fails? (16jan022)
+
+* no opportunity to disbelieve on animal automatic disbelieve (29jan022)
 
 * xp accrual on manual.md is out of date (16jan022)
 
 * some warning when no log present or log file present (9jan022)
 
 * Need some fleed action or move! (9jan022)
+
+* unconscious wizards are prompted to move (28jan022)
 
 * keep track of hexes moved to?
   distance function on roll20 coordinates?
@@ -50,6 +72,7 @@
     (29aug021)
 
 #### Thoughts:
+* Keep track of fired missles somehow (1feb022)
 * Allow comments in query responses, preceded by #?  Could somehow put names of actors into log file this way? (8jan022)
 * Everyone shows on initiative display for surprise turn (6jan022)
 * allow choice of log file from the command line (6jan022)

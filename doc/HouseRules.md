@@ -108,7 +108,9 @@ Additional HTH rules:
 * figure gets +4 DX on attempt to disengage! (according to Codex!)
   (Though this seems really strange!  Why bother make it 4 dice then?  It is even easier than a 3 die save vs DX!)
   I am going to ignore this at the moment.  Disengaging from HTH should be difficult.
-* Do figures attempting to draw a dagger in HTH get +4 DX?  I am going to assume no.
+* Figures in HTH can draw a dagger with 3d6 vs adjDX, without +4 rear bonus. (bottom p3AM)
+
+Do figures attempting to draw a dagger in HTH get +4 DX?  I am going to assume no.
 
 ### Pinning a Foe:
 The Pinning a Foe rules in Advanced Melee seem grossly unrealistic, since
@@ -289,13 +291,15 @@ rules.
 official rules will be in the xp value of wallclock time.-->
 
 The official TFT
-rules grant 1 xp per 12 minutes of wallclock time.  It also grants xp for
+rules grant 1 xp per 12 minutes of wallclock time.  It also grants 5(n-2) xp for
 'making n die rolls', with n>3, and also for playing in character.  When one
 is not playing with the full TFT rules (e.g. with talents), there are very
 few n die rolls, with n>3.  Also in certain situations it can be difficult to
 'play in character', e.g. in a pure combat scenario.
-(Does hitting a dodging foe count for extra xp??  The rules do say *any* roll,
-so I suppose so!  10 bonus xp per such successful roll!)
+<!-- (Does hitting a dodging foe count for extra xp??  The rules do say *any* roll,
+so I suppose so!  10 bonus xp per such successful roll!) -->
+(In fact these rules seem a little silly -- n=4 rolls to hit dodging opponents should not be worth bonus xp.  But n=3 rolls to use a talent/skill should be worth xp, especially if it is done in a dangerous setting!  So I may disallow mundane combat n=4 die rolls, but allow exciting n=3 die rolls.  (n=2 rolls are worth 0 xp anyway.))
+
 
 I thus offer two alternate rates of xp accrual: 1 xp / 10 min, and 1 xp / 6
 min.  The `mewcosq` tool will use the former of these for the moment.  (In a
