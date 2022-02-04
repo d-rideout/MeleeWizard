@@ -21,16 +21,18 @@
 # Following https://www.pythontutorial.net/tkinter :
 import tkinter as tk
 from tkinter import ttk
+from tkinter.messagebox import showinfo # a popup window
+
 root = tk.Tk()
 root.title('MElee/WizardCOmbatSeQuence  ') # Window
 # root.geometry('600x400+50+50') # XxY+x+y
 # print('screen width =', root.winfo_screenwidth())
 # print('screen height =', root.winfo_screenheight())
 # Includes all screens together.
-# root.resizable(False, False) # (width, height) prevents resizing
+root.resizable(False, False) # (width, height) prevents resizing
 # window.minsize(min_width, min_height) # min and max size
 # window.maxsize(min_height, max_height)
-root.attributes('-alpha', 0.5) # supposed to set transparancy, but does not seem to work on reginald (21sep021)
+# root.attributes('-alpha', 0.5) # supposed to set transparancy, but does not seem to work on reginald (21sep021)
 # window stacking stuff:
 # window.attributes('-topmost', 1) # always on top (don't know what the 1 does)
 # window.lift()
@@ -41,7 +43,8 @@ root.attributes('-alpha', 0.5) # supposed to set transparancy, but does not seem
 
 # Text label:
 # message = tk.Label(root, text='MElee Wizard COmbat SeQuence tool').pack()
-message = ttk.Label(root, text='MElee Wizard COmbat SeQuence tool').pack() # Widget
+# message =
+ttk.Label(root, text='MElee Wizard COmbat SeQuence tool').pack() # Widget
 # message['text'] = 'MElee Wizard COmbat SeQuence tool' # dict method 
 # message.config(text='MElee Wizard COmbat SeQuence tool') # config method
 # message.pack()
@@ -49,8 +52,17 @@ message = ttk.Label(root, text='MElee Wizard COmbat SeQuence tool').pack() # Wid
 # Button:
 def button_fn():
     print('button clicked')
-button = ttk.Button(root, text='button', command=button_fn)
+button = ttk.Button(root, text='Click me', command=button_fn)
+# button.state(('disabled',)) disables the button
 button.pack()
+
+def troll_clicked(): showinfo('<popup window title>', 'image button clicked!')
+# button_icon = tk.PhotoImage(file='../content/counters/Battle-Axe.png')
+button_icon = tk.PhotoImage(file='../content/counters/dagger0.png')
+# button_icon = tk.PhotoImage(file='../troll.ico')
+    
+ttk.Button(root, image=button_icon, command=troll_clicked).pack() #expand=True)
+# For some reason if I put the command inline, then it gets executed immediately (4feb022)
 
 # Text box:
 # name = tk.StringVar()
@@ -60,6 +72,11 @@ button.pack()
 # print(name.get())
 
 # print('window geometry =', root.geometry()) # not too clear on what the output means
+
+ttk.Label(root, text='Had enough?').pack()
+# quitButton =
+ttk.Button(root, text = 'Quit', command = lambda: root.quit()).pack()
+# quitButton.pack()
 
 root.mainloop()
 
