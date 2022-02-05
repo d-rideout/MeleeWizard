@@ -1,8 +1,8 @@
 #### Urgent:
 * lack of clarity about who is an enemy vs friend (1feb022)
 
-* Turn 4 action consideration: (F)inished or (?) for glbl opts> c -3
-error in global option [c -3]
+* Do damage multipliers really multiply, or just add??
+  Trying multiply for now, per rules! (4feb022)
 
 * Turn 4 movement: Holbein move, (D)efer, (f)inished, or (?) for glbl opts> 8
 Turn 4 movement: Gusty moves, or (?) for glbl opts> 1
@@ -72,6 +72,7 @@ etc (28jan022)
     (29aug021)
 
 #### Thoughts:
+* Have separate public and private name for each character? (4feb022)
 * Keep track of fired missles somehow (1feb022)
 * Allow comments in query responses, preceded by #?  Could somehow put names of actors into log file this way? (8jan022)
 * Everyone shows on initiative display for surprise turn (6jan022)
@@ -433,3 +434,5 @@ Won't that work well, with the current sparse API? (5sep021) (Yes, it does.)
 * 455730 hours and 32 minutes of wallclock time passed.
 Each survivor earns (at least) 2734383 xp for wallclock time.
 Something is wrong with reading the start time from log file??
+* Turn 4 action consideration: (F)inished or (?) for glbl opts> c -3
+error in global option [c -3]

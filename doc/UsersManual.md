@@ -2,29 +2,24 @@
 
 Party file arguments are described in the [README.md](../README.md) file.
 
-The "Overwrite log.bak file? (interrupt (Ctrl-C) if not!)" query is simply a
-last chance to avoid clobbering the backup log file.  Press enter to
-proceed.  To avoid clobbering the log file, interrupt the program by pressing
-Ctrl-C (or however you abort the program on your system).
-
 The code defaults to character-based initiative, rather than player-based or
 side-based, as it suggests in the rules.  This will be substantially more
 complicated, but also substantially more realistic?
-Try to err on the side of hitting '0' unless there is some substantial reason not to, to make the movement phase a little less complicated.
 If it is too complicated, change the `$initiative` setting at the top of `mewcosq` to `p` for party-based or `l` for pLayer-based initiative.
+<!-- Try to err on the side of hitting '0' unless there is some substantial reason not to, to make the movement phase a little less complicated. -->
 
 
 ## Global commands
-These commands can be used at any prompt (besides the initial 'Overwrite log.bak file?').
+These commands can be used at any prompt.
 
 Command|Description
 -------|-----------
 `?` | list 'global' commands
-`c <who> <DXmod>` | change `<who>`'s DX modifier due to new choice of action for this turn
+`ca <who> <DXmod>` | change `<who>`'s DX modifier due to new choice of action for this turn
 `q` | quit game
 `ud <n>` | undo `<n>` previous entries
 
-The `c` command will presumably have no effect outside of the action sub-phase.
+The `ca` command will presumably have no effect outside of the action sub-phase.
 
 
 ## Movement

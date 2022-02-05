@@ -129,7 +129,8 @@ foreach my $partyfile (@ARGV) {
     foreach my $i (0..$#hkeys) {
       $debug && print "$hkeys[$i] = $l[$i]\n";
       $c->{$hkeys[$i]} = $l[$i] }
-    print $n+1, "\t$c->{NAME}\n";
+    if (defined $c->{NAME}) {print $n+1, "\t$c->{NAME}\n"}
+    else {print $n+1, "undefined NAME ==> error in party file?\n"}
     foreach my $g (keys %globals) { $c->{$g} = $globals{$g} }
     if (defined $c->{SIDE}) { ++$sides{$c->{SIDE}} }
     else {
@@ -417,6 +418,10 @@ while (1) {
 
 
 # Display characters
+# If I get passed @roll, and $initiative eq 'c', then display characters in that order, but note that
+# it is indexed by entity indices rather than character indices.
+# Else just do the usual thing.
+# Should the $initiative logic be in the calling function or here?
 sub displayCharacters {
   my @roll = @_; # map {defined $_ ? $_ : 0} @_; map should not be needed
   # pad @roll above to fill in gaps for dead characters?
@@ -452,15 +457,11 @@ sub displayCharacters {
 # Interact with user
 # args: default value, query string
 sub query {
-#   my $default = shift;
-#   my $query = shift;
-#   my ($default, $query) = (@_);
   my ($default, $query) = @_;
-  my %global_options = ('?'=>'n', c=>'l', q=>'n', ud=>'n'); #, d=>l); # l ==> log; n ==> no log
+  # Below l ==> log; n ==> no log :
+  my %global_options = ('?'=>'n', ca=>'l', q=>'n', ud=>'n');
 
   while (1) {
-    #   print "Turn $turn $phase: ", shift, ' or (q)uit> ';
-#     print "Turn $turn $phase: ", $query, ' or global option, (?) for list> ';
     print "Turn $turn $phase: ", $query, ' or (?) for glbl opts> ';
     my $input;
     if ($restart && @log) {
@@ -468,9 +469,6 @@ sub query {
       chomp $input;
     }
     else { chomp($input = <STDIN>); }
-    #   print "input is [$input]\n";
-    #   print LOG "$input\n" unless $input eq 'q';
-    #     my $cmd = substr $input, 0, 1;
     $input =~ s/^\s+//; # strip leading whitespace
     my @cmd = split / /, $input;
     my $cmd = $cmd[0];
@@ -478,7 +476,6 @@ sub query {
       $debug && print "logging [", defined($cmd)?$cmd:'', "]\n";
       print LOG "$input\n";
       push @history, $input;
-#       ++$ncommands;
     }
     return $default unless $input || $input eq '0';
 
@@ -486,17 +483,16 @@ sub query {
     if ($global_options{$cmd}) {
       if ($input eq 'q') {
 	print "Battle finished.\n";
-	&xp; # if @xp;
+	&xp;
 	&finalST;
 	exit;
       }
       if ($input eq '?') {
-	print "(c <who> <DXmod>) to change <who>'s action to new <DXmod>\n", 
-	    #(d <who> <DX mod>) to adjust <who>\'s DX by <DX mod>;
+	print "(ca <who> <DXmod>) to change <who>'s action to new <DXmod>\n", 
 	    "(ud <n>) to undo n previous entries\n",
 	    "or (q) to quit\n";
       }
-      elsif ($input =~ /^c (.+) +?([-\d]+)$/) {
+      elsif ($input =~ /^ca (.+) +?([-\d]+)$/) {
 	my $whoi = who($1);
 	next if $whoi eq 'x';
 # 	my $c = $characters[$whoi];
@@ -638,6 +634,7 @@ sub character_prep {
   }
   
   # Address some potential issues with names
+  die "Please provide NAME for each character\n" unless defined $char->{NAME};
   print "Replacing spaces with underscores in names\n"
       if $char->{NAME} =~ s/ /_/g && !$msg_space++;
   my $name = $char->{NAME};
