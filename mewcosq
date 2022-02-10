@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 # Manage turn sequence in The Fantasy Trip's Melee/Wizard
-# Copyright (C) 2021 David P. Rideout
+# Copyright (C) 2021-2022 David P. Rideout
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,7 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 use strict;
-use warnings; # It is not easy to turn off only uninitialized value in join or string warnings (7jan022)
+use warnings; # It is not easy to turn off only uninitialized value in join or string
+              # warnings (7jan022)
 use List::Util qw/max/;
 # use List::MoreUtils qw/firstidx any/;
 
@@ -23,21 +24,16 @@ use List::Util qw/max/;
 my $debug = 0; # 1 ==> max debug output
 my $initiative = 'c'; # c ==> character-based; PARTY ==> party-based
                       # PLAYER ==> player-based; SIDE ==> 'side-based
-my $xpRate = 10; # minutes per wallclock time xp (12 is standard)
+my $xpRate = 10; # minutes per wallclock time xp (12 is standard in rules)
                 # prime factors of 60: 2 2 3 5
 # Catch signals
 $SIG{INT} = sub { print "\nINT signal received, exiting.\nCheck your log files to ensure you do not lose your history.\n"; close LOG; exit; };
 
 # Check settings
 die "Invalid initiative setting" unless $initiative =~ /^(c|PARTY|PLAYER|SIDE)$/;
-# die "Side-based initiative is not implemented yet\n" unless $initiative =~ /^[cpl]$/;
-# die "Only character- party-based initiative is currently implemented\n" unless $initiative =~ /^[cpl]$/;
-# die "Only character-based initiative is currently implemented\n" unless $initiative =~ /^[c]$/;
-# Side-based initiative is problematic -- I need to add it to the UI somehow.  Should be a property of parties.  Could group the input parties somehow on the command line?  Or maybe better -- have each party file declare a side name at the top! (2AUG021)
-
 
 # Banner
-print 'MElee/Wizard COmbat SeQuence tool  Copyright (C) 2021  David P. Rideout
+print 'MElee/Wizard COmbat SeQuence tool  Copyright (C) 2021-2022  David P. Rideout
 This program comes with ABSOLUTELY NO WARRANTY.
 This is free software, and you are welcome to redistribute it under the
 conditions of the GNU GENERAL PUBLIC LICENSE Version 3; see LICENSE file.
@@ -51,7 +47,7 @@ print "\n";
 my $restart;
 if (@ARGV) {
   while ($ARGV[0]) {
-#     print "first arg: [$ARGV[0]]\n";
+    $debug && print "first arg: [$ARGV[0]]\n";
     last unless $ARGV[0] =~ /^\-([ld]+)$/;
     my $options = $1;
     $restart = 1 if $options =~ /l/;
@@ -65,16 +61,11 @@ die "Usage: mewcosq [-ld] <party 1> [party 2] [party 3] ...\n" .
     "  -d ==> debug mode\n" unless @ARGV;
 $debug && print "Debug level $debug\n\n";
 
-# Data structures
+# Data structures (See doc/MaintainersManual.md for further explanation)
 # ---------------
 my @characters; # val hash with below keys
 my %charkeys; # key namekey val index into @characters
 my %hkeys = (NAME=>1, ST=>1, STrem=>1, DX=>1, adjDX=>1, PLAYER=>1, PARTY=>0, STUN=>0, FALL=>0, StunTurn=>0, DEAD=>0, NAMEKEY=>0, BAD=>1, ROPE=>0, ADJ=>0, CREATOR=>1, SIDE=>1);
-# STUN how much damage causes stun
-# StunTurn becomes unstunned on this turn
-# FALL how much damage causes fall
-# 1 ==> can appear in party file
-# I almost never use %hkeys.  Is it worth maintaining? (27oct021)
 my $n = 0; # total number of characters
 my @xp; # indexed by char, value array of pairs num, description
 my @spellRenewalxp; # add it all up for each character
@@ -83,6 +74,9 @@ my %sides; # key SIDE val num characters (only used for display at the beginning
 my @history; # save history for ud
 my @ent2chr; # character index for each entity index, used only for displaying characters in initiative order for character-based initiative (7jan022)
 my $act_chari; # so &query can get access to it
+my %queue; # key char index val $qi
+my $qi = 0;
+my $qfh; # queue file handle
 
 # Read parties
 # ------------
@@ -1218,3 +1212,24 @@ sub who {
 
 # s to pluralize word?
 sub s { shift > 1 ? 's' : '' }
+
+
+# Queue 'methods': APIq0
+# ---------------
+# Let's assume all entities are characters for now. (10feb022)
+
+# Add entity to queue
+sub qadd {
+
+}
+
+# Remove entity from queue
+sub qdel {
+}
+
+# Write queue to file
+sub qdump {
+  open $qfh, '>', '.queue' unless $qfh;
+  for (sort {$queue{$a}<=>$queue{$b}} keys %queue) {
+  }
+}

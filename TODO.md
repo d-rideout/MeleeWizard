@@ -1,8 +1,6 @@
 #### Urgent:
 * lack of clarity about who is an enemy vs friend (1feb022)
 
-* Do damage multipliers really multiply, or just add??
-  Trying multiply for now, per rules! (4feb022)
 
 * Turn 4 movement: Holbein move, (D)efer, (f)inished, or (?) for glbl opts> 8
 Turn 4 movement: Gusty moves, or (?) for glbl opts> 1
@@ -50,6 +48,8 @@ etc (28jan022)
 
 * Get rid of defaults, and use empty string instead?  May simplify some things and free up name space? (6jan022)
 
+* PLAYER-based initiative should really be SIDE-PLAYER-based initiative, i.e. each player should move each of their sides separately.  (eg a DM with characters on multiple sides) (10feb022)
+
 * Clean up HouseRules:
   - clean up doc/HouseRules.md (17oct021)
   * Question C falling rule, e.g. when stumble over body
@@ -59,6 +59,7 @@ etc (28jan022)
   - Get xowa working? (23sep021)
     https://www.unixmen.com/xowa-offline-wikipedia-reader-editor/
   - Use wiki format on wiki?  See computer notes. (23sep021)
+  * Questions section! (10feb022)
 
 * Sort out licensing of documentation
 
@@ -72,6 +73,8 @@ etc (28jan022)
     (29aug021)
 
 #### Thoughts:
+* Split Perl queue code into separate file/module? (10feb022)
+* Add GNU copyright stuff as global option (10feb022)
 * Have separate public and private name for each character? (4feb022)
 * Keep track of fired missles somehow (1feb022)
 * Allow comments in query responses, preceded by #?  Could somehow put names of actors into log file this way? (8jan022)
@@ -436,3 +439,5 @@ Each survivor earns (at least) 2734383 xp for wallclock time.
 Something is wrong with reading the start time from log file??
 * Turn 4 action consideration: (F)inished or (?) for glbl opts> c -3
 error in global option [c -3]
+* Do damage multipliers really multiply, or just add??
+  Trying multiply for now, per rules! (4feb022)

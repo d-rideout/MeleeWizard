@@ -1,4 +1,10 @@
+<!-- ## Some Background on The Fantasy Trip (TFT) -->
+
 # House Rules
+
+TFT is a fantasy role playing game which was published in various forms by
+Metagaming from 1977 to 1983.
+
 
 I have *Melee "Micro Game 3"*, published in 1979, *Advanced Melee*, published
 in 1982, *Wizard* Fourth Edition published in 1981, and *Advanced Wizard*
@@ -73,10 +79,11 @@ make the option slightly closer to the *standard* variant.  So the 'action initi
 
 ## Hand-To-Hand (HTH) Combat:
 I find the description of the HTH rules confusing, and the original and
-Advanced rules appear to differ slightly.  In short, the original rules seem
-to describe engaging in HTH combat as an *action*, while the Advanced rules
-seem to describe it as a *movement*.  <!-- Although we generally adopt the
-Advanced rules where they differ, in this case --> I think that the original
+Advanced rules appear to differ somewhat.  The original rules seem to regard
+engaging in HTH combat as an *action* for engaged figures (M p8), while it is not so clear for disenagaged figures.
+The Advanced rules
+seem to describe engaging in HTH as a *movement*.
+I think that the original
 rules lead to a better game: allowing engaging in HTH as a movement is simply
 too powerful -- it allows a higher MA character to almost completely trump
 any non-ranged attack, by simply engaging the attacking figure in HTH combat
@@ -246,6 +253,35 @@ loose ground is a complete fall?
 
 In fact I am starting to question the Codex in general.  It make a number of strange proclamations.
 
+<!--
+## Who is an enemy figure?
+
+The engagement rules assume that it is clear how to determine if a given
+figure is an enemy or not.  However, what if it is not clear?  Who is my
+enemy?  We adopt the following approach, suggested by Scott Rideout:
+
+During movement, there is a *mover*, who may wish to move through the front
+hexes of a standing figure (a *stander*).  It is up to the *stander* to
+enforce engagement: if a figure moves into its front hexes, the stander can
+declare itself an enemy of the mover, and thereby halt the mover's movement
+at the moment of declaration (subject to the usual engagement rules for
+multi-hex figures).
+
+If the mover ever leaves a front hex of the stander
+
+in a manner which would
+be disallowed were the mover engaged with the stander, then the stander may
+take a free rear hex attack on the mover if it wishes.
+-->
+
+
+
+
+<!-- assuming of course that the stander is at least 1/3 of
+the size of the mover in hexes). -->
+
+
+
 
 Questions:
 ---------
@@ -280,6 +316,9 @@ figure?
 
 9. TFT seems to neglect the weight of coins.  A coin is about 25g.  I may use 20g since it is more composite so arithmetic is easier?
 So 100 weigh 2.0 kg.  Not negligible!
+
+10. The official rules indicate that damage multipliers multiply, so rolling a 4 to-hit for a charging pole arm attack does 4x damage!  This seems excessive.  Shall multipliers add?  This seems more reasonable in a mathematical sense.  So each double damage effect increments the damage multiplier by 1, and triple damage by 2.  (Example: A charging pike ax attack rolls 3 to-hit for triple damage.  Under the official rules this does 6x damage, i.e. 12+12, while under the proposed rule it would 'only' do 4x damage 8+8. (8x3.5+8 = 36, 12x3.5+12 = 54))
+<!--, as one might expect mathematically?  (One can think of the damage multiplier as incremeting the exponent -->
 
 ## Deviations from Official Rules:
 For the most part I want to stick as close as possible to the published

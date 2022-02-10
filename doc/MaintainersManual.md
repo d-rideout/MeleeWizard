@@ -19,7 +19,7 @@
 phase.  'Local' data structures which are only relevant to a single turn
 phase are detailed under the description of that turn phase.
 
-`$initiative`:
+**`$initiative`**:
 
 <u>value</u> | <u>meaning</u>
 ----- | -------
@@ -28,7 +28,7 @@ phase are detailed under the description of that turn phase.
 `PLAYER` | player-based
 `SIDE` | side-based
 
-`@characters` array of hashes:
+**`@characters`**: array of hashes:
 
 <u>key</u> | <u>value</u>
 ----------- | -------------
@@ -50,10 +50,26 @@ phase are detailed under the description of that turn phase.
 `WAIT` | wait for an opening bonus
 `CREATOR` | character index of creator
 
-`%hkeys` 'header keys':  The above keys, with value 1 if they can appear in a party file.
+**`%hkeys`**: 'header keys':  The above keys, with value 1 if they can appear
+in a party file, else 0.
+
+**`$qi`**: queue index, incremented when something added to queue
+
+**`%queue`**: Movement or action queue.
+<!-- Key is character index, 
+(Is the queue needed for non-character-based movement initiative?) -->
+
+    key =~ /[^\d]/ ==> name
+    else char index
+    API tag `APIq0`
+
+value is `$qi`
+
+**`$qfh`**: queue file handle, for writing to queue file
+
 
 Store information which persists across turns in the characters' hash, and
-information which is relevant for this turn only in an array (or hash).
+information which is relevant for this turn only in an array (or hash) below.
 (Information in the character hash will take longer to access.)
 All arrays below are indexed by character index.
 
