@@ -24,7 +24,7 @@ from tkinter import ttk
 from tkinter.messagebox import showinfo # a popup window
 
 root = tk.Tk()
-root.title('MElee/WizardCOmbatSeQuence  ') # Window
+root.title('MElee/WizardCOmbatSeQuence') # Window
 # root.geometry('600x400+50+50') # XxY+x+y
 # print('screen width =', root.winfo_screenwidth())
 # print('screen height =', root.winfo_screenheight())
@@ -56,12 +56,12 @@ button = ttk.Button(root, text='Click me', command=button_fn)
 # button.state(('disabled',)) disables the button
 button.pack()
 
-def troll_clicked(): showinfo('<popup window title>', 'image button clicked!')
+def img_clicked(): showinfo('<popup window title>', 'image button clicked!')
 # button_icon = tk.PhotoImage(file='../content/counters/Battle-Axe.png')
 button_icon = tk.PhotoImage(file='../content/counters/dagger0.png')
-# button_icon = tk.PhotoImage(file='../troll.ico')
     
-ttk.Button(root, image=button_icon, command=troll_clicked).pack() #expand=True)
+ttk.Button(root, image=button_icon, text='text too', compound=tk.LEFT,
+           command=img_clicked).pack() #expand=True)
 # For some reason if I put the command inline, then it gets executed immediately (4feb022)
 
 # Text box:
