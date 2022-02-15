@@ -49,27 +49,32 @@ ttk.Label(root, text='MElee Wizard COmbat SeQuence tool').pack() # Widget
 # message.config(text='MElee Wizard COmbat SeQuence tool') # config method
 # message.pack()
 
+# Global vars
+mystring = tk.StringVar()
+
 # Button:
 def button_fn():
     print('button clicked')
+    print('string =', mystring.get())
 button = ttk.Button(root, text='Click me', command=button_fn)
 # button.state(('disabled',)) disables the button
 button.pack()
 
-def img_clicked(): showinfo('<popup window title>', 'image button clicked!')
+def img_clicked():
+    showinfo('My popup window!', f'string = {mystring.get()}')
 # button_icon = tk.PhotoImage(file='../content/counters/Battle-Axe.png')
 button_icon = tk.PhotoImage(file='../content/counters/dagger0.png')
     
-ttk.Button(root, image=button_icon, text='text too', compound=tk.LEFT,
+ttk.Button(root, image=button_icon, text='generate popup', compound=tk.LEFT,
            command=img_clicked).pack() #expand=True)
 # For some reason if I put the command inline, then it gets executed immediately (4feb022)
 
-# Text box:
-# name = tk.StringVar()
-# textbox = ttk.Entry(root, textvariable=name)
-# textbox.focus()
-# textbox.pack()
-# print(name.get())
+# (single line) Text box:
+textbox = ttk.Entry(root, textvariable=mystring)
+textbox.focus() # sends keyboard focus to the textbox
+textbox.pack()
+# print('textbox is', name.get())
+# mystring = name.get()
 
 # print('window geometry =', root.geometry()) # not too clear on what the output means
 
@@ -79,6 +84,8 @@ ttk.Button(root, text = 'Quit', command = lambda: root.quit()).pack()
 # quitButton.pack()
 
 root.mainloop()
+print("Finished root.mainloop.  mystring =", mystring.get())
+
 
 # Now we can call mewcosq and interact with it:
 # --------------------------------------------
