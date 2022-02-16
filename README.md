@@ -75,14 +75,14 @@ For the moment you can control the initiative method by setting the
 Please submit issue tickets if you encounter any problems or wish to suggest
 new features.
 
-See the [manual](doc/manual.md) for some more information.
+See the [UsersManual](doc/UsersManual.md) for some more information.
 
 ## Files
 
 <!-- trying to get it to underline column headers below -->
 __File__ | __Description__
 ---- | -----------
-`doc/to_hit_rolls.pl` | generates to-hit probability tables for 3 and 4 dice
+`doc/to_hit_rolls.pl` | generates probability tables for sums of 2-5 dice
 `parties/` | contains two sample party files.  Put your own party files here.
 `LICENSE` | GPLv3
 `TODO.md` | some plans for future development
