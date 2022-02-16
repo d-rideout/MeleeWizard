@@ -2,21 +2,6 @@
 * lack of clarity about who is an enemy vs friend (1feb022)
 
 
-* Turn 4 movement: Holbein move, (D)efer, (f)inished, or (?) for glbl opts> 8
-Turn 4 movement: Gusty moves, or (?) for glbl opts> 1
-...
-Holbein: ST 9 (7)  adjDX 11 +0inj +0act +0spl = 11  Moved 0 hexes
-Turn 4 normal actions: Action result? (N)o or (?) for glbl opts>
-...
-Gusty: ST 10 (7)  adjDX 11 +0inj +0act +0spl = 11  Moved 0 hexes
-Turn 4 normal actions: Action result? (N)o or (?) for glbl opts>
-...
-Ehege_Scoch: ST 15 (8)  adjDX 9 +0inj +0act +0spl = 9  Moved 8 hexes
-Turn 4 normal actions: Action result? (N)o or (?) for glbl opts>
-etc (28jan022)
-
-* f as special consideration fails? (16jan022)
-
 * no opportunity to disbelieve on animal automatic disbelieve (29jan022)
 
 * xp accrual on manual.md is out of date (16jan022)
@@ -26,6 +11,8 @@ etc (28jan022)
 * Need some fleed action or move! (9jan022)
 
 * unconscious wizards are prompted to move (28jan022)
+
+* blank SIDE is awkward (16feb022)
 
 * keep track of hexes moved to?
   distance function on roll20 coordinates?
@@ -441,3 +428,4 @@ Something is wrong with reading the start time from log file??
 error in global option [c -3]
 * Do damage multipliers really multiply, or just add??
   Trying multiply for now, per rules! (4feb022)
+* f as special consideration fails? (16jan022)

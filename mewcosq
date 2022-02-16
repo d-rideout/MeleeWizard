@@ -150,6 +150,7 @@ foreach my $partyfile (@ARGV) {
 my $nsides = keys %sides;
 print "\n$n characters and $nsides side", &s($nsides), ":\n";
 foreach my $side (sort {$sides{$b} <=> $sides{$a}} keys %sides) {
+#   $side = '[no side]' unless $side;
   print "$sides{$side}\t$side\n";
 }
 print "\n";
@@ -311,7 +312,7 @@ while (1) {
 ';
   while (1) {
     my $sccmd = query('', "(F)inished");
-    last unless $sccmd;
+    last if !$sccmd || lc $sccmd eq 'f';
     my @sccmd = split / +/, $sccmd; # special considerations cmd
     my $who = who(shift @sccmd);
     next if $who eq 'x';
@@ -1151,7 +1152,7 @@ sub movement {
 	# Post to queue APIq0
 	qadd();
       }
-      elsif ($move eq 'f') { last; } # finished
+      elsif (lc $move eq 'f') { last; } # finished
       else { print "unrecognized response [$move]\n"; }
     }
     last if $last<0;
