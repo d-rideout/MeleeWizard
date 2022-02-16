@@ -74,7 +74,7 @@ my %sides; # key SIDE val num characters (only used for display at the beginning
 my @history; # save history for ud
 my @ent2chr; # character index for each entity index, used only for displaying characters in initiative order for character-based initiative (7jan022)
 my $act_chari; # so &query can get access to it
-my %queue; # key char index val $qi
+my %queue; # key char index val $qi  APIq0
 my $qi = 0;
 my $qfh; # queue file handle
 
@@ -1231,5 +1231,9 @@ sub qdel {
 sub qdump {
   open $qfh, '>', '.queue' unless $qfh;
   for (sort {$queue{$a}<=>$queue{$b}} keys %queue) {
+    my $name;
+    if (/[^\d]/) { $name = $_ }
+    else { $name = $characters[$_]->{NAME} }
+    print $qfh "$queue{$_}\t$name\n";
   }
 }

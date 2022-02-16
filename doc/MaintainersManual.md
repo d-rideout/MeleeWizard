@@ -28,7 +28,7 @@ phase are detailed under the description of that turn phase.
 `PLAYER` | player-based
 `SIDE` | side-based
 
-**`@characters`**: array of hashes:
+**`@characters`**: array of hashes, indexed by character index
 
 <u>key</u> | <u>value</u>
 ----------- | -------------
@@ -53,15 +53,14 @@ phase are detailed under the description of that turn phase.
 **`%hkeys`**: 'header keys':  The above keys, with value 1 if they can appear
 in a party file, else 0.
 
+### Queue (`APIq0`)
+
 **`$qi`**: queue index, incremented when something added to queue
 
 **`%queue`**: Movement or action queue.
-<!-- Key is character index, 
-(Is the queue needed for non-character-based movement initiative?) -->
 
     key =~ /[^\d]/ ==> name
-    else char index
-    API tag `APIq0`
+    else character index
 
 value is `$qi`
 

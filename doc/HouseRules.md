@@ -3,8 +3,10 @@
 # House Rules
 
 TFT is a fantasy role playing game which was published in various forms by
-Metagaming from 1977 to 1983.
-
+Metagaming from 1977 to 1983.  Metagaming was a company founded by Howard
+Thompson in Austin, Texas, circa 1975, which specialized in 'microgames':
+games which are physically small enough to fit in a pocket and inexpensive
+enough to be affordable by children.
 
 I have *Melee "Micro Game 3"*, published in 1979, *Advanced Melee*, published
 in 1982, *Wizard* Fourth Edition published in 1981, and *Advanced Wizard*
