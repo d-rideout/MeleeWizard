@@ -244,7 +244,6 @@ while (1) {
   @distMoved = ();
   @ent2chr = ();
   if ($initiative eq 'c') {
-#     foreach my $c (@characters) {
     foreach my $ci (0..$n-1) {
       my $c = $characters[$ci];
       next unless $turn || !$surprise_parties{$c->{PARTY}};
@@ -255,8 +254,6 @@ while (1) {
     }
   }
   else {
-#     my $type = 'PARTY';
-#     $type = 'PLAYER' if $initiative eq 'l';
     my %entities;
     foreach my $c (@characters) {
       next unless $turn || !$surprise_parties{$c->{PARTY}};
@@ -1066,7 +1063,7 @@ sub movement {
   print "Spell renewal phase: Renew spells and discontinue creations\n$fmt";
   while (1) {
     my $sccmd = query('', 'Spell cost, (F)inished,');
-    last unless $sccmd;
+    last if !$sccmd || uc $sccmd eq 'F';
     my @sccmd = split / /, $sccmd;
     #     unless $sccmd =~ /^([^
     if ($sccmd[0] eq 'di') {
@@ -1100,10 +1097,10 @@ sub movement {
   print "\nMovement phase: ";
   if ($initiative eq 'c') {
 #     &displayCharacters;
-    print "Enter number of hexes moved at prompt\n",
-	"d <who>  ALL defer until <who> (just match leading symbols)\n";
+    print "Enter number of hexes moved at prompt, or\n",
 #     $w = ' <who>';
-  } else { print "Enter '0' to move\n"; }
+  } else { print "Enter '0' to move, or\n"; }
+  print "                d <who>  ALL defer until <who> (just match leading symbols)\n";
 
   $debug && print "\@order: @order\n";
   
