@@ -53,19 +53,6 @@ phase are detailed under the description of that turn phase.
 **`%hkeys`**: 'header keys':  The above keys, with value 1 if they can appear
 in a party file, else 0.
 
-### Queue (`APIq0`)
-
-**`$qi`**: queue index, incremented when something added to queue
-
-**`%queue`**: Movement or action queue.
-
-    key =~ /[^\d]/ ==> name
-    else character index
-
-value is `$qi`
-
-**`$qfh`**: queue file handle, for writing to queue file
-
 
 Store information which persists across turns in the characters' hash, and
 information which is relevant for this turn only in an array (or hash) below.
@@ -91,22 +78,54 @@ All arrays below are indexed by character index.
 
 DX = adjDX + @dxact + @dxspl + @dxinj
 
+### Queue (`APIq0`)
+
+**`$qi`**: queue index, incremented when something added to queue
+
+**`%queue`**: Movement or action queue.
+
+    key =~ /[^\d]/ ==> name
+    else character index
+
+value is `$qi`
+
+**`$qfh`**: queue file handle, for writing to queue file
+
+
+
 ## Movement
 `@entities` which can move this turn.  May be character, player, party, or side
 names, based upon `$initiative`.  Excludes 'dead' and surprised characters.
+Indexed by 'entity index'.
+
+`@ent2chr` maps entity index to character index.  Only populated for character-based initiative.
 
 `&movement(@entities)` handles all movement.
 
+### Abstract entities (`APIae`)
+(not implemented currently)
+
+Entity is hash (as opposed to name and entity index, as above)
+
+key | value
+--- | -----
+NAME |
+index | only meaningful if type=='c'?
+type | '`c`' Character; '`s`' Side; '`l`' pLayer; '`R`' paRty
+
+
 ### `&movement`
-`@ent = @entities`
+`@ent = @entities`, indexed by entity index
 
 `@roll` = movement initiative roll for each entity, \in [0,1)
+
+`@order` = entity indices, in order of initiative (sorted by `@roll`)
+
+`@moved` indexed by entity index; true ==> has moved
 
 (Movement) initiative is displayed by `&displayCharacters` if using
 character-based initiative and turn>0.  Else it is displayed separately
 before `&displayCharacters`.
-
-`@order` indices of `@ent`, sorted by `@roll`
 
 
 

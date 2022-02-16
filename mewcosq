@@ -1084,7 +1084,7 @@ sub movement {
       print "$c->{NAME} has $c->{STrem} ST remaining\n";
       $spellRenewalxp[$whoi] += $cost unless defined $c->{CREATOR};
     }
-  }
+  } # Spell renewal loop
   
   # Movement
   # --------
@@ -1107,16 +1107,16 @@ sub movement {
   while (1) {
     # skip over people who have gone already
     while ($moved[$order[$i]]) {
-      $debug && print "skipping over moved character $order[$i]\n";
+      $debug && print "skipping over moved character index $ent2chr[$order[$i]]\n";
       ++$i
     }
 
-    my $moveri = $order[$i];    
+    my $moveri = $order[$i]; # entity index
     if ($i == $last) {
 #       print "$ent[$order[$i]] moves\n";
       my $nhexes = query(0, "$ent[$order[$i]] moves,"); # to get num hexes
       $moved[$order[$i]] = 1;
-      $distMoved[$moveri] = $nhexes if $initiative eq 'c';
+      $distMoved[$ent2chr[$moveri]] = $nhexes if $initiative eq 'c';
       $defer = undef; # Right?  Can't defer past end of queue? (3nov021)
       $q = 1;
       $i = 0;
@@ -1133,7 +1133,6 @@ sub movement {
 # 	  $i = 0;
 	} else { $q = 0 }
       }
-#       $move = query('d', "$who move, (D$w)efer, (f)inished,") if $q;
       $move = query('d', "$who move, (D)efer, (f)inished,") if $q;
       
       # Parse move
@@ -1149,6 +1148,8 @@ sub movement {
 	  print "All defer until $1\n";
 	}
 	++$i;
+	# Post to queue APIq0
+	qadd();
       }
       elsif ($move eq 'f') { last; } # finished
       else { print "unrecognized response [$move]\n"; }
