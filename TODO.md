@@ -1,4 +1,9 @@
 #### Urgent:
+* It would be great to store the actor in the log file which damage is delivered.
+Though I could piece it together with the information which is there!  (15mar022)
+
+* allow launch from specific log file (15mar022)
+
 * lack of clarity about who is an enemy vs friend (1feb022)
 
 
@@ -36,6 +41,8 @@
 * Get rid of defaults, and use empty string instead?  May simplify some things and free up name space? (6jan022)
 
 * PLAYER-based initiative should really be SIDE-PLAYER-based initiative, i.e. each player should move each of their sides separately.  (eg a DM with characters on multiple sides) (10feb022)
+
+* Would be good to somehow focus attention on adjDX, esp when injured? (16feb022)
 
 * Clean up HouseRules:
   - clean up doc/HouseRules.md (17oct021)
