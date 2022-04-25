@@ -1,4 +1,6 @@
 #### Urgent:
+* Add everyone to deferral queue at outset so that players can see initiative order. (25apr022)
+
 * It would be great to store the actor in the log file which damage is delivered.
 Though I could piece it together with the information which is there!  (15mar022)
 

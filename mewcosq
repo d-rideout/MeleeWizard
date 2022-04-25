@@ -1115,8 +1115,9 @@ sub movement {
     my $moveri = $order[$i]; # entity index
     if ($i == $last) {
 #       print "$ent[$order[$i]] moves\n";
-      my $nhexes = query(0, "$ent[$order[$i]] moves,"); # to get num hexes
+      my $nhexes = query(0, "$ent[$order[$i]] must move now,"); # to get num hexes
       $moved[$order[$i]] = 1;
+      qdel($moveri);
       $distMoved[$ent2chr[$moveri]] = $nhexes if $initiative eq 'c';
       $defer = undef; # Right?  Can't defer past end of queue? (3nov021)
       $q = 1;
@@ -1132,7 +1133,10 @@ sub movement {
 # 	  print "who matches!\n";
 	  $q = 1;
 # 	  $i = 0;
-	} else { $q = 0 }
+	} else {
+	  $q = 0;
+	  qadd($moveri);
+	}
       }
       $move = query('d', "$who move, (D)efer, (f)inished,") if $q;
       
@@ -1142,6 +1146,7 @@ sub movement {
 	--$last if $i==$last;
 	$i = 0;
 	$distMoved[$moveri] = $move if $initiative eq 'c';
+	qdel($moveri);
       }
       elsif ($move =~ /^d ?(.+)?$/) { # defer (till <who>)
 	if (defined $1) {
@@ -1150,7 +1155,7 @@ sub movement {
 	}
 	++$i;
 	# Post to queue APIq0
-	qadd();
+	qadd($moveri);
       }
       elsif (lc $move eq 'f') { last; } # finished
       else { print "unrecognized response [$move]\n"; }
@@ -1216,23 +1221,38 @@ sub s { shift > 1 ? 's' : '' }
 # Queue 'methods': APIq0
 # ---------------
 # Let's assume all entities are characters for now. (10feb022)
+# (i.e. $initiative == 'c' I think. (21apr022))
 
 # Add entity to queue
 sub qadd {
+  my $who = shift;
+  $debug && print "$qi qadd: [", keys %queue, "]\n";
+  return if defined $queue{$who};
+  $queue{$who} = $qi++;
+  &qdump;
+ }
 
-}
 
 # Remove entity from queue
 sub qdel {
+  my $who = shift;
+  $debug && print "$qi qdel: [", join(' ',keys %queue), "]\n";
+  return unless defined $queue{$who};
+  delete $queue{$who};
+  &qdump;
 }
+
 
 # Write queue to file
 sub qdump {
-  open $qfh, '>', '.queue' unless $qfh;
+  $debug && print "$qi qdump: [", join(' ',keys %queue), "]\n";
+  open $qfh, '>', '.queue'; # unless $qfh;
   for (sort {$queue{$a}<=>$queue{$b}} keys %queue) {
     my $name;
     if (/[^\d]/) { $name = $_ }
     else { $name = $characters[$_]->{NAME} }
     print $qfh "$queue{$_}\t$name\n";
   }
+#   $qfh->flush;
+  close $qfh;
 }

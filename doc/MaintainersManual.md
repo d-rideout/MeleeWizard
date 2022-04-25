@@ -127,6 +127,9 @@ type | '`c`' Character; '`s`' Side; '`l`' pLayer; '`R`' paRty
 character-based initiative and turn>0.  Else it is displayed separately
 before `&displayCharacters`.
 
+`$q` ==> query user for move
+
+`$defer` = who to defer to, for deferring 'till an entity
 
 
 ## Utilities
