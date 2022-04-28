@@ -1,5 +1,9 @@
 #### Urgent:
+* Allow &qadd to receive list of characters (26apr022)
 * Add everyone to deferral queue at outset so that players can see initiative order. (25apr022)
+
+* Allow submitting multiple DX mods for multiple scenarios?
+  (Embrace the multiverse!) (27apr022)
 
 * It would be great to store the actor in the log file which damage is delivered.
 Though I could piece it together with the information which is there!  (15mar022)
@@ -69,6 +73,7 @@ Though I could piece it together with the information which is there!  (15mar022
     (29aug021)
 
 #### Thoughts:
+* Eventually queue GUI will keep track of number of hexes moved, etc. (26apr022)
 * Split Perl queue code into separate file/module? (10feb022)
 * Add GNU copyright stuff as global option (10feb022)
 * Have separate public and private name for each character? (4feb022)
