@@ -1,6 +1,6 @@
 #### Urgent:
-* Allow &qadd to receive list of characters (26apr022)
-* Add everyone to deferral queue at outset so that players can see initiative order. (25apr022)
+* +1 hit regeneration per turn for trolls (28apr022)
+  Note that unconscious trolls recover! (28apr022)
 
 * Allow submitting multiple DX mods for multiple scenarios?
   (Embrace the multiverse!) (27apr022)
@@ -443,3 +443,5 @@ error in global option [c -3]
 * Do damage multipliers really multiply, or just add??
   Trying multiply for now, per rules! (4feb022)
 * f as special consideration fails? (16jan022)
+* Allow &qadd to receive list of characters (26apr022)
+* Add everyone to deferral queue at outset so that players can see initiative order. (25apr022)
