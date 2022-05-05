@@ -16,39 +16,51 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import tkinter as tk
 from tkinter import ttk
-# import time
 
 class qgui(tk.Tk):
   def __init__(s, act):
     super().__init__()
-    s.act = act
-    s.title('Queue')
-    s.columnconfigure(0)
-    s.columnconfigure(1)
+    s.act = act # name of action (i.e. 'Move' or 'Act')
+    s.title(f'{act} Queue')
+    s.columnconfigure(0) # name
+    s.columnconfigure(1) # button
 #     s.update()
 #     s.bind('<1>', s.update)
     s.n = 0
+    s.w = [] # array of arrays of widgets
 
   def update(s):
     fp = open('.queue', 'r')
-    r = 0
+    ri = 0
     for l in fp:
       #if l[0]=='#': continue
 #       ls = l.split()
 #       if ls[col]=='-': continue
 #       self.nums.append(float(ls[col]))
 #       ttk.Label(s, text=l[:-1], borderwidth=0, background='pink', anchor=tk.CENTER).grid(column=0, row=r, sticky=tk.EW, ipadx=3, ipady=0)
-      ttk.Label(s, text=l[:-1]).grid(column=0, row=r, sticky=tk.EW, ipadx=4)
-      ttk.Button(s, text=s.act).grid(column=1, row=r)
-      r += 1
-    if r>s.n: s.n=r
+      wl = ttk.Label(s, text=l[:-1])
+      wl.grid(column=0, row=ri, sticky=tk.EW, ipadx=4)
+#       s.w[ri][0] = w
+      wb = ttk.Button(s, text=s.act)
+      wb.grid(column=1, row=ri)
+#       s.w[ri][1] = w
+      s.w.append([wl,wb])
+      ri += 1
+    if ri>s.n: s.n=ri
     else:
-      while r<s.n:
-        ttk.Label(s, text='', sticky=tk.EW).grid(column=0, row=r, ipadx=4)
-        ttk.Label(s, text='', sticky=tk.EW).grid(column=1, row=r)
-        r += 1
+      while ri<s.n:
+#         ttk.Label(s, text='xxxxxxxxxxxxxxxx', sticky=tk.EW).grid(column=0, row=ri, ipadx=4)
+#         ttk.Label(s, text='xxxxxx', sticky=tk.EW).grid(column=1, row=ri)
+        ttk.Label(s, text='xxxxxxxxxxxxx').grid(column=0, row=ri, ipadx=4)
+        ttk.Label(s, text='xxxxxx').grid(column=1, row=ri)
+        print('attempting to erase row', ri)
+        print(s.grid_slaves())
+#         print(s.w[ri][0], s.w[ri][1])
+#         s.w[ri][0].grid_forget()
+#         s.w[ri][1].grid_forget()
+        ri += 1
     fp.close()
-    print('r =', r, 'n =', s.n)
+    print('ri =', ri, 'n =', s.n)
 
 #   def refresh(s):
 #     s.after(
