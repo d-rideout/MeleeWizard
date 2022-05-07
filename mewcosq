@@ -1165,11 +1165,12 @@ sub movement {
 	# Post to queue APIq0
 	qadd($moveri);
       }
-      elsif (lc $move eq 'f') { %queue = (); last; } # finished
+      elsif (lc $move eq 'f') { last } # finished
       else { print "unrecognized response [$move]\n"; }
     }
     last if $last<0;
   } # movement phase
+  &qreset;
   $debug and map defined ? $_:'[undef]', @distMoved;
   $debug && print "[$initiative] distMoved: ", join('|', @distMoved), "\n";
 }
@@ -1265,4 +1266,11 @@ sub qdump {
   }
 #   $qfh->flush;
   close $qfh;
+}
+
+
+# Reset queue
+sub qreset {
+  %queue = ();
+  $qi = 0;
 }

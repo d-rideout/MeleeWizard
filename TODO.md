@@ -1,9 +1,5 @@
 #### Queue:
-* is messed up on Turn 2, after creation of being
-  numbers from 12 to 22
-  seems unrelated to displayed initiative order
-  is missing wolf and character
-  dead figures are there though (6may022)
+* is messed up after figure dies I think (7may022)
 
 #### Urgent:
 * unconscious wizards are prompted to move (28jan022)

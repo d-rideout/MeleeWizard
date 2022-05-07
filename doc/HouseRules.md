@@ -165,7 +165,8 @@ read the rules.  Though this should probably require a die roll of some sort.
 
 ### Questions re HTH:
 * Does a failed HTH attempt consume an action?  Presumably not!
-
+* Does a figure which falls under a multi-hex figure drop its weapon and shield?
+  I don't see this explicitly stated, so I assume not.
 
 ## 'Melee' rules for wizards:
 
