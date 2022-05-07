@@ -54,6 +54,11 @@ principles to learn here.
 * A character who must forget talents or languages due to a permanent loss of IQ may bump a talent or language from one of its three 'learning slots', and replace it with the forgotten talent or language.
 * Turn is 5 seconds.  (This is stated in AM pg 2.  ITL implies 10 seconds on pg 66.  (5 seconds is already a ridiculously long time to run 10 hexes = 13 meters))
 
+* A side which has at least one conscious figure still on the battlefield
+  wins.  Surviving characters on sides which win a battle and remain on the
+  battlefield evenly split the full xp value of unconscious foes, and 1/3 xp
+  value for non-winners which flee.  (Because I am really unconfortable with the
+  'slit throats for xp' and 'chase down foes for xp' motivations.)
 
 These are the '**standard**' house rules.  It will be convenient to allow variants, to facilitate play testing them.  I will present the **named variants in boldface**, so that the choice of rules for a particular game can be easily described using these named variants.
 
@@ -157,6 +162,9 @@ above -- if the defender manages to roll out (and therefore stand!) in the
 same turn, then it can keep hold of its weapon and shield.  This is how I
 read the rules.  Though this should probably require a die roll of some sort.
 3-dice against DX?
+
+### Questions re HTH:
+* Does a failed HTH attempt consume an action?  Presumably not!
 
 
 ## 'Melee' rules for wizards:

@@ -1,36 +1,53 @@
+#### Queue:
+* is messed up on Turn 2, after creation of being
+  numbers from 12 to 22
+  seems unrelated to displayed initiative order
+  is missing wolf and character
+  dead figures are there though (6may022)
+
 #### Urgent:
+* unconscious wizards are prompted to move (28jan022)
+
 * +1 hit regeneration per turn for trolls (28apr022)
   Note that unconscious trolls recover! (28apr022)
 
 * Allow submitting multiple DX mods for multiple scenarios?
   (Embrace the multiverse!) (27apr022)
 
-* It would be great to store the actor in the log file which damage is delivered.
-Though I could piece it together with the information which is there!  (15mar022)
+* no opportunity to disbelieve on animal automatic disbelieve (29jan022)
+
+* keep track of hexes moved to?
+  distance function on roll20 coordinates?
+
+* damage during movement from HTH fail! (27dec021)
+
+
+
+* Get rid of defaults, and use empty string instead?  May simplify some
+  things and free up name space? (6jan022)
+* Movement queries have multiple prompts, which confuses list of displayed
+  options.  Better to put all options at top? (5may022)
+* case insensitivity is confusing in general (5may022)
+
+
+
+* action queue can become a mess if a battle fizzles (5may022)
+
+* might be nice to indent stuff under each Actor
+  Make a print function which adds indent? (7jan022)
 
 * allow launch from specific log file (15mar022)
 
 * lack of clarity about who is an enemy vs friend (1feb022)
 
-
-* no opportunity to disbelieve on animal automatic disbelieve (29jan022)
-
 * xp accrual on manual.md is out of date (16jan022)
 
 * some warning when no log present or log file present (9jan022)
 
-* Need some fleed action or move! (9jan022)
-
-* unconscious wizards are prompted to move (28jan022)
-
 * blank SIDE is awkward (16feb022)
-
-* keep track of hexes moved to?
-  distance function on roll20 coordinates?
+  'none' as default, like the Ents? (5may022)
 
 * Tool to throw multiple dice (30dec021)
-
-* damage during movement from HTH fail! (27dec021)
 
 * I think changing one's own DX mod during an action may cause actor to defer
   unnecessarily. (7jan022)
@@ -39,12 +56,9 @@ Though I could piece it together with the information which is there!  (15mar022
 
 * I think weak disengage may be better! (7nov021)
 
+* It would be great to store the actor in the log file which damage is delivered.
+Though I could piece it together with the information which is there!  (15mar022)
 * Store actor in log file?  It is mismatching for some reason.  At least it can catch this error. (7jan022)
-
-* might be nice to indent stuff under each Actor
-  Make a print function which adds indent? (7jan022)
-
-* Get rid of defaults, and use empty string instead?  May simplify some things and free up name space? (6jan022)
 
 * PLAYER-based initiative should really be SIDE-PLAYER-based initiative, i.e. each player should move each of their sides separately.  (eg a DM with characters on multiple sides) (10feb022)
 
@@ -71,8 +85,10 @@ Though I could piece it together with the information which is there!  (15mar022
   - Maybe add etiquette guidelines?  To press 'm' unless you have a good reason
     to defer.  'Can only defer if have a good reason to wait' sort of thing.
     (29aug021)
+  Though need queue working better! (5may022)
 
 #### Thoughts:
+* FLEED ==> DEAD? (5may022)
 * Eventually queue GUI will keep track of number of hexes moved, etc. (26apr022)
 * Split Perl queue code into separate file/module? (10feb022)
 * Add GNU copyright stuff as global option (10feb022)
@@ -445,3 +461,5 @@ error in global option [c -3]
 * f as special consideration fails? (16jan022)
 * Allow &qadd to receive list of characters (26apr022)
 * Add everyone to deferral queue at outset so that players can see initiative order. (25apr022)
+* Need some fleed action or move! (9jan022)
+* created wolf does not show in character list

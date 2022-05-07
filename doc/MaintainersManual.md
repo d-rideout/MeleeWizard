@@ -49,6 +49,7 @@ phase are detailed under the description of that turn phase.
 `ADJ` | array of pairs DXmod, last turn of mod
 `WAIT` | wait for an opening bonus
 `CREATOR` | character index of creator
+`FLEED` | true ==> character fleed from battlefield
 
 **`%hkeys`**: 'header keys':  The above keys, with value 1 if they can appear
 in a party file, else 0.

@@ -248,7 +248,7 @@ while (1) {
     foreach my $ci (0..$n-1) {
       my $c = $characters[$ci];
       next unless $turn || !$surprise_parties{$c->{PARTY}};
-      unless ($c->{DEAD}) {
+      unless ($c->{DEAD} || $c->{FLEED}) {
 	push @entities, $c->{NAME};
 	push @ent2chr, $ci;
       }
@@ -258,7 +258,7 @@ while (1) {
     my %entities;
     foreach my $c (@characters) {
       next unless $turn || !$surprise_parties{$c->{PARTY}};
-      next if $c->{DEAD};
+      next if $c->{DEAD} || $c->{FLEED};
       my $ent = $c->{$initiative};
       push @entities, $ent unless $entities{$ent}++;
     }
@@ -280,7 +280,7 @@ while (1) {
   # Apply ongoing dxmods
   foreach my $ci (0..$#characters) {
     my $c = $characters[$ci];
-    next if $c->{DEAD};
+    next if $c->{DEAD} || $c->{FLEED};
 
     # waiting for an opening
     $dxspl[$_] += $c->{WAIT} if $c->{WAIT};
@@ -381,7 +381,7 @@ while (1) {
   act(@chars);
   if (@bow2) {
     # remove acted flag from living chars
-    !$characters[$_]->{DEAD} && (@acted[$_] = 0) foreach @bow2;
+    !$characters[$_]->{DEAD} && !$characters[$_]->{FLEED} && (@acted[$_] = 0) foreach @bow2;
     $phase = 'second missle shots';
     print "\nSecond bow attacks:\n";
     $debug && print "for @bow2\n";
@@ -400,7 +400,7 @@ while (1) {
     $debug && print "considering forcer $forcer\n";
     next if $turn_damage[$forcer];
     foreach my $forced (keys %{$retreats{$forcer}}) {
-      next if $characters[$forced]->{DEAD};
+      next if $characters[$forced]->{DEAD} || $characters[$forced]->{FLEED};
       print "$characters[$forcer]->{NAME} on $characters[$forced]->{NAME}?\n";
     }
   }
@@ -410,23 +410,20 @@ while (1) {
 
 
 # Display characters
-# If I get passed @roll, and $initiative eq 'c', then display characters in that order, but note that
-# it is indexed by entity indices rather than character indices.
+# If I get passed @roll, and $initiative eq 'c', then display characters in
+# that order, but note that @roll is indexed by entity indices rather than
+# character indices!
 # Else just do the usual thing.
-# Should the $initiative logic be in the calling function or here?
+# Should the $initiative logic below be in the calling function or here?
 sub displayCharacters {
   my @roll = @_; # map {defined $_ ? $_ : 0} @_; map should not be needed
   # pad @roll above to fill in gaps for dead characters?
   my $msg = 'Characters';
   my @order = 0..$n-1;
-#   my @order = 0..$#roll;
+  #   my @order = 0..$#roll;
+  $debug && print "&displayCharacters n = $n\n";
+  
   if ($initiative eq 'c' && @roll) {
-
-#     This is confused.  @roll uses *entity* indices, not *character* indices!  I am conflating the two.  This needs to be clearer.
-# 
-# 	&movement is pased only a list of entities.
-# 	the mapping of these to characters has to also be passed in!
-    
     $debug && print "&displayCharacters: roll: @roll\n";
     $msg = 'Initiative order';
     @order = sort {return 0 unless $roll[$a] && $roll[$b];
@@ -440,7 +437,7 @@ sub displayCharacters {
     next unless defined $ent2chr[$i];
     my $c = $characters[$ent2chr[$i]]; # $i];
     $debug && print "$i\t$ent2chr[$i]\t";
-    print "$c->{NAMEKEY}\t$c->{NAME}\n" unless $c->{DEAD};
+    print "$c->{NAMEKEY}\t$c->{NAME}\n" unless $c->{DEAD} || $c->{FLEED};
   }
   print '-'x26, "\n";
 }
@@ -543,11 +540,6 @@ sub finalST {
 #  &query parser under 'q' (28sep021))
 sub xp {
   # Which sides won?
-#   for my $i (0..$n-1) {
-#     my $c = $characters[$i];
-#     my $st = $c->{STrem};
-#     $sides{$c->{SIDE}} = 'w' if $st>1;
-#   }
   foreach my $c (@characters) {
     $c->{SIDE} = '' unless $c->{SIDE};
     $sides{$c->{SIDE}} = 'w' if $c->{STrem} > 1;
@@ -556,10 +548,12 @@ sub xp {
   my ($nwinners, $nunconscious) = (0)x2;
   foreach my $c (@characters) {
     next if defined $c->{CREATOR}; # ignore creations
-#     print "side: [$c->{SIDE}]\n";
-    if ($sides{$c->{SIDE}} eq 'w' && $c->{STrem} > 0) { ++$nwinners }
-    elsif ($sides{$c->{SIDE}} ne 'w' && $c->{STrem} == 1) {
-      $unconsciousXP += $c->{DX}+1; ++$nunconscious
+    if ($sides{$c->{SIDE}} eq 'w' && $c->{STrem} > 0 && !$c->{FLEED}) { ++$nwinners }
+    elsif ($sides{$c->{SIDE}} ne 'w') {
+      if ($c->{STrem} == 1) { $unconsciousXP += $c->{DX}+1; ++$nunconscious }
+      elsif ($c->{FLEED}) {
+	$unconsciousXP += int(($c->{DX}+$c->{STrem})/3+.5); ++$nunconscious
+      }
     }
   }
   my $uxp = int($unconsciousXP/$nwinners+.5);
@@ -728,7 +722,7 @@ sub whosnext {
   $debug && print join(':', @roll), "\n";
   foreach (@_) {
     my $c = $characters[$_];
-    next if $acted[$_] || $c->{DEAD};
+    next if $acted[$_] || $c->{DEAD} || $c->{FLEED};
     $debug && print "maxdx = $maxdx maxroll=", defined($maxroll)?$maxroll:'', "\n";
     my $dx = $characters[$_]->{adjDX} + $dxact[$_] + $dxspl[$_] + $dxinj[$_];
     if ($dx > $maxdx) {
@@ -786,6 +780,7 @@ sub act {
         "-------\n", # in alphabetical order (within each sub-phase)
       "* [sp<ST>] <who>-<dam>\n  (e.g. c-4 for 4 damage to character c after armor)\n",
       "* de [DX mod]\t\t\tdefer action\n",
+      "* l\t\t\tfLeed from battlefield\n",
       "* m\t\t\tmiss (to end wait-for-an-opening)\n";
 #   print "* sp<ST> a <who> <DX mod>\n  spell which modifies <who>\'s adjDX by <DX mod>\n",
   print "* a <who> <DX mod> <num turns>\n  adjust <who>\'s adjDX by <DX mod>\n",
@@ -807,7 +802,7 @@ sub act {
   while (defined ($act_chari = whosnext(@chars))) {
 #     print 0+@chars, " chars\n";
     my $ac = $characters[$act_chari]; # acting character
-    die if $ac->{DEAD}; # &whosnext should not return dead figures
+    die if $ac->{DEAD} || $ac->{FLEED}; # &whosnext should not return dead figures
     print "$ac->{NAME}: ST $ac->{ST} ($ac->{STrem})  adjDX $ac->{adjDX} ",
 	smod($dxinj[$act_chari]), 'inj ', smod($dxact[$act_chari]), 'act ',
 	smod($dxspl[$act_chari]), "spl = $maxdx";
@@ -876,6 +871,7 @@ sub act {
 	push @dxact, 0;
 	push @dxspl, 0;
 	push @dxinj, 0;
+	push @ent2chr, $n; # needed to display new creations in &displayCharacters
 	character_prep($n++);
 	&displayCharacters();
 	delete $ac->{WAIT};
@@ -885,6 +881,10 @@ sub act {
 	$dxact[$act_chari] = $1 if defined $1;
 	$defer = -1;
 	++$ndefer;
+	last;
+      }
+      elsif (uc $action eq 'l') {
+	$characters[$act_chari]->{FLEED} = 1;
 	last;
       }
       elsif ($action =~ /^di (.+)$/) { # Disbelieve
@@ -1103,6 +1103,8 @@ sub movement {
 #     $w = ' <who>';
   } else { print "Enter '0' to move, or\n"; }
   print "                d <who>  ALL defer until <who> (just match leading symbols)\n";
+  print "                f        Finished with movement phase\n";
+  print "                l        fLeed from battlefield\n";
 
   $debug && print "\@order: @order\n";
   
@@ -1117,6 +1119,7 @@ sub movement {
     if ($i == $last) {
 #       print "$ent[$order[$i]] moves\n";
       my $nhexes = query(0, "$ent[$order[$i]] must move now,"); # to get num hexes
+      $characters[$ent2chr[$moveri]]->{FLEED} = 1 if lc $nhexes eq 'l';
       $moved[$order[$i]] = 1;
       qdel($moveri);
       $distMoved[$ent2chr[$moveri]] = $nhexes if $initiative eq 'c';
@@ -1139,10 +1142,14 @@ sub movement {
 	  qadd($moveri);
 	}
       }
-      $move = query('d', "$who move, (D)efer, (f)inished,") if $q;
+      $move = query('d', "$who move, (D)efer,") if $q;
       
       # Parse move
-      if ($move =~ /^\d/) { # digit ==> move
+      if (lc $move eq 'l') {
+	$characters[$ent2chr[$moveri]]->{FLEED} = 1;
+	$move = 99; # so it 'moves' below
+      }
+      if ($move =~ /^\d/) { # digit ==> move	
 	$moved[$order[$i]] = 1;
 	--$last if $i==$last;
 	$i = 0;
