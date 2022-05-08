@@ -881,6 +881,7 @@ sub act {
 	$dxact[$act_chari] = $1 if defined $1;
 	$defer = -1;
 	++$ndefer;
+	qadd($act_chari);
 	last;
       }
       elsif (uc $action eq 'l') {
@@ -986,6 +987,7 @@ sub act {
     if ($defer) { $acted[$act_chari] = -1; }
     else {
       $debug && print "$ac->{NAME} acted  ndefer=$ndefer\n";
+      qdel($act_chari);
       --$ndefer if $acted[$act_chari] && $acted[$act_chari] < 0; # if this was a deferred figure
       if ($ndefer) {
 	# clear all defer flags
@@ -1007,6 +1009,7 @@ sub act {
 
   } # loop over actors
   $debug && print "actions finished\n";
+  &qreset;
 } # main loop over turns
 
 
@@ -1046,6 +1049,7 @@ sub movement {
   my $displayInitiative = ($initiative ne 'c'); # or !$turn);
   print "\nInitiative order:\n" if $displayInitiative; #unless $initiative eq 'c';
   my @order; # list of entity indices in initiative order
+  my @orderCI; # list of character indices in initiative order
   my $prev_roll;
   my @moved; # who has moved so far
   foreach my $i (sort {$roll[$a] <=> $roll[$b]} 0..$#roll) {
@@ -1054,8 +1058,9 @@ sub movement {
     else { $prev_roll = $roll; }
     print " $ent[$i]\n" if $displayInitiative; #unless $initiative eq 'c';
     push @order, $i;
+    push @orderCI, $ent2chr[$i];
   }
-  qadd(@order);
+  qadd(@orderCI);
 #   print "\n";
 
   $phase = 'renew spells';
@@ -1121,7 +1126,7 @@ sub movement {
       my $nhexes = query(0, "$ent[$order[$i]] must move now,"); # to get num hexes
       $characters[$ent2chr[$moveri]]->{FLEED} = 1 if lc $nhexes eq 'l';
       $moved[$order[$i]] = 1;
-      qdel($moveri);
+      qdel($ent2chr[$moveri]);
       $distMoved[$ent2chr[$moveri]] = $nhexes if $initiative eq 'c';
       $defer = undef; # Right?  Can't defer past end of queue? (3nov021)
       $q = 1;
@@ -1139,7 +1144,7 @@ sub movement {
 # 	  $i = 0;
 	} else {
 	  $q = 0;
-	  qadd($moveri);
+	  qadd($ent2chr[$moveri]);
 	}
       }
       $move = query('d', "$who move, (D)efer,") if $q;
@@ -1154,7 +1159,7 @@ sub movement {
 	--$last if $i==$last;
 	$i = 0;
 	$distMoved[$moveri] = $move if $initiative eq 'c';
-	qdel($moveri);
+	qdel($ent2chr[$moveri]);
       }
       elsif ($move =~ /^d ?(.+)?$/) { # defer (till <who>)
 	if (defined $1) {
@@ -1163,7 +1168,7 @@ sub movement {
 	}
 	++$i;
 	# Post to queue APIq0
-	qadd($moveri);
+	qadd($ent2chr[$moveri]);
       }
       elsif (lc $move eq 'f') { last } # finished
       else { print "unrecognized response [$move]\n"; }
@@ -1235,12 +1240,14 @@ sub s { shift > 1 ? 's' : '' }
 # Add list of entities to queue
 sub qadd {
   my $who;
+  my $nadded = 0;
   while (defined($who = shift)) {
     $debug && print "adding $who to qadd: [", keys %queue, "] w qi=$qi\n";
-    return if defined $queue{$who};
+    next if defined $queue{$who};
     $queue{$who} = $qi++;
+    ++$nadded;
   }
-  &qdump;
+  &qdump if $nadded;
  }
 
 

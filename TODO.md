@@ -1,7 +1,10 @@
 #### Queue:
-* is messed up after figure dies I think (7may022)
 
 #### Urgent:
+* Aid spell to ST! (7may022)
+
+* Dragon disappear did not remove it from movement. (7may022)
+
 * unconscious wizards are prompted to move (28jan022)
 
 * +1 hit regeneration per turn for trolls (28apr022)
@@ -84,6 +87,7 @@ Though I could piece it together with the information which is there!  (15mar022
   Though need queue working better! (5may022)
 
 #### Thoughts:
+* clean up handling of @order, @orderCI, @ent2chr in &movement (7may022)
 * FLEED ==> DEAD? (5may022)
 * Eventually queue GUI will keep track of number of hexes moved, etc. (26apr022)
 * Split Perl queue code into separate file/module? (10feb022)
@@ -459,3 +463,4 @@ error in global option [c -3]
 * Add everyone to deferral queue at outset so that players can see initiative order. (25apr022)
 * Need some fleed action or move! (9jan022)
 * created wolf does not show in character list
+* is messed up after figure dies I think (7may022)
