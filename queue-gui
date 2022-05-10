@@ -80,8 +80,11 @@ def fn():
   qg.after(3000, fn)
 
 fn()
-  
+
+ttk.Button(root, text = 'Quit', command = lambda: qg.quit()).pack()
+
 qg.mainloop()
 
 # deleted figures are not removed properly.  Fix or just leave them? (27apr022)
 
+print("mainloop finished.  Have a nice day!\n")

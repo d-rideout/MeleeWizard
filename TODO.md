@@ -2,6 +2,16 @@
 
 #### Urgent:
 * Aid spell to ST! (7may022)
+  Make it its own command for now.  (Does anything else modify another's ST??)
+  Actually no why not just modify the 'a' command, to allow specification of
+  modifying ST or DX.
+  Though it is a bit different.  Need to store list of pairs of ST and expiration turn.  And need to spend ST from oldest stores first.  Including damage!  SO taking damage now becomes even more complicated!
+  There is a &spendST for spending spell ST. Hmm, this is really complicated!
+  I think I need yet another ST spending function, which is called by &spendST.  And also when a figure takes damage.  And it checks for Aid ST buffers.
+  (9may022)
+
+* Spell cost lost if command fails.
+  Subtract cost after command completes? (9may022)
 
 * Dragon disappear did not remove it from movement. (7may022)
 

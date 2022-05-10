@@ -854,7 +854,7 @@ sub act {
 	print "$characters[$targeti]->{NAME} adjDX ", smod($2), " for $3 turns\n";
 	last;
       } # DX mod, e.g. from Clumsiness spell
-      elsif ($action =~ /^([^ ]+) (\d+) (\d+) ?(\d+)?$/) { # Create being
+      elsif ($action =~ /^([^ ]+) +(\d+) +(\d+) *(\d+)?$/) { # Create being
 	my ($name, $st, $dx, $adjdx) = ($1, $2, $3, $4);
 	$adjdx = $dx unless defined $adjdx;
 	print "$name created with ST $st DX $dx ($adjdx)\n";
