@@ -1,4 +1,5 @@
 #### Queue:
+* label.configure(text="I will self destruct in 2 secs")? (10may022)
 
 #### Urgent:
 * Aid spell to ST! (7may022)
@@ -20,6 +21,8 @@
 * +1 hit regeneration per turn for trolls (28apr022)
   Note that unconscious trolls recover! (28apr022)
 
+* Warn when creating being with no spell cost (12may022)
+
 * Allow submitting multiple DX mods for multiple scenarios?
   (Embrace the multiverse!) (27apr022)
 
@@ -30,7 +33,11 @@
 
 * damage during movement from HTH fail! (27dec021)
 
+* reverse missles xp needs to go to wizard not person hit (8jul022)
+* need way to refer to creator in party file (9jul022)
+  Argument "Lona" isn't numeric in array element at ./mewcosq line 975, <STDIN> line 21.
 
+* no xp for injuring self (23jul022)
 
 * Get rid of defaults, and use empty string instead?  May simplify some
   things and free up name space? (6jan022)

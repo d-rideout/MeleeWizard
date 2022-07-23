@@ -209,7 +209,7 @@ Below is my best guess as to the intended rules.
 * A wizard in HTH is at -4 DX for drawing a dagger.
 * A wizard wielding a dagger in HTH is presumably at +4 DX, because s/he is attacking a rear hex.
 * Wizard cannot cast spell with weapon or shield besides staff ready.
-* Anyone can use a dagger (in hand, no throwing) without non-talent or wizard penalty (C)
+* Anyone can use a dagger (in hand, no throwing) without non-talent or wizard penalty. (C)
 * The armor DX penalty for wizards is independent of necessity of using gestures in spells. (C)
 * (ST<18) wizard in leather (cloth) armor: usual -2 (-1) DX on spells and attacks
 * wizard in iron armor: -(4 + usual penalty) DX on spells and (non-staff/dagger) attacks
@@ -220,6 +220,12 @@ Below is my best guess as to the intended rules.
 * wizard wielding weapon besides staff or non-silver dagger -4 DX
 (so -8 DX for weapon and shield -- that seems to be what ITL pg 12 says)
 <!-- * wizard wielding shield and non-(staff/silver dagger) -4 DX (i.e. the penalty is not doubled) -->
+
+* It seems that 'pre-TFT' (??) wizards could use non-silver daggers without
+  penalty.  I will rule that such wizards exist, and one can claim that their
+  PC wizard is of this sort if they so choose.  Many (most?!) 'monster'
+  wizards will be of this sort.  (I am using (old?) D+D terminology here regarding PCs
+  and monsters.)
 
 Is that a reasonable interpretation of the rules as stated?
 
@@ -250,6 +256,26 @@ I believe the published rules intend an adjDX penalty of
 -(2+spell_turn) for the Rope spell, as clarified above.
 
 All spells have no effect on spell turn 13, unless they are renewed.
+
+
+## Flight
+
+My take on the rules for flight as described in AM:
+
+There are two sorts of situations in which flight takes place: constrained
+and unconstrained.  Generally, if there is a ceiling, then it is constrained
+flight, unless the ceiling is very high.  Unless the latter is indicated
+explicitly (in the description of the room or whatever), then assume flight
+is constrained.
+
+When flight takes place in an unconstrained setting, then attacks in both
+directions are at -4 DX, and engagement is decided by the fliers.  In a
+constrained setting, there are no -4 DX penalties, and engagement is the same
+as for figures on the ground.
+
+(Ideally there should be an entire range of degrees of constraint, depending
+on whether figures on the ground are using pole weapons etc.  But I think the
+intent is to keep the rules simple.)
 
 
 ## Clarifications from *Questions* section of *the Fantasy Masters' Codex 1981*:
