@@ -24,8 +24,9 @@ use List::Util qw/max/;
 my $debug = 0; # 1 ==> max debug output
 my $initiative = 'c'; # c ==> character-based; PARTY ==> party-based
                       # PLAYER ==> player-based; SIDE ==> 'side-based
-my $xpRate = 10; # minutes per wallclock time xp (12 is standard in rules)
-                # prime factors of 60: 2 2 3 5
+my $xpRate = 12; # minutes per wallclock time xp (12 is standard in rules)
+                 # prime factors of 60: 2 2 3 5
+
 # Catch signals
 $SIG{INT} = sub { print "\nINT signal received, exiting.\nCheck your log files to ensure you do not lose your history.\n"; close LOG; exit; };
 

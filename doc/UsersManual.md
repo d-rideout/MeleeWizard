@@ -1,12 +1,20 @@
-# Melee/Wizard Turn Sequence Tool - User Manual
+# Melee/Wizard Turn Sequence Tool (mewcosq) - User Manual
 
 Party file arguments are described in the [README.md](../README.md) file.
 
 The code defaults to character-based initiative, rather than player-based or
-side-based, as it suggests in the rules.  This will be substantially more
+side-based, as recommended in the rules.  This will be substantially more
 complicated, but also substantially more realistic?
-If it is too complicated, change the `$initiative` setting at the top of `mewcosq` to `p` for party-based or `l` for pLayer-based initiative.
+If it is too complicated, change the `$initiative` setting at the top of `mewcosq` to `PARTY` for party-based or `PLAYER` for player-based initiative.
 <!-- Try to err on the side of hitting '0' unless there is some substantial reason not to, to make the movement phase a little less complicated. -->
+
+The following variables which appear at the beginning of `mewcosq` are also customizable:
+
+Variable|Discussion
+--------|----------
+`$debug` | 1 ==> max debug output
+`$initiative` | also accepts `SIDE` for side-based initiative
+`$xpRate` | number of wallclock minutes required to earn 1 xp for all surviving participants.  12 is value suggested by official rules.  Can try 10 or 6 to 'level-up' characters more quickly.
 
 
 ## Global commands

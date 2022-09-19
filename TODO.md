@@ -80,6 +80,8 @@ Though I could piece it together with the information which is there!  (15mar022
 
 * Would be good to somehow focus attention on adjDX, esp when injured? (16feb022)
 
+* command to fire missle weapon (to keep track of arrows etc) (19sep022)
+
 * Clean up HouseRules:
   - clean up doc/HouseRules.md (17oct021)
   * Question C falling rule, e.g. when stumble over body

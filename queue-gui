@@ -71,6 +71,8 @@ qg = qgui('Move')
 #   time.sleep(1)
 #   print(i)
 #   qg.event_generate('<1>')
+
+# https://stackoverflow.com/questions/3296007/how-do-you-refresh-a-window-in-tkinter
 i=0
 def fn():
   global i

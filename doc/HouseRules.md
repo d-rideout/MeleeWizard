@@ -60,6 +60,8 @@ principles to learn here.
   value for non-winners which flee.  (Because I am really unconfortable with the
   'slit throats for xp' and 'chase down foes for xp' motivations.)
 
+* A figure may disengage from an imaginary foe.
+
 These are the '**standard**' house rules.  It will be convenient to allow variants, to facilitate play testing them.  I will present the **named variants in boldface**, so that the choice of rules for a particular game can be easily described using these named variants.
 
 ## Disengagement:
@@ -356,6 +358,8 @@ So 100 weigh 2.0 kg.  Not negligible!
 
 10. The official rules indicate that damage multipliers multiply, so rolling a 4 to-hit for a charging pole arm attack does 4x damage!  This seems excessive.  Shall multipliers add?  This seems more reasonable in a mathematical sense.  So each double damage effect increments the damage multiplier by 1, and triple damage by 2.  (Example: A charging pike ax attack rolls 3 to-hit for triple damage.  Under the official rules this does 6x damage, i.e. 12+12, while under the proposed rule it would 'only' do 4x damage 8+8. (8x3.5+8 = 36, 12x3.5+12 = 54))
 <!--, as one might expect mathematically?  (One can think of the damage multiplier as incremeting the exponent -->
+
+11. Can a figure choose to disengage from an imaginary foe?  I am assuming yes above, but am soliciting opinions, as this has a significant effect on combat, e.g, it makes disengagement much less effective?
 
 ## Deviations from Official Rules:
 For the most part I want to stick as close as possible to the published
