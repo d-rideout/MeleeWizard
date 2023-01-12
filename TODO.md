@@ -2,6 +2,9 @@
 * label.configure(text="I will self destruct in 2 secs")? (10may022)
 
 #### Urgent:
+* Polyana: ST 11 (11)  adjDX 12 +0inj +0act +1spl = 13  Moved 6 hexes
++1 spl???
+
 * Aid spell to ST! (7may022)
   Make it its own command for now.  (Does anything else modify another's ST??)
   Actually no why not just modify the 'a' command, to allow specification of
@@ -13,6 +16,8 @@
 
 * Spell cost lost if command fails.
   Subtract cost after command completes? (9may022)
+
+* move party files out of parties/ (?) (21sep022)
 
 * Dragon disappear did not remove it from movement. (7may022)
 

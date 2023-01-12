@@ -793,7 +793,7 @@ sub act {
       "* [sp<ST>] sh<dex adj>\tready or unready shield, which changes base adjDX\n",
 	  "\t\t\t(e.g. 'sh -2' to ready a tower shield)\n",
       "* ur <who>\t\tun-Rope <who>\n",
-      "* w\t\t\twait for an opening\n",
+      "* w\t\t\twait for an opening (cannot move)\n",
       "  Prefix with 'sp<ST>' if result is from spell of ST cost <ST>.\n",
       "  (Note that spell can have no result, but still cost ST.)\n",
       "  Suffix with '\\' if figure has more actions for this turn.\n"
